@@ -1,5 +1,40 @@
 {
-  "name": "soyie",
+  "name": "Soyie",
+  "description": "a new mvvm web framework",
   "version": "0.0.1",
-  "timestamp": 1437728114396
+  "keywords": [
+    "toolkit",
+    "soyie",
+    "mvvm",
+    "web",
+    "nodejs",
+    "chinese"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cevio/soyie"
+  },
+  "files": [
+    "dist",
+    "lib",
+    "test"
+  ],
+  "dependencies": {
+    "domready": "^1.0.8",
+    "fastclick": "^1.0.6"
+  },
+  "devDependencies": {
+    "domready": "^1.0.8",
+    "fastclick": "^1.0.6"
+  },
+  "scripts": {},
+  "engine-strict": true,
+  "engines": {
+    "node": ">= 0.12"
+  },
+  "licenses": [
+    {
+      "type": "MIT"
+    }
+  ]
 }
