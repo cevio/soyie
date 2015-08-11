@@ -1,52 +1,60 @@
-var controller = require('./lib/view/controller');
-var config = require('./lib/config');
-var fastclick = require('fastclick');
-var domReady = require('domready');
-var Promise = require('./lib/promise');
-var observe = require('./lib/view/observe');
+(function(global){
+    /**
+     * VM module - vmodel factory.
+     * @type {*|exports|module.exports}
+     */
+    var VM = require('./lib/modules/vmodel');
 
-var EnvirsParser = module.exports = function(node){
-    this.RootElement = node;
-};
+    /**
+     * soyie contrcutor.
+     * global Soyie factory.
+     * @param controller
+     * @param scope
+     * @returns {*}
+     */
+    var soyie = function(controller, scope){
+        return soyie.define(controller, scope).watch();
+    };
 
-EnvirsParser.module = function(name){
-    var ApplicationElement;
-    if ( !name ){ ApplicationElement = document.querySelector('[' + config.attr_module + ']'); }
-    else{ ApplicationElement = document.querySelector("[" + config.attr_module + "='" + name + "']"); }
-    if ( ApplicationElement ){ return new EnvirsParser(ApplicationElement); }
-    else{ console.error('moduler not found. ', config.attr_module + '=' + (name || undefined)); }
-};
-
-EnvirsParser.prototype.controller = function(name, data){
-    var ControlElement = this.RootElement.querySelector("[" + config.attr_controller + "='" + name + "']");
-    if ( ControlElement ){
-        var ctrl = new controller();
-        ctrl.search(ControlElement, data || {});
-        ctrl.fetchDependencies(data);
-        ctrl.watch(data);
-        return ctrl;
-    }else{
-        console.error('controller not found.', config.attr_controller + '=' + (name || undefined));
-    }
-};
-
-EnvirsParser.config = function(key, value){
-    if ( !value ){
-        for ( var i in key ){
-            EnvirsParser.config(i, key[i]);
+    /**
+     * Soyie.define
+     * define a ast contructor.
+     * except watch factory.
+     * @param controller
+     * @param scope
+     */
+    soyie.define = function(controller, scope){
+        var DOM = document.querySelector("[es-controller='" + controller + "']");
+        if ( !DOM ){
+            console.error('can not find controller:' + controller);
+            return;
         }
-    }else{
-        config[key] = value;
-    }
-};
+        var vm = new VM(DOM, scope);
+        return vm.find();
+    };
 
-EnvirsParser.ready = domReady;
-EnvirsParser.observe = observe;
-EnvirsParser.fastclick = fastclick;
-EnvirsParser.Promise = Promise;
+    /**
+     * observe to global
+     * @type {observe|exports|module.exports}
+     */
+    soyie.observe = require('./lib/modules/observe');
 
-if ( typeof window !== 'undefined' ){
-    window.Soyie = EnvirsParser;
-    domReady(function(){ fastclick(window.document.body); });
-    if ( !window.Promise ) window.Promise = Promise;
-}
+    /**
+     * Promise to global
+     * @type {*|exports|module.exports}
+     */
+    soyie.Promise = require('promise-order');
+
+    /**
+     * make cmd factory.
+     * and amd factory.
+     */
+    if (typeof module != 'undefined' && module.exports) { module.exports = soyie }
+    else if (typeof define === 'function' && define.amd) { define(soyie); };
+
+    /**
+     * push Soyie to global.
+     * @type {Function}
+     */
+    global.Soyie = soyie;
+})(Function('return this;')());

@@ -1,95 +1,95 @@
-var envirs = Soyie;
-window.onload = function(){
-    var ts = envirs.module().controller('mvvm', {
-        name: 'evio',
-        age: 18,
-        tel: '18506831190',
-        qq: '8802430',
-        des: 'test view render.',
-        choose: 3,
-        a: "5",
-        b: "8",
-        img: "http://app.webkits.cn/app/75f1b51ecb80de4f367c8ee79efcdc93f4dddcd3/logo.png",
-        checkone: 'evio',
-        tt: function(){
-          alert(1);
+function test(){
+    var x = Soyie('test', {
+        title: '测试',
+        image: 'https://www.baidu.com/img/baidu_jgylogo3.gif',
+        cls: 'most',
+        name: 'test name',
+        word: 'Soyie Mvvm Frame Worker coming!',
+        choose: '3',
+        checkbox: 'evio',
+        cc: '2',
+        jump: function(){
+            console.log(this);
         },
-        yy: function(){
-          alert(2);
-        },
-        list: [
-            { name: 'evio2', age: 18, des: ['tt', 'rr'], img: 'http://app.webkits.cn/app/75f1b51ecb80de4f367c8ee79efcdc93f4dddcd3/logo.png' },
-            { name: 'xybk', age: 32, des: ['daf', 'dafdasaf'], img: 'http://app.webkits.cn/app/fa92c091241bf6acdae6dae6c1a5768b53aebf44/logo.png' }
-        ]
+        arrs: [
+            {
+                a: '第一层数据a',
+                b: '第一层数据b',
+                c: [
+                    '第一层数据c的数据中第一层数据',
+                    '第一层数据c的数据中第二层数据'
+                ]
+            },
+            {
+                a: '第二层数据a',
+                b: '第二层数据b',
+                c: [
+                    '第二层数据c的数据中第一层数据',
+                    '第二层数据c的数据中第二层数据'
+                ]
+            }
+        ],
+        p: 0
     });
 
-
-    var mods = envirs.module().controller('tttttt', {
-        a: 1,
-        b: 2,
-        c: 3
+    x.property('p', function(newValue, oldValue, pools){
+        var el = document.getElementById('pc');
+        if ( newValue < 30 ){
+            el.innerHTML = '很慢都开始';
+        }
+        else if ( newValue < 60 ){
+            el.innerHTML = '速度渐渐变快';
+        }
+        else if ( newValue < 100 ){
+            el.innerHTML = '马上就要完成了';
+        }
+        else{
+            el.innerHTML = '好了，全部完成，你可以开始做别的事情了';
+        }
     });
-    mods.task('name1', function(scope, resolve, reject){
+
+    x.task('t1', function($scope, resolve){
         setTimeout(function(){
-            scope.a = 2;
-            console.log('scope.a = ' + scope.a);
+            $scope.title = 'Soyie web mvvm framework';
             resolve();
         }, 1000);
     });
-    mods.task('name2', function(scope, resolve, reject){
+    x.task('t2', function($scope, resolve){
         setTimeout(function(){
-            scope.b = 3;
-            console.log('scope.b = ' + scope.b);
+            $scope.name = 'user soyie to build';
             resolve();
-        }, 2000);
+        }, 1000);
     });
-    mods.task('name3', function(scope, resolve, reject){
-        setTimeout(function(){
-            scope.c = 4;
-            console.log('scope.c = ' + scope.c);
-            resolve();
-        }, 3000);
-    });
-    mods.registTask('default', ['name1', 'name2']);
-    mods.registTask('test', ['name1', 'name2', 'name3']);
-    mods.run('test', function(err){
-        if ( err ){
-            console.error(err);
+
+    x.task('ps', function($scope, resolve, reject){
+        if ( $scope.p >= 100 ){
+            reject('done');
         }else{
-            console.log('All is done!');
-            ts.action(function($scope){
-                $scope.list[1].name = 'evio is a good man!';
-                $scope.img = 'http://app.webkits.cn/app/fa92c091241bf6acdae6dae6c1a5768b53aebf44/logo.png';
-                $scope.yy = function(node){
-                    alert(3);
-                    console.log(this);
-                }
-                $scope.list[1].img = 'http://app.webkits.cn/app/75f1b51ecb80de4f367c8ee79efcdc93f4dddcd3/logo.png';
-            });
+            setTimeout(function(){
+                $scope.p = $scope.p + 1;
+                resolve();
+            }, 300);
         }
     });
-};
 
-/*window.x = {
-    name: 'evio',
-    age: 18,
-    tel: '18506831190',
-    qq: '8802430',
-    des: 'test view render.',
-    choose: 3,
-    a: "5",
-    b: "8",
-    checkone: 'evio',
-    list: [
-        { name: 'evio2', age: 18, des: ['tt', 'rr'] },
-        { name: 'xybk', age: 32, des: ['daf', 'dafdasaf'] }
-    ]
-};
-window.onload = function(){
-    var c = new soyie();
-    c.search(document.getElementById('asp'), window.x);
-    c.fetchDependencies(window.x);
-    c.watch(window.x);
-    console.log(c);
-};
-*/
+    x.registTask('me', ['t1', 't2']);
+    x.registTask('pm', ['ps']);
+
+    function runs(){
+        x.run('pm', function(err){
+            if ( !err ){
+                runs();
+            }else{
+                console.log('process done');
+            }
+        });
+    }
+
+    x.run('me', function(){
+        console.log('all done.')
+        runs();
+    });
+
+}
+
+test();
