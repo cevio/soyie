@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+	<head>
+		<link type="text/css" rel="stylesheet" href="http://bit.ly/multi_markdown_style_css " />
+	</head>
+<body>
+<h1 id="name">Name</h1>
+
+<p>JSON2 - json2 / native JSON normalizer for Joose</p>
+
+<h1 id="synopsis">SYNOPSIS</h1>
+
+<pre><code>    // bunlde will include the json2.js lib
+    &lt;script src = "/jsan/lib/Task/JSON2/Bundle.js"&gt;&lt;/script&gt;
+
+
+    // `use` will load it on-demand (requires JooseX.Namespace.Depended)
+    use('JSON2', function () {
+
+        var str = JSON2.stringify([])
+
+        var arr = JSON2.parse('[]')
+    })
+</code></pre>
+
+<h1 id="description">DESCRIPTION</h1>
+
+<p><code>JSON2</code> is a normalizing wrapper around the json2 library and native JSON implementation in supporting browsers.</p>
+
+<h1 id="usage">USAGE</h1>
+
+<p>Since its only a thin wrapper you should only use the features intersection between json2 &amp; native JSON. For example,
+seems the native implementation of <code>JSON.parse</code> in FF do not accept 2nd argument. </p>
+
+<h1 id="gettinghelp">GETTING HELP</h1>
+
+<p>This extension is supported via github issues tracker: <a href="http://github.com/SamuraiJack/JSON2/issues">http://github.com/SamuraiJack/JSON2/issues</a></p>
+
+<p>For general Joose questions you can also visit <a href="http://webchat.freenode.net/?randomnick=1&amp;channels=joose&amp;prompt=1">#joose</a> 
+on irc.freenode.org or the mailing list at: <a href="http://groups.google.com/group/joose-js">http://groups.google.com/group/joose-js</a></p>
+
+<h1 id="seealso">SEE ALSO</h1>
+
+<p><a href="https://developer.mozilla.org/en/Using_JSON_in_Firefox">Using JSON in Firefox</a></p>
+
+<h1 id="bugs">BUGS</h1>
+
+<p>All complex software has bugs lurking in it, and this module is no exception.</p>
+
+<p>Please report any bugs through the web interface at <a href="http://github.com/SamuraiJack/JSON2/issues">http://github.com/SamuraiJack/JSON2/issues</a></p>
+
+<h1 id="authors">AUTHORS</h1>
+
+<p>Nickolay Platonov <a href="m&#97;&#x69;&#x6C;&#x74;&#x6F;:&#x6E;&#112;&#x6C;a&#116;&#111;&#x6E;&#111;&#x76;&#64;&#99;p&#97;&#x6E;&#46;&#x6F;&#114;&#103;">&#x6E;&#112;&#x6C;a&#116;&#111;&#x6E;&#111;&#x76;&#64;&#99;p&#97;&#x6E;&#46;&#x6F;&#114;&#103;</a></p>
+
+<h1 id="copyrightandlicense">COPYRIGHT AND LICENSE</h1>
+
+<p>This software is Copyright (c) 2010 by Nickolay Platonov.</p>
+
+<p>This is free software, licensed under:</p>
+
+<p>The GNU Lesser General Public License, Version 3, June 2007</p>
+</body>
+</html>

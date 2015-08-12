@@ -44,6 +44,7 @@
      * @type {*|exports|module.exports}
      */
     soyie.Promise = require('promise-order');
+    soyie.EventEmitter = require('events').EventEmitter;
 
     /**
      * make cmd factory.

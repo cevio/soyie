@@ -8,9 +8,9 @@
     <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
     <meta http-equiv="pragma" content="no-cache" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-    <title>人品专家</title>
+    <title>Soyie Demo</title>
 
     <!-- Bootstrap -->
     <link href="res/css/dist.css" rel="stylesheet" />
@@ -22,9 +22,40 @@
     <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body>
-<p>icon:<i class="fa fa-send"></i></p>
+<body es-controller="global">
+<div class="layer">
+    <div class="wrap">
+        <div class="text text-center">正在加载...</div>
+    </div>
+</div>
+<div class="channel">
+    <header class="container-fluid">
+        <div class="row">
+            <div class="tape col-xs-2 text-left btn-back"><i class="fa fa-refresh"></i></div>
+            <div class="tape col-xs-8 text-center btn-title">{{title}}</div>
+            <div class="tape col-xs-2 text-right btn-other"><i class="fa fa-cog"></i></div>
+        </div>
+    </header>
+    <div es-controller="demo">
+        <div class="channel-title"><i class="fa fa-home"></i> Get Start</div>
+        <section>
+            <a href="javascript:;" class="bar clearfix">
+                简介<span class="fa fa-angle-right pull-right"></span>
+            </a>
+            <a href="javascript:;" class="bar clearfix">
+                优势<span class="fa fa-angle-right pull-right"></span>
+            </a>
+            <a href="javascript:;" class="bar clearfix">
+                对比其他同类<span class="fa fa-angle-right pull-right"></span>
+            </a>
+            <a href="javascript:;" class="bar clearfix">
+                安装<span class="fa fa-angle-right pull-right"></span>
+            </a>
+        </section>
+    </div>
+</div>
 <script src="res/js/dist.js"></script>
 <script src="../dist/minify.js"></script>
+<script src="res/js/action.js"></script>
 </body>
 </html>
