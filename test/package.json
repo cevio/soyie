@@ -11,33 +11,42 @@
                   "icon": "fa-home",
                   "childs": [
                       { "name": "简介", "url": "intro" },
-                      { "name": "优势", "url": "" },
-                      { "name": "对比其他同类", "url": "" },
-                      { "name": "安装", "url": "" }
+                      { "name": "安装", "url": "install" },
+                    {"name": "文档", "url": "doc"}
                   ]
               },
               {
                   "name": "Get Demo",
                   "icon": "fa-html5",
                   "childs": [
+                      { "name": "数据标签", "url": "demo-datatag" },
                       { "name": "双向绑定", "url": "demo-binding" }
                   ]
               }
           ]
       },
       "intro": {
-          "title": "简介",
-          "lv": 2
+            "title": "简介",
+            "lv": 2
       },
       "demo-binding": {
-          "title": "演示 双向绑定",
-          "lv": 2,
+            "title": "演示 双向绑定",
+            "lv": 2,
             "text": "World",
             "who": "Tommy",
             "agree": "Evio",
             "correct": "yes",
             "code": "var vm = Soyie.define('demo', {\n\tname: 'evio',\n\tage: 18\n});\nvm.watch();"
 
+      },
+    "demo-datatag": {
+      "title": "简单的数据标签",
+      "lv": 2,
+      "data": {
+        "name": "evio",
+        "age": 18,
+        "address": "杭州"
       }
+    }
   }
 }

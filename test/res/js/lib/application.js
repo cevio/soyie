@@ -9,7 +9,8 @@ var noop = function(){};
 var construct = {
     "home": require('../frames/home'),
     "intro": require('../frames/intro'),
-    "demo-binding": require('../frames/demo-binding')
+    "demo-binding": require('../frames/demo-binding'),
+    "demo-datatag": require('../frames/demo-datatag')
 };
 
 var application = module.exports = function(){

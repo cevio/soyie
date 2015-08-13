@@ -24,7 +24,7 @@
     <![endif]-->
 </head>
 <body es-controller="global">
-<div class="layer">
+<div class="layer white">
     <div class="wrap">
         <div class="text text-center">正在加载...</div>
     </div>
@@ -60,6 +60,18 @@
         </div>
     </header>
     <article class="block"></article>
+</div>
+
+<!--page: demo-binding-->
+<div class="channel hide" es-controller="demo-datatag" page-router="demo-datatag">
+    <header class="container-fluid">
+        <div class="row">
+            <div class="tape col-xs-2 text-left btn-back" es-click="back('home')"><i class="fa fa-angle-left"></i></div>
+            <div class="tape col-xs-8 text-center btn-title">{{title}}</div>
+            <div class="tape col-xs-2 text-right btn-other"><i class="fa fa-refresh"></i></div>
+        </div>
+    </header>
+    <article></article>
 </div>
 
 <!--page: demo-binding-->

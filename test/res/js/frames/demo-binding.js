@@ -12,7 +12,7 @@ var page = module.exports = function(handle){
 
     data.back = this.back.bind(this);
 
-    $.get('html/demo-binding.html', function(html){
+    $.get('html/' + which + '.html', function(html){
         page.DOM.find('article').html(html);
         Soyie(which, data);
         page.DOM.find('article .code-html').html(marked('``` html\n' + html + '\n```'));

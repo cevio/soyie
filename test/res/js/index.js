@@ -5,5 +5,5 @@ var express = require('./lib/application');
 var app = new express();
 app.onStatus();
 app.ready(function(){
-    $('.layer').addClass('hide');
+    $('.layer').addClass('hide').removeClass('white');
 });
