@@ -63,6 +63,7 @@ section .title{
     font-size: 14px;
     border-bottom: 1px solid #eeeeee;
     padding-bottom: 5px;
+    padding-top: 5px;
     margin-bottom: 5px;
     color: #009926;
 }
@@ -170,6 +171,12 @@ header .btn-title{
     text-shadow: 1px 1px 1px rgba(0,0,0,.1);
 }
 
-article{
+section.pad{
+    padding-right: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 5px;
+}
+
+article.block{
     padding: 10px 15px;
 }

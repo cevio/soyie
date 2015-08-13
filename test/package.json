@@ -31,7 +31,13 @@
       },
       "demo-binding": {
           "title": "演示 双向绑定",
-          "lv": 2
+          "lv": 2,
+            "text": "World",
+            "who": "Tommy",
+            "agree": "Evio",
+            "correct": "yes",
+            "code": "var vm = Soyie.define('demo', {\n\tname: 'evio',\n\tage: 18\n});\nvm.watch();"
+
       }
   }
 }

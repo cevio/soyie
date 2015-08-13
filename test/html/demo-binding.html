@@ -1,1 +1,65 @@
-daf
+<div class="channel-title">演示：</div>
+
+<section class="pad">
+    <div class="line title">Input 表单双向绑定:</div>
+    <div class="line">Binding Change: <code>Hello {{text}}!</code></div>
+    <div class="line">
+        <input type="text" es-binding="text" class="form-control" />
+    </div>
+    <div class="line tip">请输入您的名字。</div>
+</section>
+
+<section class="pad">
+    <div class="line title">Select 表单双向绑定:</div>
+    <div class="line">Binding Change: <code>Come home with {{who}}!</code></div>
+    <div class="line">
+        <select es-binding="who" class="form-control">
+            <option value="Evio">Evio</option>
+            <option value="Tommy">Tommy</option>
+            <option value="XYBK">XYBK</option>
+        </select>
+    </div>
+    <div class="line tip">请选择您和谁回家的名字。</div>
+</section>
+
+<section class="pad">
+    <div class="line title">Radio 表单双向绑定:</div>
+    <div class="line">Binding Change: <code>I agree with {{agree}}!</code></div>
+    <div class="line">
+        <input type="radio" value="Evio" es-binding="agree" name="agree" /> Evio
+        <input type="radio" value="Tommy" es-binding="agree" name="agree" /> Tommy
+        <input type="radio" value="XYBK" es-binding="agree" name="agree" /> XYBK
+    </div>
+    <div class="line tip">请选择您同意谁的观点。</div>
+</section>
+
+<section class="pad">
+    <div class="line title">CheckBox 表单双向绑定:</div>
+    <div class="line">Binding Change: <code>order tickets? {{correct}}</code></div>
+    <div class="line">
+        预定？<input type="checkbox" value="yes" es-binding="correct" />
+    </div>
+    <div class="line tip">请选择是否要预定机票。</div>
+</section>
+
+<section class="pad">
+    <div class="line title">TextArea 表单双向绑定:</div>
+    <div class="line">Binding Change: write code</div>
+    <pre>{{code}}</pre>
+    <div class="line">
+        <textarea class="form-control" es-binding="code" style="height: 150px; resize: none;"></textarea>
+    </div>
+    <div class="line tip">写入您的代码。</div>
+</section>
+
+<div class="channel-title">HTML代码：</div>
+<div class="code-html"></div>
+
+<div class="channel-title">Javascript代码：</div>
+<div class="code-js"></div>
+
+<div class="channel-title">指令：</div>
+<section class="pad" style="padding-top:10px;">
+    <h6><code>es-binding</code> 双向绑定指令</h6>
+    <p>所谓双向绑定，就是在view层改变的时候通知data层，data层改变的时候通知view层。形成一个数据的闭环交互。您可以很容易通过双向绑定在页面的其他区域（controller作用域）下实时显示你修改后的数据。你能省去很多代码来绑定事件和触发事件后的UI改变。同时，也省去了数据改变时候的通知代码。您完全不用写任何一丁点多余代码来实现你的需求，而是通过在页面上写入规则标签表达式。</p>
+</section>
