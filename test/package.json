@@ -21,7 +21,10 @@
                   "childs": [
                       { "name": "数据标签", "url": "demo-datatag" },
                       { "name": "双向绑定", "url": "demo-binding" },
-                    {"name": "循环绑定", "url": "demo-repeat"}
+                    {"name": "循环绑定", "url": "demo-repeat"},
+                    {"name": "循环操作", "url": "demo-repeat-action"},
+                    {"name": "实列对比", "url": "demo-diff"},
+                    {"name": "关心数据", "url": "demo-caredata"}
                   ]
               }
           ]
@@ -79,6 +82,24 @@
           { "name": "Where are you!", "time": "2015-01-12", "content": "美文美文！好像雨水溅落在玻璃杯上的清澈。" }
         ]}
       ]
+    },
+    "demo-repeat-action": {
+      "title": "循环行为操作",
+      "lv": 2,
+      "data": [
+        { "a": 1, "b": 2 },
+        { "a": 3, "b": 4 }
+      ]
+    },
+    "demo-diff": {
+      "title": "传统与创新",
+      "lv": 2,
+      "name": "evio"
+    },
+    "demo-caredata": {
+      "title": "关心数据",
+      "lv": 2,
+      "p": 0
     }
   }
 }

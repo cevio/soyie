@@ -13,7 +13,10 @@ var construct = {
     "doc": require('../frames/doc'),
     "demo-binding": require('../frames/demo-binding'),
     "demo-datatag": require('../frames/demo-datatag'),
-    "demo-repeat": require('../frames/demo-repeat')
+    "demo-repeat": require('../frames/demo-repeat'),
+    "demo-repeat-action": require('../frames/demo-repeat-action'),
+    "demo-diff": require('../frames/demo-diff'),
+    "demo-caredata": require('../frames/demo-caredata')
 };
 
 var application = module.exports = function(){
