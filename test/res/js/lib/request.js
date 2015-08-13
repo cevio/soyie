@@ -177,6 +177,7 @@ request._handle = function(locations, next){
 request._parseSearcher = function(str){
     var query = {};
     str.replace(/^\?/, '').split('&').forEach(function(searcher){
+        console.log(searcher)
         var uri = searcher.indexOf('=');
         var uriKey, uriValue;
 

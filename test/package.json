@@ -1,4 +1,26 @@
 {
   "name": "soyie-demo",
-  "version": "0.0.1"
+  "version": "0.0.1",
+  "data": {
+      "home": {
+          "title": "Soyie",
+          "lv": 1,
+          "list": [
+              {
+                  "name": "Get Start",
+                  "icon": "fa-home",
+                  "childs": [
+                      { "name": "简介", "url": "intro" },
+                      { "name": "优势", "url": "" },
+                      { "name": "对比其他同类", "url": "" },
+                      { "name": "安装", "url": "" }
+                  ]
+              }
+          ]
+      },
+      "intro": {
+          "title": "简介",
+          "lv": 2
+      }
+  }
 }

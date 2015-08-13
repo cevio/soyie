@@ -28,32 +28,38 @@
         <div class="text text-center">正在加载...</div>
     </div>
 </div>
-<div class="channel">
+<!--page: home-->
+<div class="channel hide" es-controller="home" page-router="home">
     <header class="container-fluid">
         <div class="row">
-            <div class="tape col-xs-2 text-left btn-back"><i class="fa fa-refresh"></i></div>
+            <div class="tape col-xs-2 text-left btn-back" es-click="window.location.reload()"><i class="fa fa-refresh"></i></div>
             <div class="tape col-xs-8 text-center btn-title">{{title}}</div>
             <div class="tape col-xs-2 text-right btn-other"><i class="fa fa-cog"></i></div>
         </div>
     </header>
-    <div es-controller="demo">
-        <div class="channel-title"><i class="fa fa-home"></i> Get Start</div>
+    <div es-repeat="item in list">
+        <div class="channel-title"><i class="fa {{item.icon}}"></i> {{item.name}}</div>
         <section>
-            <a href="javascript:;" class="bar clearfix">
-                简介<span class="fa fa-angle-right pull-right"></span>
-            </a>
-            <a href="javascript:;" class="bar clearfix">
-                优势<span class="fa fa-angle-right pull-right"></span>
-            </a>
-            <a href="javascript:;" class="bar clearfix">
-                对比其他同类<span class="fa fa-angle-right pull-right"></span>
-            </a>
-            <a href="javascript:;" class="bar clearfix">
-                安装<span class="fa fa-angle-right pull-right"></span>
-            </a>
+            <div es-repeat="bar in item.childs" class="bars">
+                <a href="javascript:;" class="bar clearfix" data-url="{{bar.url}}">
+                    {{bar.name}}<span class="fa fa-angle-right pull-right"></span>
+                </a>
+            </div>
         </section>
     </div>
 </div>
+
+<!--page: intro-->
+<div class="channel hide" es-controller="intro" page-router="intro">
+    <header class="container-fluid">
+        <div class="row">
+            <div class="tape col-xs-2 text-left btn-back" es-click="back('home')"><i class="fa fa-angle-left"></i></div>
+            <div class="tape col-xs-8 text-center btn-title">{{title}}</div>
+            <div class="tape col-xs-2 text-right btn-other"><i class="fa fa-refresh"></i></div>
+        </div>
+    </header>
+</div>
+
 <script src="res/js/dist.js"></script>
 <script src="../dist/minify.js"></script>
 <script src="res/js/action.js"></script>
