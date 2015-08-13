@@ -56,7 +56,31 @@
         <div class="row">
             <div class="tape col-xs-2 text-left btn-back" es-click="back('home')"><i class="fa fa-angle-left"></i></div>
             <div class="tape col-xs-8 text-center btn-title">{{title}}</div>
-            <div class="tape col-xs-2 text-right btn-other"><i class="fa fa-refresh"></i></div>
+            <div class="tape col-xs-2 text-right btn-other" es-click="window.location.reload()"><i class="fa fa-refresh"></i></div>
+        </div>
+    </header>
+    <article class="block"></article>
+</div>
+
+<!--page: install-->
+<div class="channel hide" es-controller="install" page-router="install">
+    <header class="container-fluid">
+        <div class="row">
+            <div class="tape col-xs-2 text-left btn-back" es-click="back('home')"><i class="fa fa-angle-left"></i></div>
+            <div class="tape col-xs-8 text-center btn-title">{{title}}</div>
+            <div class="tape col-xs-2 text-right btn-other" es-click="window.location.reload()"><i class="fa fa-refresh"></i></div>
+        </div>
+    </header>
+    <article class="block"></article>
+</div>
+
+<!--page: doc-->
+<div class="channel hide" es-controller="doc" page-router="doc">
+    <header class="container-fluid">
+        <div class="row">
+            <div class="tape col-xs-2 text-left btn-back" es-click="back('home')"><i class="fa fa-angle-left"></i></div>
+            <div class="tape col-xs-8 text-center btn-title">{{title}}</div>
+            <div class="tape col-xs-2 text-right btn-other" es-click="window.location.reload()"><i class="fa fa-refresh"></i></div>
         </div>
     </header>
     <article class="block"></article>
@@ -68,7 +92,7 @@
         <div class="row">
             <div class="tape col-xs-2 text-left btn-back" es-click="back('home')"><i class="fa fa-angle-left"></i></div>
             <div class="tape col-xs-8 text-center btn-title">{{title}}</div>
-            <div class="tape col-xs-2 text-right btn-other"><i class="fa fa-refresh"></i></div>
+            <div class="tape col-xs-2 text-right btn-other" es-click="window.location.reload()"><i class="fa fa-refresh"></i></div>
         </div>
     </header>
     <article></article>
@@ -80,7 +104,19 @@
         <div class="row">
             <div class="tape col-xs-2 text-left btn-back" es-click="back('home')"><i class="fa fa-angle-left"></i></div>
             <div class="tape col-xs-8 text-center btn-title">{{title}}</div>
-            <div class="tape col-xs-2 text-right btn-other"><i class="fa fa-refresh"></i></div>
+            <div class="tape col-xs-2 text-right btn-other" es-click="window.location.reload()"><i class="fa fa-refresh"></i></div>
+        </div>
+    </header>
+    <article></article>
+</div>
+
+<!--page: demo-repeat-->
+<div class="channel hide" es-controller="demo-repeat" page-router="demo-repeat">
+    <header class="container-fluid">
+        <div class="row">
+            <div class="tape col-xs-2 text-left btn-back" es-click="back('home')"><i class="fa fa-angle-left"></i></div>
+            <div class="tape col-xs-8 text-center btn-title">{{title}}</div>
+            <div class="tape col-xs-2 text-right btn-other" es-click="window.location.reload()"><i class="fa fa-refresh"></i></div>
         </div>
     </header>
     <article></article>
