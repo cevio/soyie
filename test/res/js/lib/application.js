@@ -7,8 +7,9 @@ var utils = require('./utils');
 var noop = function(){};
 
 var construct = {
-    home: require('../frames/home'),
-    intro: require('../frames/intro')
+    "home": require('../frames/home'),
+    "intro": require('../frames/intro'),
+    "demo-binding": require('../frames/demo-binding')
 };
 
 var application = module.exports = function(){
@@ -96,9 +97,6 @@ application.prototype.go = function(name){
     if (!no) domout.addClass('slide-out-n');
     domin.addClass('slide-in-n');
     domin.add(domout).off('bsTransitionEnd').removeClass('hide');
-    if ( !construct[name].installed ){
-        construct[name].call(this, noop);
-    }
     domin.on('bsTransitionEnd', function(){
         if (!no) domout.removeClass('slide').removeClass('slide-out-n').removeClass('slide-out');
         domin.removeClass('slide').removeClass('slide-in-n').removeClass('slide-in');
@@ -107,10 +105,21 @@ application.prototype.go = function(name){
         domout.addClass('hide');
         domin.removeClass('hide');
     });
-    setTimeout(function(){
-        if (!no) domout.addClass('slide').addClass('slide-out');
-        domin.addClass('slide').addClass('slide-in');
-    }, 30);
+    if ( !construct[name].installed ){
+        $('.layer').removeClass('hide');
+        construct[name].call(this, function(){
+            $('.layer').addClass('hide');
+            setTimeout(function(){
+                if (!no) domout.addClass('slide').addClass('slide-out');
+                domin.addClass('slide').addClass('slide-in');
+            }, 30);
+        });
+    }else{
+        setTimeout(function(){
+            if (!no) domout.addClass('slide').addClass('slide-out');
+            domin.addClass('slide').addClass('slide-in');
+        }, 30);
+    }
 };
 
 application.prototype.back = function(name){
@@ -125,9 +134,6 @@ application.prototype.back = function(name){
     if (!no) domout.addClass('back-out-n');
     domin.addClass('back-in-n');
     domin.add(domout).off('bsTransitionEnd').removeClass('hide');
-    if ( !construct[name].installed ){
-        construct[name].call(this, noop);
-    }
     domin.on('bsTransitionEnd', function(){
         if (!no) domout.removeClass('slide').removeClass('back-out-n').removeClass('back-out');
         domin.removeClass('slide').removeClass('back-in-n').removeClass('back-in');
@@ -136,8 +142,19 @@ application.prototype.back = function(name){
         domout.addClass('hide');
         domin.removeClass('hide');
     });
-    setTimeout(function(){
-        if (!no) domout.addClass('slide').addClass('back-out');
-        domin.addClass('slide').addClass('back-in');
-    }, 30);
+    if ( !construct[name].installed ){
+        $('.layer').removeClass('hide');
+        construct[name].call(this, function(){
+            $('.layer').addClass('hide');
+            setTimeout(function(){
+                if (!no) domout.addClass('slide').addClass('back-out');
+                domin.addClass('slide').addClass('back-in');
+            }, 30);
+        });
+    }else{
+        setTimeout(function(){
+            if (!no) domout.addClass('slide').addClass('back-out');
+            domin.addClass('slide').addClass('back-in');
+        }, 30);
+    }
 };

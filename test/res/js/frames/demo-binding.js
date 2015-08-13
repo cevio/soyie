@@ -1,8 +1,7 @@
 /**
  * Created by evio on 15/8/12.
  */
-var which = 'intro';
-var marked = require('marked');
+var which = 'demo-binding';
 var data = require('../../../package.json').data[which];
 var page = module.exports = function(handle){
     page.installed = true;
@@ -12,11 +11,8 @@ var page = module.exports = function(handle){
     data.back = this.back.bind(this);
     Soyie(which, data);
 
-    $.get('html/intro.html', function(html){
-        page.DOM.find('article').html(marked(html));
-        page.DOM.find('article').find('pre code').each(function(i, block){
-            hljs.highlightBlock(block);
-        });
+    $.get('html/demo-binding.html', function(html){
+        page.DOM.find('article').html(html);
         handle();
     });
 };

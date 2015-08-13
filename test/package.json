@@ -15,11 +15,22 @@
                       { "name": "对比其他同类", "url": "" },
                       { "name": "安装", "url": "" }
                   ]
+              },
+              {
+                  "name": "Get Demo",
+                  "icon": "fa-html5",
+                  "childs": [
+                      { "name": "双向绑定", "url": "demo-binding" }
+                  ]
               }
           ]
       },
       "intro": {
           "title": "简介",
+          "lv": 2
+      },
+      "demo-binding": {
+          "title": "演示 双向绑定",
           "lv": 2
       }
   }

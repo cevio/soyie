@@ -14,6 +14,7 @@
 
     <!-- Bootstrap -->
     <link href="res/css/dist.css" rel="stylesheet" />
+    <link href="res/highlight/styles/github-gist.css" rel="stylesheet" />
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -58,10 +59,24 @@
             <div class="tape col-xs-2 text-right btn-other"><i class="fa fa-refresh"></i></div>
         </div>
     </header>
+    <article></article>
+</div>
+
+<!--page: demo-binding-->
+<div class="channel hide" es-controller="demo-binding" page-router="demo-binding">
+    <header class="container-fluid">
+        <div class="row">
+            <div class="tape col-xs-2 text-left btn-back" es-click="back('home')"><i class="fa fa-angle-left"></i></div>
+            <div class="tape col-xs-8 text-center btn-title">{{title}}</div>
+            <div class="tape col-xs-2 text-right btn-other"><i class="fa fa-refresh"></i></div>
+        </div>
+    </header>
+    <article></article>
 </div>
 
 <script src="res/js/dist.js"></script>
 <script src="../dist/minify.js"></script>
+<script src="res/highlight/highlight.pack.js"></script>
 <script src="res/js/action.js"></script>
 </body>
 </html>
