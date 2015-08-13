@@ -1,1 +1,46 @@
 <div class="channel-title">循环操作的动态添加数据</div>
+
+<section class="pad" style="padding-top:10px;">
+    <h6>vm.search 方法用于获取数据路由</h6>
+    <p>我们可以通过<code>vm.search(dataRouter, callback);</code>的方法获取到匹配到对象，您可以根据对象的不同来操作每个对象的额外方法和属性。</p>
+</section>
+<div class="channel-title">代码：</div>
+<section class="pad" style="padding-top:10px;">
+<pre><code class="lang-javascript hljs">
+page.append = function(){
+    page.vm.search('#-data', function(){
+        this.$append({
+            a: parseInt(Math.random() * 1000),
+            b: parseInt(Math.random() * 1000)
+        });
+    });
+};
+
+page.prepend = function(){
+    page.vm.search('#-data', function(){
+        this.$prepend({
+            a: parseInt(Math.random() * 1000),
+            b: parseInt(Math.random() * 1000)
+        });
+    });
+};</code></pre>
+</section>
+
+<div class="channel-title">代码：</div>
+<section class="pad" style="padding-top:10px;">
+<div class="dt"></div>
+</section>
+
+<div class="sec-demo">
+<section class="pad" style="padding-top:10px;">
+    <p><input es-binding="name" class="form-control" /></p>
+    <div es-repeat="item in data" class="comment-box">
+        <p>{{$parent.name}}: a = {{item.a}}, b = {{item.b}}, sum = {{item.a + item.b}}</p>
+    </div>
+    <div class="text-center">
+        <button es-click="append()" class="btn btn-success">在尾部插入数据</button>
+        <button es-click="prepend()" class="btn btn-info">在头部插入数据</button>
+    </div>
+</section>
+</div>
+

@@ -86,6 +86,7 @@
     "demo-repeat-action": {
       "title": "循环行为操作",
       "lv": 2,
+      "name": "evio",
       "data": [
         { "a": 1, "b": 2 },
         { "a": 3, "b": 4 }

@@ -87,7 +87,17 @@ function test(){
 
     x.run('me', function(){
         console.log('all done.')
-        runs();
+        //runs();
+        x.search('#-arrs', function(){
+            this.$append({
+                a: '第三层数据a',
+                b: '第三层数据b',
+                c: [
+                    '第三层数据c的数据中第一层数据',
+                    '第三层数据c的数据中第二层数据'
+                ]
+            });
+        });
     });
 
 }
