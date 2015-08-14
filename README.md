@@ -1,111 +1,70 @@
-Soyie - MVVM
-==================
+### Soyie Doc ###
 
-一套轻量级的mvvm前端框架。目前正在完善中。
+一套高性能的`MVVM`框架。一期功能已完成
 
-## installtion ##
+### API ###
 
-> npm install Soyie
+框架API简介。
 
-## Instruction ##
+#### Soyie.define(controller, database) ####
 
-	* 双向绑定
-	* 只需要用户关心数据，而不需要考虑视图
-
-## Get Started ##
-
-让我们开始吧！
-
-你可以使用 `Soyie.config(key, value)` 的方式来操作基本设置：
-
-  * defaultExpressionValue: 设置默认的文本替换文字
-  * exceptTagNames: 添加你的过滤不分析的标签
-  *  cmd: 指令前缀
-  *  attr_controller: controller作用域关键字名
-  *  attr_module: module作用域名关键字名
-  *  attr_binding: 双向绑定关键字名
-  *  attr_repeat: 循环作用域关键字名
-
-### Soyie.config(key[, value]) ###
-
-你可以这样设置：
+用于定义一个UI层的VM，没有数据监听功能
 
 ``` javascript
-Soyie.config('cmd', 'es-');
-// 或者这样设置
-Soyie.config({
-	cmd: 'es-',
-	defaultExpressionValue: '-'
+var VM = Soyie.define('demo', { a:1 });
+```
+
+一旦使用define后UI界面都已经显示完毕。之后的`VM`代表上面产生的VModel对象。
+
+#### Soyie.watch(datarouter, property) ####
+
+将VM绑定观察者，此时具有监听功能。
+
+``` javascript
+VM.watch(); // 全局监听
+VM.watch('name'); // 监听根数据的property属性
+VM.watch('#-arrs-0-list-ps', 'main'); // 通过查找数据路由监听数据上的property属性
+```
+
+它具有3种写法,合理使用这3种写法至关重要。
+
+#### Soyie(controller, database) ####
+
+这个是`define`与`watch`的结合
+
+``` javascript
+Soyie('name', val);
+// 等同于
+Soyie.define('name', val).watch();
+```
+
+#### [VM].property(pro, callback) ####
+
+当scope作用域下当pro数据变化时候，会触发callback方法。
+`callback`具有3个参数：
+
+  * newValue: 数据变动的新值
+  * oldValue: 数据变动的旧值
+  * pools: 数据变动时候，相对于这个数据关联的所有表达式对象的数组集合
+
+``` javascript
+VM.property('a', function(news, olds, pools){
+    console.log(news, olds, pools);
 });
 ```
 
-### Soyie. ready(fn) ###
+#### [VM].action(callback) ####
 
-当domready的时候自动触发`Soyie.ready`定义的方法。
-
-``` javascript
-Soyie.ready(function(){
-	var ctrl = Soyie.module('app').controller('myapp', {
-		name: 'evio',
-		age: 100
-		address: '....',
-		action: doMyTask
-	});
-
-	ctrl.task('mytask-1', function($scope, resolve, reject){
-		setTimeout(function(){
-			$scope.age = 99;
-			resolve();
-		}, 1000);
-	});
-	
-	ctrl.task('mytask-2', function($scope, resolve, reject){
-		setTimeout(function(){
-			$scope.name = 'xybk';
-			resolve();
-		}, 2000);
-	});
-
-	ctrl.registTask('default', ['mytask-1', 'mytask-2']);
-
-	function doMyTask(){
-		ctrl.run(function(err){
-			if ( err ){
-				console.error(err);
-			}else{
-				console.log('All done.');
-			}
-		});
-	}
-});
-```
-
-### Soyie.module([module-name]) ###
-
-定义一个module层作用域，这个作用域下将可以同时包含很多个controller层作用域。它的存在将在之后作为路由起到决定性作用。
+可以简单的认为是VM的回调。`callback`只有一个参数`$scope`，即作用域名。
 
 ``` javascript
-var MODULE = Soyie.module('app');
-// 如果没有参数，那么默认指向 `es-app`
-var MODULE = Soyie.module()
+VM.action(function($scope){
+    console.log($scope);
+    // do something else.
+})
 ```
 
-之后我们将使用`[module]`表示该返回对象。
-
-### [module].controller(name, data) ###
-
-获取一个controller名为name的视图层对象，并且实例化。返回实例化对象。
-
-``` javascript
-MODULE.controller('app-name', {
-	a: 1,
-	b: 2
-});
-```
-
-之后我们将使用`[controller]`表示该返回对象。
-
-### [controller].task(name, fn) ###
+#### [VM].task(name, fn) ####
 
 定义一个任务。
 
@@ -121,113 +80,122 @@ MODULE.controller('app-name', {
 具体Promise说明请参见 [https://github.com/jakearchibald/es6-promise](https://github.com/jakearchibald/es6-promise)
 
 ``` javascript
-[controller].task('name', function($scope, resolve, reject){
-	// ...
+VM.task('name', function($scope, resolve, reject){
+// ...
 });
 ```
 
-###[controller].registTask(flow-name, tasks-array) ###
+#### [VM].registTask(flow-name, tasks-array) ####
 
-向`[controller]`注册一个任务流水线执行过程。
+向`[VM]`注册一个任务流水线执行过程。
 
 ``` javascript
-[controller].registTask('test', ['task-1', 'task-2', 'task-3'];
+VM.registTask('test', ['task-1', 'task-2', 'task-3'];
 // or
-[controller].registTask('test', 'task-1', 'task-2', 'task-3');
-// or 
-[controller].registTask('taks-1'); // 将被默认为default下的task-1任务流水。
+VM.registTask('test', 'task-1', 'task-2', 'task-3');
+// or
+VM.registTask('taks-1'); // 将被默认为default下的task-1任务流水。
 ```
 
-### [controller].run(flow-name, callback) ###
+#### [VM].run(flow-name, callback) ####
 
 执行一个任务流水线。同时在完毕所有任务后执行`callback`回调。
 
 ``` javascript
-[controller].run('default', function(err){
-	if ( err ){
-		console.error(err);
-	}else{
-		console.log('All done.');
-	}
+VM.run('default', function(err){
+    if ( err ){
+        console.error(err);
+    }else{
+        console.log('All done.');
+    }
 });
 // or
-[controller].run(callback);
+VM.run(callback);
 // 如果不存在流水线任务名，那么默认为default流水线任务名。
 ```
 
-### [controller].action(callback) ###
+#### [VM].search(datarouter, callback) ####
 
-对controller对象回调。
+通过数据路由`datarouter`查找数据对应的`VCONTROLLER`对象。将其组成的数组逐个用`callback`方法处理。
+
+`callback`方法的`this`指针指向这个`VCONTROLLER`对象。同时存在一个VM对象参数。
 
 ``` javascript
-[controller].action(function($scope){
-	// $scope.a = 1;
+VM.search('#-arrs-0-list', function(vm){
+    this.$append('今天天气很好');
+    vm.$apply(); // 绑定新数据监听
 });
 ```
 
-## Expressions ##
+#### [VCONTROLLER] ####
 
-下面来介绍下表达式已经双向绑定
+`VCONTROLLER`是什么？它是一个包括节点对象和repeat对象的单独实例化对象。我们所有节点改变都是基于它提供的方法。
 
-### 文本表达式 ###
+`VCONTROLLER-NORMAL`指非repeat循环对象的对象。
 
-表达式格式`{{....}}` 。它将可以使用一起具有返回值的js语法表达式。比如
+`VCONTROLLER-REPEAT`指单个repeat对象。
 
-``` html
-{{a}} + {{b}} + {{c}} = {{ (a + b) / 2 * (a / b) + c * 2 }} - {{Math.ceil(a)}}
-```
+#### [VCONTROLLER-REPEAT].$append(data) ####
 
-程序会自动匹配到表达式对象的数据依赖关系。只要你的表达式与`$scope`作用域下的数据具有依赖关系，那么它将在数据变化同时自动更新表达式的值。
-
-我们来看一段简单的代码
-
-``` html
-<div id="dd" es-controller="tttttt">{{a}} + {{b}} + {{c}} = {{ (a + b) / 2 * (a / b) + c * 2 }} - {{Math.ceil(a)}}</div>
-```
-在这个controller名为`tttttt`的作用域名，改变数据，这里的所有依赖表达式都将自动更新
+往新的repeat循环中的尾部添加一条数据。
 
 ``` javascript
-function update($scope){
-	$scope.a = 55;
-	$scope.b = 68;
-	$scope.c = 99;
-}
+[VCONTROLLER-REPEAT].$append({a:1});
 ```
 
-### 双向绑定表达式 ###
+#### [VCONTROLLER-REPEAT].$prepend(data) ####
 
- 格式:  `<input es-binding="name">` 这里的`name`就是`$scope`下的一个数据源。
+往新的repeat循环中的头部添加一条数据。
 
-``` html
-<div style="width: 640px; margin: 0 auto; margin-top: 50px;" es-controller="mvvm" id="asp">
-    <h1>Duplex binding example:</h1>
-    <p>name: id=a</p>
-    <input type="text" value="" es-binding="name" id="a" />
-    <p>age: id=b</p>
-    <input type="text" value="" es-binding="age" id="b" />
-    <p>tel: id=c</p>
-    <input type="text" value="" es-binding="tel" id="c" />
-    <p>qq: id=d</p>
-    <input type="text" value="" es-binding="qq" id="d" />
-    <p>des: id=e</p>
-    <textarea style="width: 500px; height: 80px;resize: none;" es-binding="des" id="e"></textarea><br />
-</div>
+``` javascript
+[VCONTROLLER-REPEAT].$prepend({a:1});
+```
+
+#### [VCONTROLLER-NORMAL].value ####
+
+为文本节点或者属性节点赋值
+
+``` javascript
+[VCONTROLLER-NORMAL].value = 123;
+```
+
+#### [VCONTROLLER-NORMAL].compile(scope) ####
+
+返回文本节点或者属性节点通过scope编译后的数据
+
+``` javascript
+var value = [VCONTROLLER-NORMAL].compile(scope);
+console.log(value);
 ```
 
 ### 指令表达式 ###
 
-指令表达式能帮助你更快地实现数据地展示和行为的绑定。目前只支持以下几种指令表达式：
+我们来说一下各种指令表达式。
 
-  * es-src 图片地址表达式
-  * es-click 行为绑定表达式
+#### es-controller ####
+
+该指令将会产生一个VM闭包，之外或者之内的所有同指令都不能跨过作用域调用。
+
+#### es-repeat ####
+
+循环指令。 格式 `item in list` 或者 `list`。如果没有in属性。默认别名为`$this`。
+
+#### es-binding ####
+
+双向绑定。
+
+#### es-src ####
+
+图片的src属性增强。具有事件功能。`[object].on`和`[object].emit`。
+
+事件分为 `load` 和 `error`.
+
+#### es-click ####
+
+模拟点击事件。
 
 ``` html
-<img es-src="img" es-click="yy.call(this)" />
+<button es-click="alert(this.TagName)">click</button>
 ```
 
-## TODO LIST ##
-
-  * `es-input`指令更新
-  * `es-touch`指令更新
-  * `$scope.$on`方法更新
-  * `$scope.$listen`方法更新
+其他指令在二期陆续增加。
