@@ -45,13 +45,13 @@ model.prototype.create = function(uri, callback){
 };
 
 model.prototype.make = function(__dirname, __filename, code, deps, callback){
-    var codeString = new Function('exports', 'require', 'module', '__dirname', '__filename', code);
+    var codeString = new Function('exports', 'require', 'module', '__dirname', '__filename', '__devmodel', code);
     var that = this;
     this.loadDeps(deps, __dirname, __filename, function(){
         var xmodule = new LoadModule(__dirname, that.map);
         var expose = xmodule.exports = {};
         xmodule.constructor = codeString;
-        codeString(expose, xmodule.require.bind(xmodule), xmodule, __dirname, __filename);
+        codeString(expose, xmodule.require.bind(xmodule), xmodule, __dirname, __filename, true);
         that.map[__filename].exports = xmodule.exports;
         that.map[__filename].status = 200;
         typeof callback === 'function' && callback(that.map[__filename].exports);
