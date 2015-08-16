@@ -37,7 +37,9 @@ model.prototype.create = function(uri, callback){
     ajax(__filename, function(code){
         that.map[__filename].status = 201;
         if ( ext == '.json' ){
-
+            that.map[__filename].exports = JSON.parse(code);
+            that.map[__filename].status = 200;
+            typeof callback === 'function' && callback(that.map[__filename].exports);
         }else{
             that.make(__dirname, __filename, code, deps(removeComment(code)), callback);
         }
