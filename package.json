@@ -1,6 +1,29 @@
 {
-  "name": "soyie2",
-  "version": "0.0.1",
+  "name": "soyie",
+  "description": "a web mvvm framework",
+  "version": "0.0.2",
+  "keywords": [
+    "web",
+    "mvvm",
+    "framework",
+    "bind",
+    "node",
+    "angular",
+    "vue",
+    "avalon",
+    "soyie",
+    "easy"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cevio/soyie"
+  },
+  "files": [
+    "dist",
+    "lib",
+    "loader",
+    "test"
+  ],
   "timestamp": 1438693004413,
   "dependencies": {
     "domready": "^1.0.8",
@@ -9,6 +32,17 @@
     "fastclick": "^1.0.6",
     "marked": "^0.3.5",
     "path-to-regexp": "^1.2.0",
+    "promise-order": "0.0.1",
     "url": "^0.10.3"
-  }
+  },
+  "scripts": {},
+  "engine-strict": true,
+  "engines": {
+    "node": ">= 0.12"
+  },
+  "licenses": [
+    {
+      "type": "MIT"
+    }
+  ]
 }
