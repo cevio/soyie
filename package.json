@@ -22,7 +22,11 @@
     "dist",
     "lib",
     "loader",
-    "test"
+    "test",
+    "Envfile.js",
+    "index.js",
+    "loader.js",
+    "README.md"
   ],
   "timestamp": 1438693004413,
   "dependencies": {
@@ -32,7 +36,7 @@
     "fastclick": "^1.0.6",
     "marked": "^0.3.5",
     "path-to-regexp": "^1.2.0",
-    "promise-order": "0.0.1",
+    "promise-order": "^0.0.2",
     "url": "^0.10.3"
   },
   "scripts": {},
