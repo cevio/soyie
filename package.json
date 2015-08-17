@@ -1,7 +1,7 @@
 {
   "name": "soyie",
   "description": "a web mvvm framework",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "keywords": [
     "web",
     "mvvm",
@@ -19,14 +19,11 @@
     "url": "https://github.com/cevio/soyie"
   },
   "files": [
-    "dist",
-    "lib",
-    "loader",
+    "src",
     "test",
-    "Envfile.js",
-    "index.js",
-    "loader.js",
-    "README.md"
+    "README.md",
+    "LICENSE.txt",
+    "package.json"
   ],
   "timestamp": 1438693004413,
   "dependencies": {
