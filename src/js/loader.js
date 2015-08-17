@@ -3,7 +3,7 @@
  */
 var url = require('url');
 var path = require('path');
-var model = require('./loader/module');
+var model = require('../loader/module');
 var loader = module.exports = function(locator){
     this.req = url.parse(locator);
     this.map = {};
@@ -51,10 +51,10 @@ loader.prototype.fetch = function(uri, callback){
     ms.create(uri, callback);
 };
 
-function SoyieRequire(uri, callback){
+module.exports = function SoyieRequire(uri, callback){
     var load = new loader(window.location.href);
     load.fetch(uri, callback);
-}
+};
 
 if ( typeof window.Soyie === 'undefined' ){
     window.SoyieRequire = SoyieRequire;

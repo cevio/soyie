@@ -1,7 +1,7 @@
 {
   "name": "soyie",
   "description": "a web mvvm framework",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "keywords": [
     "web",
     "mvvm",
@@ -48,5 +48,11 @@
     {
       "type": "MIT"
     }
-  ]
+  ],
+  "soyiefiles": [],
+  "isSoyie":true,
+  "soyieRenderConfigs":{
+    "jquery":false,
+    "bootstrap":false
+  }
 }

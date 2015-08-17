@@ -3,7 +3,7 @@
      * VM module - vmodel factory.
      * @type {*|exports|module.exports}
      */
-    var VM = require('./lib/modules/vmodel');
+    var VM = require('../lib/modules/vmodel');
 
     /**
      * soyie contrcutor.
@@ -12,7 +12,7 @@
      * @param scope
      * @returns {*}
      */
-    var soyie = function(controller, scope){
+    var soyie = module.exports = function(controller, scope){
         return soyie.define(controller, scope).watch();
     };
 
@@ -37,7 +37,7 @@
      * observe to global
      * @type {observe|exports|module.exports}
      */
-    soyie.observe = require('./lib/modules/observe');
+    soyie.observe = require('../lib/modules/observe');
 
     /**
      * Promise to global
@@ -45,13 +45,6 @@
      */
     soyie.Promise = require('promise-order');
     soyie.EventEmitter = require('events').EventEmitter;
-
-    /**
-     * make cmd factory.
-     * and amd factory.
-     */
-    if (typeof module != 'undefined' && module.exports) { module.exports = soyie }
-    else if (typeof define === 'function' && define.amd) { define(soyie); };
 
     /**
      * push Soyie to global.
