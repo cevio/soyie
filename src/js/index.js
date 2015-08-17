@@ -4,6 +4,7 @@
      * @type {*|exports|module.exports}
      */
     var VM = require('../lib/modules/vmodel');
+    var cmd = require('../lib/attr-node/plugins');
 
     /**
      * soyie contrcutor.
@@ -45,6 +46,7 @@
      */
     soyie.Promise = require('promise-order');
     soyie.EventEmitter = require('events').EventEmitter;
+    soyie.Cmd = cmd;
 
     /**
      * push Soyie to global.

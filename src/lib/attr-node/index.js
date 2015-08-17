@@ -1,6 +1,7 @@
 var config = require('../config');
 var node = require('./node');
 var utils = require('../utils');
+var plugins = require('./plugins');
 
 module.exports = createAttributeParser;
 
@@ -9,6 +10,8 @@ var ModuleCmders = {};
 ModuleCmders['es-src'] = require('./es-command/es-src');
 ModuleCmders['es-click'] = require('./es-command/es-click');
 ModuleCmders['es-binding'] = require('./es-command/es-binding');
+
+utils.mixin(ModuleCmders, plugins.exports);
 
 function createAttributeParser(DOM, SCOPE, NODE, PATH){
     var AttributeName = DOM.nodeName;
