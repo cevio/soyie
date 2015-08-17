@@ -51,13 +51,7 @@ loader.prototype.fetch = function(uri, callback){
     ms.create(uri, callback);
 };
 
-module.exports = function SoyieRequire(uri, callback){
+window.SoyieRequire = module.exports = function SoyieRequire(uri, callback){
     var load = new loader(window.location.href);
     load.fetch(uri, callback);
 };
-
-if ( typeof window.Soyie === 'undefined' ){
-    window.SoyieRequire = SoyieRequire;
-}else{
-    window.Soyie.require = SoyieRequire;
-}
