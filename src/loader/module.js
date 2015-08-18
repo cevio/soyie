@@ -9,9 +9,33 @@ var path = require('path');
 var model = module.exports = function(dirname, map){
     this.__dirname = dirname;
     this.map = map;
+    this.stop = 0;
 };
 
-model.prototype.create = function(uri, callback){
+model.prototype.merge = function(dirname, modulename, callback){
+    var which = path.resolve(dirname, './node_modules', modulename, 'package.json');
+    var that = this;
+    ajax(which, function(err, code){
+        if ( !err ){
+            code = JSON.parse(code);
+            code.main = code.main || 'index.js';
+            var ext = path.extname(code.main).toLowerCase();
+            if ( ['.js', '.json'].indexOf(ext) === -1 ){ code.main += '.js'; }
+            var p = path.resolve(dirname, './node_modules', modulename, code.main);
+            callback(p);
+        }else{
+            if ( dirname === '/' ) that.stop++;
+            var f = path.dirname(path.dirname(dirname));
+            if ( err === 404 && that.stop < 2 ){
+                that.merge(f, modulename, callback);
+            }else{
+                console.warn('can not find the package.');
+            }
+        }
+    });
+};
+
+model.prototype.door = function(uri, callback, alias){
     var which = path.resolve(this.__dirname, uri);
     var ext = path.extname(which).toLowerCase();
     if ( ['.js', '.json'].indexOf(ext) === -1 ){ which += '.js'; }
@@ -34,16 +58,37 @@ model.prototype.create = function(uri, callback){
 
     that.map[__filename] = {};
     that.map[__filename].status = 0;
-    ajax(__filename, function(code){
-        that.map[__filename].status = 201;
-        if ( ext == '.json' ){
-            that.map[__filename].exports = JSON.parse(code);
-            that.map[__filename].status = 200;
-            typeof callback === 'function' && callback(that.map[__filename].exports);
+    if ( alias ){
+        that.map[alias] = that.map[__filename];
+    }
+    ajax(__filename, function(err, code){
+        if ( !err ){
+            that.map[__filename].status = 201;
+            if ( ext == '.json' ){
+                that.map[__filename].exports = JSON.parse(code);
+                that.map[__filename].status = 200;
+                typeof callback === 'function' && callback(that.map[__filename].exports);
+            }else{
+                that.make(__dirname, __filename, code, deps(removeComment(code)), callback);
+            }
         }else{
-            that.make(__dirname, __filename, code, deps(removeComment(code)), callback);
+            if ( err === 404 ){
+
+            }
         }
     });
+};
+
+model.prototype.create = function(uri, callback){
+    var that = this;
+    if ( uri.indexOf('./') == -1 ){
+        var m = uri;
+        this.merge(this.__dirname, uri, function(uri){
+            that.door(uri, callback, m);
+        });
+    }else{
+        that.door(uri, callback);
+    }
 };
 
 model.prototype.make = function(__dirname, __filename, code, deps, callback){
@@ -82,10 +127,17 @@ function LoadModule(dirname, map){
 }
 
 LoadModule.prototype.require = function(uri){
-    uri = path.resolve(this.__dirname, uri);
-    var ext = path.extname(uri).toLowerCase();
-    if ( ['.js', '.json'].indexOf(ext) === -1 ){ uri += '.js'; }
-    return this.map[uri].exports;
+    if ( uri.indexOf('./') == -1 ){
+        if ( this.map[uri] ){
+            return this.map[uri].exports;
+        }
+    }else{
+        uri = path.resolve(this.__dirname, uri);
+        var ext = path.extname(uri).toLowerCase();
+        if ( ['.js', '.json'].indexOf(ext) === -1 ){ uri += '.js'; }
+        console.info('Cmd require cache: ' + uri, this.map);
+        return this.map[uri].exports;
+    }
 };
 
 function delay(fn, foo){

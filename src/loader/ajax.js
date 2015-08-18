@@ -4,7 +4,9 @@ module.exports = function sendAjaxRequest(url, callback) {
   XMLHttpReq.onreadystatechange = function processResponse() {
     if (XMLHttpReq.readyState == 4) {
       if (XMLHttpReq.status == 200) {
-        callback(XMLHttpReq.responseText);
+        callback(null, XMLHttpReq.responseText);
+      }else{
+        callback(XMLHttpReq.status, XMLHttpReq.responseText);
       }
     }
   };
