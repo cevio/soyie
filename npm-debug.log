@@ -1,0 +1,115 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'publish' ]
+2 info using npm@2.12.1
+3 info using node@v0.12.6
+4 verbose node symlink /usr/local/bin/node
+5 verbose publish [ '.' ]
+6 silly cache add args [ '.', null ]
+7 verbose cache add spec .
+8 silly cache add parsed spec { raw: '.',
+8 silly cache add   scope: null,
+8 silly cache add   name: null,
+8 silly cache add   rawSpec: '.',
+8 silly cache add   spec: '/EnvirsProject/X-Power-Coms/soyie',
+8 silly cache add   type: 'directory' }
+9 verbose addLocalDirectory /Users/evio/.npm/soyie/0.0.10/package.tgz not in flight; packing
+10 verbose tar pack [ '/Users/evio/.npm/soyie/0.0.10/package.tgz',
+10 verbose tar pack   '/EnvirsProject/X-Power-Coms/soyie' ]
+11 verbose tarball /Users/evio/.npm/soyie/0.0.10/package.tgz
+12 verbose folder /EnvirsProject/X-Power-Coms/soyie
+13 info prepublish soyie@0.0.10
+14 verbose addLocalTarball adding from inside cache /Users/evio/.npm/soyie/0.0.10/package.tgz
+15 silly cache afterAdd soyie@0.0.10
+16 verbose afterAdd /Users/evio/.npm/soyie/0.0.10/package/package.json not in flight; writing
+17 verbose afterAdd /Users/evio/.npm/soyie/0.0.10/package/package.json written
+18 silly publish { name: 'soyie',
+18 silly publish   description: 'a web mvvm framework',
+18 silly publish   version: '0.0.10',
+18 silly publish   keywords:
+18 silly publish    [ 'web',
+18 silly publish      'mvvm',
+18 silly publish      'framework',
+18 silly publish      'bind',
+18 silly publish      'node',
+18 silly publish      'angular',
+18 silly publish      'vue',
+18 silly publish      'avalon',
+18 silly publish      'soyie',
+18 silly publish      'easy' ],
+18 silly publish   repository: { type: 'git', url: 'git+https://github.com/cevio/soyie.git' },
+18 silly publish   files: [ 'src', 'test', 'README.md', 'LICENSE.txt', 'package.json' ],
+18 silly publish   timestamp: 1438693004413,
+18 silly publish   dependencies:
+18 silly publish    { domready: '^1.0.8',
+18 silly publish      'es6-promise': '^2.3.0',
+18 silly publish      events: '^1.0.2',
+18 silly publish      fastclick: '^1.0.6',
+18 silly publish      marked: '^0.3.5',
+18 silly publish      'path-to-regexp': '^1.2.0',
+18 silly publish      'promise-order': '^0.0.2',
+18 silly publish      url: '^0.10.3' },
+18 silly publish   scripts: {},
+18 silly publish   'engine-strict': true,
+18 silly publish   engines: { node: '>= 0.12' },
+18 silly publish   licenses: [ { type: 'MIT' } ],
+18 silly publish   soyiefiles: [],
+18 silly publish   isSoyie: true,
+18 silly publish   soyieRenderConfigs: { jquery: false, bootstrap: false },
+18 silly publish   readme: '### Soyie Doc ###\n\n一套高性能的`MVVM`框架。一期功能已完成\n\n### API ###\n\n框架API简介。\n\n#### Soyie.define(controller, database) ####\n\n用于定义一个UI层的VM，没有数据监听功能\n\n``` javascript\nvar VM = Soyie.define(\'demo\', { a:1 });\n```\n\n一旦使用define后UI界面都已经显示完毕。之后的`VM`代表上面产生的VModel对象。\n\n#### Soyie.watch(datarouter, property) ####\n\n将VM绑定观察者，此时具有监听功能。\n\n``` javascript\nVM.watch(); // 全局监听\nVM.watch(\'name\'); // 监听根数据的property属性\nVM.watch(\'#-arrs-0-list-ps\', \'main\'); // 通过查找数据路由监听数据上的property属性\n```\n\n它具有3种写法,合理使用这3种写法至关重要。\n\n#### Soyie(controller, database) ####\n\n这个是`define`与`watch`的结合\n\n``` javascript\nSoyie(\'name\', val);\n// 等同于\nSoyie.define(\'name\', val).watch();\n```\n\n#### [VM].property(pro, callback) ####\n\n当scope作用域下当pro数据变化时候，会触发callback方法。\n`callback`具有3个参数：\n\n  * newValue: 数据变动的新值\n  * oldValue: 数据变动的旧值\n  * pools: 数据变动时候，相对于这个数据关联的所有表达式对象的数组集合\n\n``` javascript\nVM.property(\'a\', function(news, olds, pools){\n    console.log(news, olds, pools);\n});\n```\n\n#### [VM].action(callback) ####\n\n可以简单的认为是VM的回调。`callback`只有一个参数`$scope`，即作用域名。\n\n``` javascript\nVM.action(function($scope){\n    console.log($scope);\n    // do something else.\n})\n```\n\n#### [VM].task(name, fn) ####\n\n定义一个任务。\n\n  * name: 任务名\n  * fn: 任务方法。每个任务方法都是一个`Promise`回调。\n\n`fn`任务方法包含3个参数：\n\n  * $scope: 作用域对象\n  * resolve: Promise成功回调函数\n  * reject: Promise失败回调函数\n\n具体Promise说明请参见 [https://github.com/jakearchibald/es6-promise](https://github.com/jakearchibald/es6-promise)\n\n``` javascript\nVM.task(\'name\', function($scope, resolve, reject){\n// ...\n});\n```\n\n#### [VM].registTask(flow-name, tasks-array) ####\n\n向`[VM]`注册一个任务流水线执行过程。\n\n``` javascript\nVM.registTask(\'test\', [\'task-1\', \'task-2\', \'task-3\'];\n// or\nVM.registTask(\'test\', \'task-1\', \'task-2\', \'task-3\');\n// or\nVM.registTask(\'taks-1\'); // 将被默认为default下的task-1任务流水。\n```\n\n#### [VM].run(flow-name, callback) ####\n\n执行一个任务流水线。同时在完毕所有任务后执行`callback`回调。\n\n``` javascript\nVM.run(\'default\', function(err){\n    if ( err ){\n        console.error(err);\n    }else{\n        console.log(\'All done.\');\n    }\n});\n// or\nVM.run(callback);\n// 如果不存在流水线任务名，那么默认为default流水线任务名。\n```\n\n#### [VM].search(datarouter, callback) ####\n\n通过数据路由`datarouter`查找数据对应的`VCONTROLLER`对象。将其组成的数组逐个用`callback`方法处理。\n\n`callback`方法的`this`指针指向这个`VCONTROLLER`对象。同时存在一个VM对象参数。\n\n``` javascript\nVM.search(\'#-arrs-0-list\', function(vm){\n    this.$append(\'今天天气很好\');\n    vm.$apply(); // 绑定新数据监听\n});\n```\n\n#### [VCONTROLLER] ####\n\n`VCONTROLLER`是什么？它是一个包括节点对象和repeat对象的单独实例化对象。我们所有节点改变都是基于它提供的方法。\n\n`VCONTROLLER-NORMAL`指非repeat循环对象的对象。\n\n`VCONTROLLER-REPEAT`指单个repeat对象。\n\n#### [VCONTROLLER-REPEAT].$append(data) ####\n\n往新的repeat循环中的尾部添加一条数据。\n\n``` javascript\n[VCONTROLLER-REPEAT].$append({a:1});\n```\n\n#### [VCONTROLLER-REPEAT].$prepend(data) ####\n\n往新的repeat循环中的头部添加一条数据。\n\n``` javascript\n[VCONTROLLER-REPEAT].$prepend({a:1});\n```\n\n#### [VCONTROLLER-NORMAL].value ####\n\n为文本节点或者属性节点赋值\n\n``` javascript\n[VCONTROLLER-NORMAL].value = 123;\n```\n\n#### [VCONTROLLER-NORMAL].compile(scope) ####\n\n返回文本节点或者属性节点通过scope编译后的数据\n\n``` javascript\nvar value = [VCONTROLLER-NORMAL].compile(scope);\nconsole.log(value);\n```\n\n### 指令表达式 ###\n\n我们来说一下各种指令表达式。\n\n#### es-controller ####\n\n该指令将会产生一个VM闭包，之外或者之内的所有同指令都不能跨过作用域调用。\n\n#### es-repeat ####\n\n循环指令。 格式 `item in list` 或者 `list`。如果没有in属性。默认别名为`$this`。\n\n#### es-binding ####\n\n双向绑定。\n\n#### es-src ####\n\n图片的src属性增强。具有事件功能。`[object].on`和`[object].emit`。\n\n事件分为 `load` 和 `error`.\n\n#### es-click ####\n\n模拟点击事件。\n\n``` html\n<button es-click="alert(this.TagName)">click</button>\n```\n\n其他指令在二期陆续增加。',
+18 silly publish   readmeFilename: 'README.md',
+18 silly publish   gitHead: '8977d8e2dc28c2d8ae099f730b7bbb5988d2d698',
+18 silly publish   bugs: { url: 'https://github.com/cevio/soyie/issues' },
+18 silly publish   homepage: 'https://github.com/cevio/soyie#readme',
+18 silly publish   _id: 'soyie@0.0.10',
+18 silly publish   _shasum: '7a4a252c15d0111d0ceebb1e3e10b697d41c8aa1',
+18 silly publish   _from: '.' }
+19 verbose getPublishConfig undefined
+20 silly mapToRegistry name soyie
+21 silly mapToRegistry using default registry
+22 silly mapToRegistry registry https://registry.npmjs.org/
+23 silly mapToRegistry uri https://registry.npmjs.org/soyie
+24 verbose publish registryBase https://registry.npmjs.org/
+25 silly publish uploading /Users/evio/.npm/soyie/0.0.10/package.tgz
+26 verbose request uri https://registry.npmjs.org/soyie
+27 verbose request sending authorization for write operation
+28 info attempt registry request try #1 at 19:29:38
+29 verbose request using bearer token for auth
+30 verbose request id f9bc4a17fcb212fb
+31 http request PUT https://registry.npmjs.org/soyie
+32 http 403 https://registry.npmjs.org/soyie
+33 verbose headers { 'content-type': 'application/json',
+33 verbose headers   'cache-control': 'max-age=60',
+33 verbose headers   'content-length': '96',
+33 verbose headers   'accept-ranges': 'bytes',
+33 verbose headers   date: 'Wed, 19 Aug 2015 11:29:51 GMT',
+33 verbose headers   via: '1.1 varnish',
+33 verbose headers   connection: 'keep-alive',
+33 verbose headers   'x-served-by': 'cache-nrt6122-NRT',
+33 verbose headers   'x-cache': 'MISS',
+33 verbose headers   'x-cache-hits': '0',
+33 verbose headers   'x-timer': 'S1439983774.750750,VS0,VE17147' }
+34 verbose request invalidating /Users/evio/.npm/registry.npmjs.org/soyie on PUT
+35 error publish Failed PUT 403
+36 verbose stack Error: "You cannot publish over the previously published version 0.0.10." : soyie
+36 verbose stack     at CachingRegistryClient.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:247:14)
+36 verbose stack     at Request._callback (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:170:14)
+36 verbose stack     at Request.self.callback (/usr/local/lib/node_modules/npm/node_modules/request/request.js:197:22)
+36 verbose stack     at Request.emit (events.js:110:17)
+36 verbose stack     at Request.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:1050:14)
+36 verbose stack     at Request.emit (events.js:129:20)
+36 verbose stack     at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:996:12)
+36 verbose stack     at IncomingMessage.emit (events.js:129:20)
+36 verbose stack     at _stream_readable.js:908:16
+36 verbose stack     at process._tickCallback (node.js:355:11)
+37 verbose statusCode 403
+38 verbose pkgid soyie
+39 verbose cwd /EnvirsProject/X-Power-Coms/soyie
+40 error Darwin 14.4.0
+41 error argv "node" "/usr/local/bin/npm" "publish"
+42 error node v0.12.6
+43 error npm  v2.12.1
+44 error code E403
+45 error "You cannot publish over the previously published version 0.0.10." : soyie
+46 error If you need help, you may report this error at:
+46 error     <https://github.com/npm/npm/issues>
+47 verbose exit [ 1, true ]
