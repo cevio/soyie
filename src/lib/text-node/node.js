@@ -27,6 +27,7 @@ node.prototype.compile = function(scope){
 node.prototype.relation = function(key){
     if ( utils.relationRegExp(key, this.expression) ){
         var relations = (this.scopePath || '#') + '-' + key;
+        relations = relations.replace(/\./g, '-');
         if (this.dependencies.indexOf(relations) === -1) this.dependencies.push(relations);
     }
 };

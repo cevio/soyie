@@ -59,7 +59,8 @@ exports.relationRegExp = function(key, compileExpression){
     compileExpression = compileExpression.replace(exports.REGEXP_STRING, '').trim();
     if ( !/^return\s/i.test(compileExpression) ){ compileExpression = 'return ' + compileExpression; }
     var NORMALREGEXP = new RegExp('[^\\.]\\b' + key.replace(/\./g, '\\.').replace(/\$/, '\\$') + '\\b');
-    return NORMALREGEXP.test(compileExpression);
+    var matched = NORMALREGEXP.test(compileExpression);
+    return matched;
 };
 
 exports.miss = function(fn, context){

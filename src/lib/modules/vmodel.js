@@ -57,14 +57,23 @@ VM.prototype.parseAttributes = function(DOM){
     return pools;
 };
 
-VM.prototype.dependencies = function(){
+VM.prototype.dependencies = function(scopes, selector){
     var that = this;
+    if ( !scopes ){
+        scopes = that.scope;
+        selector = '';
+    }
     this.pools.forEach(function(pool){
-        Object.keys(that.scope).forEach(function(key){
+        Object.keys(scopes).forEach(function(key){
+            var val = scopes[key];
             if ( pool.namespace === 'REAPEATBLOCK' ){
                 pool.relation();
             }else{
-                pool.relation(key);
+                pool.relation(selector + key);
+            }
+
+            if ( utils.type(val, 'Object') ){
+                that.dependencies(val, selector + key + '.');
             }
         });
     });

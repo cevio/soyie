@@ -37,6 +37,7 @@ node.prototype.relation = function(key){
         matcher = matcher.replace(/^\{\{/, '').replace(/\}\}$/, '');
         if ( utils.relationRegExp(key, matcher) ){
             var relations = (that.scopePath || '#') + '-' + key;
+            relations = relations.replace(/\./g, '-');
             if (that.dependencies.indexOf(relations) === -1) that.dependencies.push(relations);
         }
     });
