@@ -112,9 +112,6 @@ repeatBlock.prototype.dist = function(DOMObject, newCloneNode, data, index){
     var that = this;
     DOMObject.scope.$resolvePath(this.scope.$path, key);
 
-    var attrs = DOMObject.compileAttributes();
-    DOMObject.pools = DOMObject.pools.concat(attrs);
-
     DOMObject.find(newCloneNode, function(){
         var block = new repeatBlock(this);
         block.scope.$this = data;

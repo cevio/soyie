@@ -21,7 +21,7 @@
         <section class="pad" style="padding-top:10px;">
             <p><input es-binding="stitle" class="form-control" /></p>
             <p>{{subject}}</p>
-            <div es-repeat="item in data" class="comment-box">
+            <div es-repeat="item in data" class="comment-box" data-id="{{$parent.stitle}}">
                 <span class="index label label-success">{{$index + 1}}</span>
                 <div class="info">{{item.name}}: <span>{{item.time}}</span></div>
                 <div class="words">{{item.content}}<div class="from">发表在《{{$parent.stitle}}》</div></div>

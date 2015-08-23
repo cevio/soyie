@@ -13,26 +13,10 @@ var node = module.exports = function(DOM){
     this.namespace = 'REPEATSINGLE';
 };
 
-node.prototype.compileAttributes = function(){
-    var DOM = this.element;
-    var attributes = DOM.attributes;
-    var pools = [];
-    var parent = this.scope.$parent.$this || this.scope.$parent;
-    if ( parent ){
-        for ( var i = 0 ; i < attributes.length ; i++ ){
-            var retNodeCollection = attrNodeParser(attributes[i], parent, DOM, this.scope.$parent.$path || '#');
-            if ( retNodeCollection ){
-                retNodeCollection.attrScope = parent;
-                pools.push(retNodeCollection);
-            }
-        }
-    }
-    return pools;
-};
-
 node.prototype.find = function(DOM, callback){
     var childNodes = utils.slice.call(DOM.childNodes, 0);
     var that = this;
+    that.pools = that.pools.concat(that.parseAttributes(DOM, that.scope.$path));
     childNodes.forEach(function(child){
         var nodeType = child.nodeType;
         if ( nodeType === 1 ){

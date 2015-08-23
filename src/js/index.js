@@ -5,6 +5,8 @@
      */
     var VM = require('../lib/modules/vmodel');
     var cmd = require('../lib/attr-node/plugins');
+    var utils = require('../lib/utils');
+    var config = require('../lib/config');
 
     /**
      * soyie contrcutor.
@@ -25,13 +27,31 @@
      * @param scope
      */
     soyie.define = function(controller, scope){
-        var DOM = document.querySelector("[es-controller='" + controller + "']");
+        var DOM = utils.type(controller, 'String')
+                ? document.querySelector("[es-controller='" + controller + "']")
+                : controller;
+
         if ( !DOM ){
             console.error('can not find controller:' + controller);
             return;
         }
         var vm = new VM(DOM, scope);
         return vm.find();
+    };
+
+    /**
+     * Soyie configs
+     * @param key
+     * @param value
+     */
+    soyie.config = function(key, value){
+        if ( utils.type(key, 'Object') ){
+            for ( var obj in key ){
+                soyie.config(obj, key[obj]);
+            }
+        }else{
+            config[key] = value;
+        }
     };
 
     /**
@@ -47,6 +67,54 @@
     soyie.Promise = require('promise-order');
     soyie.EventEmitter = require('events').EventEmitter;
     soyie.Cmd = cmd;
+
+    /**
+     * copy template to render view.
+     * use for waitting data.
+     * you can see the page first time.
+     * @type {Function}
+     */
+    var Copy = module.exports = function(){
+        this.template = null;
+        this.node = null
+    };
+
+    /**
+     * use rebuild to render realy data.
+     * return realy vm;
+     * @param data
+     * @returns {*}
+     */
+    Copy.prototype.rebuild = function(data){
+        this.node.innerHTML = this.template;
+        return soyie(this.node, data);
+    };
+
+    /**
+     * Soyie.resolve method grunt.
+     * first time for entering:
+     * var resolving = Soyie.resolve('test', { a: 1, b: 2 });
+     * ......
+     * when get realy data:
+     * var vm = resolving.rebuild({a: 3, b: 4});
+     * and the realy vm is this vm.
+     * ......
+     * @param controller
+     * @param data
+     * @returns {Function}
+     */
+    soyie.resolve = function(controller, data){
+        var resolve = new Copy();
+        var DOM = utils.type(controller, 'String')
+            ? document.querySelector("[es-controller='" + controller + "']")
+            : controller;
+
+        resolve.template = DOM.innerHTML;
+        resolve.node = DOM;
+        resolve.vm = soyie(DOM, data);
+
+        return resolve;
+    };
 
     /**
      * push Soyie to global.
@@ -122,6 +190,6 @@ var click = function(obj){
     tvm.search('#-list-3-b', function(){
         this.$replace(99999, 1);
     });
-*/
 
+*/
 })(Function('return this;')());
