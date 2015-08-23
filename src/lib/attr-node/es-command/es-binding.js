@@ -47,11 +47,13 @@ function createInputBinding(NODE, SCOPE){
         });
 
         DOMObject.compile2DataBase = function(value){
-            SCOPE[DOMObject.expression] = value;
+            var scope = DOMObject.scope || SCOPE;
+            repeatBinding.call(DOMObject, DOMObject.expression, scope, value);
         };
 
         DOMObject.compile = function($scope){
-            return utils.transform(DOMObject.expression, $scope || SCOPE);
+            DOMObject.scope = $scope || SCOPE;
+            return utils.transform(DOMObject.expression, DOMObject.scope);
         };
 
         NormalEvents.forEach(function(EventName){
@@ -78,11 +80,13 @@ function createInputBinding(NODE, SCOPE){
         });
 
         DOMObject.compile2DataBase = function(value){
-            SCOPE[DOMObject.expression] = value;
+            var scope = DOMObject.scope || SCOPE;
+            repeatBinding.call(DOMObject, DOMObject.expression, scope, value);
         };
 
         DOMObject.compile = function($scope){
-            return utils.transform(DOMObject.expression, $scope || SCOPE);
+            DOMObject.scope = $scope || SCOPE;
+            return utils.transform(DOMObject.expression, DOMObject.scope);
         };
 
         checkEvents.forEach(function(EventName){
@@ -116,11 +120,13 @@ function createTextAreaBinding(NODE, SCOPE){
     });
 
     DOMObject.compile2DataBase = function(value){
-        SCOPE[DOMObject.expression] = value;
+        var scope = DOMObject.scope || SCOPE;
+        repeatBinding.call(DOMObject, DOMObject.expression, scope, value);
     };
 
     DOMObject.compile = function($scope){
-        return utils.transform(DOMObject.expression, $scope || SCOPE);
+        DOMObject.scope = $scope || SCOPE
+        return utils.transform(DOMObject.expression, DOMObject.scope);
     };
 
     NormalEvents.forEach(function(EventName){
@@ -159,11 +165,13 @@ function createSelectBinding(NODE, SCOPE){
     });
 
     DOMObject.compile2DataBase = function(value){
-        SCOPE[DOMObject.expression] = value;
+        var scope = DOMObject.scope || SCOPE;
+        repeatBinding.call(DOMObject, DOMObject.expression, scope, value);
     };
 
     DOMObject.compile = function($scope){
-        return utils.transform(DOMObject.expression, $scope || SCOPE);
+        DOMObject.scope = $scope || SCOPE;
+        return utils.transform(DOMObject.expression, DOMObject.scope);
     };
 
     NormalEvents.forEach(function(EventName){
@@ -175,4 +183,10 @@ function createSelectBinding(NODE, SCOPE){
     });
 
     DOMObject.value = DOMObject.compile(SCOPE);
+}
+
+function repeatBinding(expression, scope, value){
+    expression = expression.trim();
+    var foo = new Function('scope', 'value', 'scope.' + expression + '=value');
+    foo(scope, value);
 }

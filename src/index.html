@@ -16,20 +16,53 @@
 
 </head>
 <body>
-<h1 style="padding: 60px 100px; font-family: 'Lantinghei SC', 'Open Sans', Arial, 'Hiragino Sans GB', 'Microsoft YaHei', STHeiti, 'WenQuanYi Micro Hei', SimSun, Helvetica, sans-serif;">
-    Soyie Express
-    <div style="color:#777; font-size: 12px; padding-top: 40px; padding-left: 10px; line-height: 30px;">
-        <i class="fa fa-angle-right"></i>
-        Welcome to use Soyie-cli to create this project.<br />
-        <i class="fa fa-angle-right"></i>
-        As you see, it runs success.<br />
-        <i class="fa fa-angle-right"></i>
-        To get more api on <a href="https://cevio.github.com/soyie-cli" target="_blank">github</a>.
-        <br /><br />
-        <h5 style="color: #555;"><i class="fa fa-thumbs-o-up"></i> Enjoy yourself !</h5>
+<div class="sec-demo">
+    <div es-controller="demo-repeat-example">
+        <section class="pad" style="padding-top:10px;">
+            <p><input es-binding="stitle" class="form-control" /></p>
+            <p>{{subject}}</p>
+            <div es-repeat="item in data" class="comment-box">
+                <span class="index label label-success">{{$index + 1}}</span>
+                <div class="info">{{item.name}}: <span>{{item.time}}</span></div>
+                <div class="words">{{item.content}}<div class="from">发表在《{{$parent.stitle}}》</div></div>
+                <div class="reply">
+                    <div class="reply-box" es-repeat="detail in item.reply">
+                        <span class="index label label-info">{{$index + 1}}</span>
+                        <div class="info">{{detail.name}}: <span>{{detail.time}}</span></div>
+                        <div class="words">{{detail.content}}
+                            <div class="from">{{detail.name}}回复{{$parent.item.name}} - 发表在《{{$parent.$parent.stitle}}》</div>
+                            <button es-click="detail.click(this)" data-id="{{detail.content}}">click</button>
+                            <input type="text" es-binding="detail.content" /><input type="text"
+                                                                                    es-binding="detail.name" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
-</h1>
-<div es-controller="ddd">{{data.text}}</div>
+</div>
+<div es-controller="tvm">
+    <input type="text" es-binding="s" />
+    <div es-repeat="c in list">
+        {{c.a}} - {{$parent.s}}
+        <button es-click="c.c()">click</button>
+        <ul>
+            <li es-repeat="t in c.b">{{t}} {{$parent.$parent.s}}</li>
+        </ul>
+    </div>
+</div>
+<style>
+    body,html{font-size: 12px;}
+    .comment-box,
+    .comment-box .reply .reply-box{ border-top:1px solid #eee; position: relative; padding-left: 30px; padding-top: 5px;}
+    .comment-box .index{ position: absolute; top:10px; left:0px; height: 20px; line-height: 20px;}
+    .comment-box .info{ height:30px; line-height: 30px; position: relative; font-weight: bold;}
+    .comment-box .info span{ display: block; height: 30px; line-height: 30px; position: absolute; right: 0px; top:0;
+        font-weight: normal; color: #ccc;}
+    .comment-box .words{ padding-bottom: 10px; color: #777;}
+    .comment-box .reply{ padding-left: 15px;}
+    .comment-box .words .from{ padding: 3px 0; color: #ddd;}
+</style>
 <!--script:start:index.js-->
 <script src="lib/soyie-require.js"></script>
 <script>SoyieRequire('./js/index');</script>

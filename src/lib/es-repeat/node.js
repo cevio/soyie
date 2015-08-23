@@ -10,6 +10,7 @@ var node = module.exports = function(DOM){
     this.element = DOM;
     this.scope = new dataParser();
     this.pools = [];
+    this.namespace = 'REPEATSINGLE';
 };
 
 node.prototype.compileAttributes = function(){

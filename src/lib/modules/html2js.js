@@ -8,13 +8,14 @@ module.exports = function(template){
     template.split(utils.REGEXP_TAGSPILTOR).forEach(function(text, index){
         var isTextNodeElement = index % 2 === 1;
         if ( isTextNodeElement ){
-            pools.push(text);
+            pools.push('(' + text + ')');
         }else{
             pools.push('"' + text.replace(/\"/g, '\\\\"') + '"')
         }
     });
 
     return function($scope){
+        this.scope = $scope;
         return utils.transform(pools.join(' + '), $scope);
     }
 };

@@ -3,6 +3,7 @@
  */
 var url = require('url');
 var path = require('path');
+var utils = require('../lib/utils');
 var model = require('../loader/module');
 var loader = module.exports = function(locator){
     this.req = url.parse(locator);

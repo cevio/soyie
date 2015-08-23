@@ -24,7 +24,7 @@ node.prototype.listen = function(){
 };
 
 node.prototype._createCompiler = function(){
-    this.compile = HTML2JS(this.expression);
+    this.compile = HTML2JS(this.expression).bind(this);
 };
 
 node.prototype.relation = function(key){

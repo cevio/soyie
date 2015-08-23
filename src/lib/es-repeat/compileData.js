@@ -24,4 +24,5 @@ data.prototype.$resolvePath = function(){
     }else{
         this.$path = this.$parent.$path + '-' + utils.slice.call(arguments, 0).join('-');
     }
+    this.$path = this.$path.replace(/#[^#]+?#/, '#');
 };

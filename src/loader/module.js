@@ -135,7 +135,6 @@ LoadModule.prototype.require = function(uri){
         uri = path.resolve(this.__dirname, uri);
         var ext = path.extname(uri).toLowerCase();
         if ( ['.js', '.json'].indexOf(ext) === -1 ){ uri += '.js'; }
-        console.info('Cmd require cache: ' + uri, this.map);
         return this.map[uri].exports;
     }
 };

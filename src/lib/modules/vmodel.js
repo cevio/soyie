@@ -12,8 +12,9 @@ var VM = module.exports = function(DOM, scope){
     this.pools = [];
     this.taskRender = new taskWorker();
     this.changes = {};
-    utils.mixin(this, EventEmitter.prototype);
 };
+
+utils.mixin(VM.prototype, EventEmitter.prototype);
 
 VM.prototype.find = function(node){
     node = node || this.element;
@@ -57,6 +58,41 @@ VM.prototype.parseAttributes = function(DOM){
     return pools;
 };
 
+VM.prototype.map = function(object, callback){
+    var that = this;
+    if ( object.pools ){
+        object.pools.forEach(function(obj){
+            if ( obj.namespace === 'REAPEATBLOCK' ){
+                that.eachRepeat(obj, callback);
+            }else{
+                that.map(obj, callback);
+            }
+        });
+    }else{
+        typeof callback === 'function' && callback(object);
+    }
+};
+
+/**
+ * 重置依赖关系
+ * @returns {exports}
+ */
+VM.prototype.reset = function(){
+    this.map(this, function(obj){
+        if ( obj.dependencies ){
+            obj.dependencies = [];
+        }
+    });
+    this.dependencies();
+    return this;
+};
+
+/**
+ * 写入每个碎片的依赖关系
+ * @param scopes
+ * @param selector
+ * @returns {exports}
+ */
 VM.prototype.dependencies = function(scopes, selector){
     var that = this;
     if ( !scopes ){
@@ -67,7 +103,7 @@ VM.prototype.dependencies = function(scopes, selector){
         Object.keys(scopes).forEach(function(key){
             var val = scopes[key];
             if ( pool.namespace === 'REAPEATBLOCK' ){
-                pool.relation();
+                gruntRepeatDeps(pool);
             }else{
                 pool.relation(selector + key);
             }
@@ -94,31 +130,21 @@ VM.prototype.watch = function(property, per){
             var poolCatches = [];
             that.pools.forEach(function(pool){
                 if ( pool.namespace === 'REAPEATBLOCK' ){
-                    pool.pools.forEach(function(p){
-                        //console.log(p.scopePath)
-                        if ( p.dependencies.indexOf(zoom) > -1 ){
-                            if ( p.bindingRender ){
-                                p.bindingRender = null;
-                            }else{
-                                p.value = p.compile(p.scope);
-                            }
-                            poolCatches.push(p);
-                        }
-                    });
+                    that.watchRepeat(pool, zoom, poolCatches);
                 }else{
                     if ( pool.dependencies.indexOf(zoom) > -1 ){
-                        if ( pool.bindingRender ){
-                            pool.bindingRender = null;
-                        }else{
-                            pool.value = pool.compile(pool.scope);
-                        }
+                        if ( pool.bindingRender ){ pool.bindingRender = null; }
+                        else{ pool.value = pool.compile(pool.scope); }
                         poolCatches.push(pool);
                     }
                 }
             });
-            if ( that.changes && that.changes[zoom] ){
+
+            if ( that.changes[zoom] ){
                 that.changes[zoom].forEach(function(callback){
-                    callback(newValue, oldValue, poolCatches);
+                    poolCatches.forEach(function(ast){
+                        typeof callback === 'function' && callback.call(ast, newValue, oldValue);
+                    });
                 });
             }
         });
@@ -134,6 +160,35 @@ VM.prototype.watch = function(property, per){
         this.scope.$observer.watch(t, per);
     }
     return this;
+};
+
+VM.prototype.eachRepeat = function(object, callback){
+    var that = this;
+    object.pools.forEach(function(pool){
+        pool.pools.forEach(function(obj){
+            typeof callback === 'function' && callback(obj);
+        });
+    });
+    object.repeatBlocks.forEach(function(obj){
+        that.eachRepeat(obj, callback);
+    });
+};
+
+VM.prototype.watchRepeat = function(object, zoom, poolCatches){
+    var that = this;
+    object.pools.forEach(function(pool){
+        var pools = pool.pools;
+        pools.forEach(function(obj){
+            if ( obj.dependencies.indexOf(zoom) > -1 ){
+                if ( obj.bindingRender ){ obj.bindingRender = null; }
+                else{ obj.value = obj.compile(obj.scope); }
+                if ( poolCatches ){ poolCatches.push(obj); }
+            }
+        });
+    });
+    object.repeatBlocks.forEach(function(obj){
+        that.watchRepeat(obj, zoom, poolCatches);
+    });
 };
 
 /**
@@ -175,14 +230,9 @@ VM.prototype.action = function(fn) {
 };
 
 VM.prototype.property = function(name, fn){
-    var scope = this.scope[name];
-    if ( scope !== undefined ){
-        var key = '#-' + name;
-        if ( !this.changes[key] ){ this.changes[key] = []; }
-        this.changes[key].push(fn);
-    }else{
-        console.error('can not find the name of ' + name);
-    }
+    var key = /^\#\-/.test(name) ? name : '#-' + name;
+    if ( !this.changes[key] ){ this.changes[key] = []; }
+    this.changes[key].push(fn);
     return this;
 };
 
@@ -204,8 +254,9 @@ VM.prototype.search = function(DataRouter, foo){
     });
 };
 
-VM.prototype.$apply = function(){
-    this.pools.forEach(function(pool){
-        pool.pools = utils.reFilterPools(utils.reSearchRepeatPools(pool));
+function gruntRepeatDeps(pool){
+    pool.relation();
+    pool.repeatBlocks.forEach(function(obj){
+        gruntRepeatDeps(obj);
     });
-};
+}

@@ -27,7 +27,6 @@ exports.getCommandInVars = function(expression){
 exports.reBuildNormalStyle = function(pool){
     var scope = pool.scope;
     var compileExpression = getCompileExpression(pool.expression);
-
     if ( !compileExpression ) return;
     if ( scope && scope.$alias ){
         getReactTags(scope.$this, scope.$alias).forEach(function(TAG){
@@ -36,26 +35,26 @@ exports.reBuildNormalStyle = function(pool){
                 makeParentPather(parentMatcher, pool);
             }else{
                 var NORMALREGEXP = RegExpMatcher(TAG);
-                if (
-                    NORMALREGEXP[0].test(compileExpression) ||
-                    NORMALREGEXP[1].test(compileExpression)
-                ){
+                var NO1 = NORMALREGEXP[0].test(compileExpression);
+                var NO2 = NORMALREGEXP[1].test(compileExpression);
+                //console.log(compileExpression,NORMALREGEXP[0], NORMALREGEXP[1], NO1, NO2);
+                if ( NO1 || NO2 ){
                     var pather = pool.scopePath + '-' + scope.$index + (TAG.tag.length > 0 ? '-' + TAG.tag : '');
+                    //console.log(compileExpression,pather);
                     if ( pool.dependencies.indexOf(pather) === -1 ){
                         pool.dependencies.push(pather);
                     }
+                    //if ( pool._type_ == 'COMMANDNODE-BINDING' ) console.log(compileExpression, pool.scopePath,
+                    // pool.dependencies);
                 }
             }
         });
         pool.compiled = true;
-    }else{
-        //console.log(pool)
+    }else if (pool.attrScope){
         Object.keys(pool.attrScope).forEach(function(key){
             pool.relation(key);
-            //console.info(pool)
         });
     }
-    //console.log(pool.dependencies)
 };
 
 function RegExpMatcher(TAG){
@@ -139,7 +138,6 @@ function getReactTags(datas, alias){
             }
         }
     });
-
     return TAGS;
 }
 
