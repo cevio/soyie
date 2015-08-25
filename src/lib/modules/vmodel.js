@@ -6,6 +6,8 @@ var repeatNodeParser = require('../es-repeat/index');
 var observe = require('./observe');
 var taskWorker = require('./task');
 var EventEmitter = require('events').EventEmitter;
+var differ = require('./data-diff');
+
 var VM = module.exports = function(DOM, scope){
     this.element = DOM;
     this.scope = scope || {};
@@ -243,7 +245,7 @@ VM.prototype.search = function(DataRouter, foo){
         if ( pool.namespace === 'REAPEATBLOCK' ){
             utils.searchRepeatBlocks(pool, pools, DataRouter);
         }else{
-            if ( pool.scopePath === DataRouter ){
+            if ( pool.dependencies.indexOf(DataRouter) > -1 ){
                 pools.push(pool);
             }
         }
@@ -254,9 +256,25 @@ VM.prototype.search = function(DataRouter, foo){
     });
 };
 
+VM.prototype.diff = function(data){
+    var diff = new differ();
+    var that = this;
+    diff.append = function(router, dat, index){
+        that.search(router, function(){
+            this.$append(dat);
+        });
+    };
+    diff.remove = function(router, dat, index){
+        that.search(router, function(){
+            this.$remove(index);
+        });
+    };
+    diff.watch(this.scope, data);
+};
+
 function gruntRepeatDeps(pool){
     pool.relation();
     pool.repeatBlocks.forEach(function(obj){
         gruntRepeatDeps(obj);
     });
-}
+};
