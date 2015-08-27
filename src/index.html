@@ -21,6 +21,7 @@
         <section class="pad" style="padding-top:10px;">
             <p><input es-binding="stitle" class="form-control" /></p>
             <p>{{subject}}</p>
+            <input type="password" es-passview="view" /><button es-passview="view">view</button>
             <div es-repeat="item in data" class="comment-box" data-id="{{$parent.stitle}}">
                 <span class="index label label-success">{{$index + 1}}</span>
                 <div class="info">{{item.name}}: <span>{{item.time}}</span></div>
@@ -41,6 +42,7 @@
         </section>
     </div>
 </div>
+<hr />
 <div es-controller="tvm">
     <input type="text" es-binding="s" />
     <div es-repeat="c in list">

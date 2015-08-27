@@ -18,7 +18,7 @@ function createCommandPassView(SCOPE, NODE, PATH){
     Object.defineProperty(DOMObject, 'value', {
         get: function(){ return this._value_; },
         set: function(value){
-            this._value_ = value;
+            this._value_ = !!value;
             if ( isText ){
                 if ( !!this._value_ ){
                     NODE.type = 'text';

@@ -127,11 +127,16 @@ alert(obj.getAttribute('data-id'));
 };
 
 
-var scopeData = {
+var scopeData = {};
+
+
+var vm = soyie('demo-repeat-example', scopeData);
+vm.diff({
     "title": "复杂的循环绑定",
     "lv": 2,
     "subject": "我的评论列表",
     "stitle": "诗意如画",
+    "view": true,
     "data": [
         { "name": "evio", "time": "2015-01-01", "content": "文字很美，再接再厉。", "reply": [
             { "name": "jack", "time": "2015-01-02", "content": "确实不错的文字", click: click },
@@ -149,16 +154,20 @@ var scopeData = {
             { "name": "Where are you!", "time": "2015-01-12", "content": "美文美文！好像雨水溅落在玻璃杯上的清澈。", click: click }
         ]}
     ]
-};
-
-
-var vm = soyie('demo-repeat-example', scopeData);
+});
+console.log(vm.pools)
 vm.on('change', function(){
-   //console.log(arguments);
+   console.log(arguments);
 });
 
-vm.property('#-data-0-name', function(value){
-   //alert('change:#-data-0-name:' + value);
+vm.property('#-lv', function(value){
+   console.log('change:#-data-0-name:' + value);
+});
+
+vm.property('#-view', function(value){
+    this.callback = function(){
+        alert(value)
+    }
 });
 
 vm.search('#-data', function(){
@@ -171,40 +180,5 @@ setTimeout(function(){
     vm.scope.lv = 3;
     vm.scope.data[0].name = '沈赟杰';
 }, 1000);
-
-var d = function(){
-    alert(1)
-}
-
-var taxi = {
-    s: 'tv',
-    v: false,
-    list: [
-        {a:1, b:[1,2,3,4,5,6,7,8], c:d},
-        {a:2, b:[9,10,11,12,13,14], c:d},
-        {a:3, b:[15,16,171,81], c:d},
-        {a:4, b:[4334,345,435,3534,34], c:d}
-    ]
-};
-
-var tvm = soyie('tvm', taxi);
-tvm.search('#-v', function(){
-   if ( this._type_ === 'COMMANDNODE-PASSVIEW' ){
-       this.callback = function(value){
-           alert(value)
-       }
-   }
-});
-//setTimeout(function() {
-//    tvm.diff({
-//        s: 'evio',
-//        list: [
-//            {a:1, b:[435,2,3435,4,5,6,7,8], c:d},
-//            {a:2, b:[9,10,11,12,13,14], c:d},
-//            {a:3, b:[15,16,171], c:d},
-//            {a:5, b:[4334,345,435,3534], c:d}
-//        ]
-//    });
-//}, 3000);
 
 */

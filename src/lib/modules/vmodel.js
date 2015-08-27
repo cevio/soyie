@@ -142,11 +142,14 @@ VM.prototype.watch = function(property, per){
                 }
             });
 
-            if ( that.changes[zoom] ){
+            if ( utils.type(that.changes[zoom], 'Array') ){
                 that.changes[zoom].forEach(function(callback){
                     poolCatches.forEach(function(ast){
                         typeof callback === 'function' && callback.call(ast, newValue, oldValue);
                     });
+                    if ( !poolCatches.length ){
+                        callback.call(null, newValue, oldValue);
+                    }
                 });
             }
         });
@@ -257,6 +260,7 @@ VM.prototype.search = function(DataRouter, foo){
 };
 
 VM.prototype.diff = function(data){
+    var keys = Object.keys(this.scope);
     var diff = new differ();
     var that = this;
     diff.append = function(router, dat, index){
@@ -270,6 +274,23 @@ VM.prototype.diff = function(data){
         });
     };
     diff.watch(this.scope, data);
+
+    if ( keys.length == 1 && keys[0] == '$observer' ){
+        delete this.scope['$observer'];
+        this.pools.forEach(function(obj){
+            if ( obj.namespace === 'REAPEATBLOCK' ){
+                obj.scope.$this = that.scope;
+                obj.scope.$parent = that.scope;
+                obj.scope.$resolvePath();
+                obj.compile();
+            }else{
+                obj.value = obj.compile(that.scope);
+            }
+        });
+        this.reset();
+        this.watch();
+        //console.log(this.pools)
+    }
 };
 
 function gruntRepeatDeps(pool){
@@ -277,4 +298,4 @@ function gruntRepeatDeps(pool){
     pool.repeatBlocks.forEach(function(obj){
         gruntRepeatDeps(obj);
     });
-};
+}
