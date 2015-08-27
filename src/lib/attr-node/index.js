@@ -11,6 +11,7 @@ ModuleCmders['es-src'] = require('./es-command/es-src');
 ModuleCmders['es-click'] = require('./es-command/es-click');
 ModuleCmders['es-binding'] = require('./es-command/es-binding');
 ModuleCmders['es-passview'] = require('./es-command/es-passview');
+ModuleCmders['es-html'] = require('./es-command/es-html');
 
 utils.mixin(ModuleCmders, plugins.exports);
 

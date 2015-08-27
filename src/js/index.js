@@ -137,6 +137,7 @@ vm.diff({
     "subject": "我的评论列表",
     "stitle": "诗意如画",
     "view": true,
+    "html": '<h3>evio is a good man.</h3>',
     "data": [
         { "name": "evio", "time": "2015-01-01", "content": "文字很美，再接再厉。", "reply": [
             { "name": "jack", "time": "2015-01-02", "content": "确实不错的文字", click: click },
@@ -180,5 +181,4 @@ setTimeout(function(){
     vm.scope.lv = 3;
     vm.scope.data[0].name = '沈赟杰';
 }, 1000);
-
 */
