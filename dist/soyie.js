@@ -3015,7 +3015,7 @@ exports.invoke = function(controller, initScope, factory){
 
 exports.fastClick = function(){
     if ( !this.fastClick.installed ){
-        fastClick.attach(document.body);
+        fastClick(document.body);
         this.fastClick.installed = true;
     }
 };
@@ -3024,6 +3024,10 @@ exports.ready = function(foo){
     this.fastClick();
     domReady(foo);
 };
+
+if ( typeof window !== 'undefined' ){
+    window.Soyie = exports;
+}
 },{"./domready":10,"./scan-node/index":14,"./utils":19,"fastclick":1}],12:[function(require,module,exports){
 var utils = require('../utils');
 
