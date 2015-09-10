@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div id="test">
+    {{ast}}
+<ul>
+    <li es-repeat="mose.list" class="{{$index}}">
+        {{$index + 1}}: {{a}} - {{b}} : {{$parent.dist + a.toString()}}
+        <div es-repeat="item in c" class="{{$this}}-{{$parent.$parent.dist}}">
+            ({{$index + 1}}):{{item}} - {{$parent.$parent.dist}}
+        </div>
+    </li>
+</ul>
+    </div>
+<hr />
+<ul>
+    <li id="test2" es-repeat="m">
+        {{$index}}: {{b}} - {{c}}
+        <div es-repeat="item in d" class="{{$this}}">
+            ({{$index + 1}}):{{item}}
+        </div>
+    </li>
+</ul>
+<div id="test3">{{Math.ceil(x.c) + x.y[1] + k.l}}</div>
+<script src="../../dist/soyie-require.js"></script>
+<script>SoyieRequire('./repeat');</script>
+<h3>摇钱树：</h3>
+<table border="1" width="100%">
+    <thead>
+        <tr>
+            <th>项目名称</th>
+            <th>部门</th>
+            <th>业务负责人</th>
+            <th>H5开发负责人</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>51办卡</td>
+            <td>管家</td>
+            <td>陈坤宇</td>
+            <td>王浩</td>
+        </tr>
+        <tr>
+            <td>51人品贷</td>
+            <td>金融</td>
+            <td>-</td>
+            <td>吴淞</td>
+        </tr>
+        <tr>
+            <td>51借款</td>
+            <td>管家</td>
+            <td>邹文虎</td>
+            <td>王浩</td>
+        </tr>
+        <tr>
+            <td>51理财</td>
+            <td>人品</td>
+            <td>蔡延鑫</td>
+            <td>刘芳</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>服务：</h3>
+<table border="1" width="100%">
+    <thead>
+    <tr>
+        <th>项目名称</th>
+        <th>类型</th>
+        <th>部门</th>
+        <th>业务负责人</th>
+        <th>H5开发负责人</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>银行服务</td>
+        <td>原生</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td>51信使</td>
+        <td>原生</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td>hao羊毛</td>
+        <td>H5</td>
+        <td>管家</td>
+        <td>陈坤宇</td>
+        <td>王浩</td>
+    </tr>
+    <tr>
+        <td>帐户查询</td>
+        <td>H5</td>
+        <td>管家</td>
+        <td>－</td>
+        <td>王宏伟</td>
+    </tr>
+    <tr>
+        <td>征信报告</td>
+        <td>H5</td>
+        <td>管家</td>
+        <td>－</td>
+        <td>王宏伟</td>
+    </tr>
+    <tr>
+        <td>公积金</td>
+        <td>第三方</td>
+        <td>-</td>
+        <td>－</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td>违章</td>
+        <td>第三方</td>
+        <td>-</td>
+        <td>－</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td>付房租</td>
+        <td>第三方</td>
+        <td>-</td>
+        <td>－</td>
+        <td>-</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
