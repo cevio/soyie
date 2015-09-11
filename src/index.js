@@ -1,7 +1,6 @@
 var vmodel = require('./scan-node/index');
 var utils = require('./utils');
-var domReady = require('./domready');
-var fastClick = require('fastclick');
+var domReady = require('domready');
 
 exports.select = function(expression){
     if ( !utils.type(expression, 'String') ){
@@ -35,18 +34,6 @@ exports.invoke = function(controller, initScope, factory){
     return vm;
 };
 
-exports.fastClick = function(){
-    if ( !this.fastClick.installed ){
-        fastClick(document.body);
-        this.fastClick.installed = true;
-    }
-};
-
 exports.ready = function(foo){
-    this.fastClick();
     domReady(foo);
 };
-
-if ( typeof window !== 'undefined' ){
-    window.Soyie = exports;
-}
