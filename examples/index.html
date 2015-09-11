@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
     <script src="http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <script src="../dist/soyie.min.js"></script>
-    <script src="index.js"></script>
     <link href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://cdn.bootcss.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
     <title>Soyie demo</title>
 </head>
 <style>
@@ -14,16 +13,110 @@
     .area{ margin-top: 10px; padding-top:15px; padding-bottom: 15px;  }
     .main{ border-right: 1px solid #ddd; }
     h1{ margin-bottom: 50px;}
+    .avatar{width: 40px; margin-right: 15px;}
+    .reply .avatar{ margin-right: 0px; margin-left: 15px; }
+    .sec{ border-top:1px solid #eee; padding-top: 15px; }
+    .content{ padding-bottom: 15px; padding-left: 55px; color: #777; padding-top: 10px;}
+    .user .name{ font-weight: 700; line-height: 20px; }
+    .user .time{ color: #ccc;  line-height: 20px; }
+    .avatar img{ box-shadow: 1px 2px 1px rgba(0,0,0,.2);}
+    article.sec{ border-color: #999;}
+    .action{
+        background-color: #fff;
+        border: 1px solid #eee;
+        border-bottom: 0px;
+        padding: 10px 15px;
+    }
+    input,textarea{font-size: 12px!important;}
+    .checked{ background-color: #ddd;}
+    .dline{ text-decoration: line-through; color: #ccc;}
 </style>
 <body>
-<div class="container-fluid area">
+<div class="container-fluid area" es-controller="app">
     <h1 class="text-center">Soyie.js</h1>
     <div class="row">
         <div class="col-xs-8 main">
-            <h2></h2>
+            <h4>{{title}}</h4>
+            <article es-repeat="list" class="sec {{!checked ? '' : 'checked'}}">
+                <div class="ass">
+                    <div class="user clearfix" data-id="{{id}}">
+                        <div class="avatar pull-left"><img es-src="{{avatar}}" class="img-responsive img-circle"></div>
+                        <div class="info pull-left">
+                            <div class="name">{{name}}</div>
+                            <div class="time"><i class="fa fa-clock-o"></i> {{time}}</div>
+                            <div class="replies">发表在《{{$parent.title}}》，共有{{reply.length}}条回复
+                            <input type="checkbox" es-binding="checked" value="1" /></div>
+                        </div>
+                    </div>
+                    <div class="content">{{content}}</div>
+                    <div class="action">
+                        <div class="form-group">
+                            <label for="exampleInputEmail{{id}}">修改作者</label>
+                            <input type="text" class="form-control" id="exampleInputEmail{{id}}" es-binding="name" />
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputContent{{id}}">修改内容</label>
+                            <textarea class="form-control" id="exampleInputContent{{id}}"
+                                      es-binding="content"></textarea>
+                        </div>
+                        <p>
+                            <button class="btn btn-success" es-click="add()">添加一条新数据</button>
+                            <button class="btn btn-danger" es-click="remove()">删除这条数据</button>
+                        </p>
+                        <p></p>
+                    </div>
+                </div>
+                <div class="reply">
+                    <div class="reply-box sec {{!re.checked ? '' : 'checked'}}" es-repeat="re in reply">
+                        <div class="user clearfix" data-id="{{re.id}}">
+                            <div class="avatar pull-right">
+                                <img es-src="{{re.avatar}}" class="img-responsive img-circle">
+                            </div>
+                            <div class="info pull-right">
+                                <div class="name text-right">
+                                    {{re.name}} <i class="fa fa-exchange"></i> {{$parent.name}}
+                                </div>
+                                <div class="time text-right"><i class="fa fa-clock-o"></i> {{re.time}}
+                                    <input type="checkbox" es-binding="re.checked" value="1" /> {{$index + 1}}</div>
+                            </div>
+                        </div>
+                        <div class="content text-right">发表在《{{$parent.$parent.title}}》：{{re.content}}</div>
+                        <div class="action">
+                            <div class="form-group">
+                                <label for="exampleInputEmail{{re.id}}">修改作者</label>
+                                <input type="text" class="form-control" id="exampleInputEmail{{re.id}}"
+                                       es-binding="re.name" />
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputContent{{re.id}}">修改内r容</label>
+                            <textarea class="form-control" id="exampleInputContent{{re.id}}"
+                                      es-binding="re.content"></textarea>
+                            </div>
+                            <button class="btn btn-danger" es-click="re.remove()">删除这条数据</button>
+                        </div>
+                    </div>
+                </div>
+            </article>
         </div>
-        <div class="col-xs-4">2</div>
+        <div class="col-xs-4">
+            <div class="form-group">
+                <label>修改标题 </label>
+                <input type="text" class="form-control" es-binding="title" />
+            </div>
+            <h6>任务流程</h6>
+            还有{{total()}}个任务未完成
+            <ul>
+                <li es-repeat="task in tasks">
+                    <input type="checkbox" value="{{task.value}}" es-binding="task.check" />
+                    <span class="{{task.check + '' === '1' ? 'dline' : ''}}">{{task.name}}</span>
+                </li>
+            </ul>
+            <input type="text" es-binding="newtask" class="form-control" /><br />
+            <button class="btn btn-info" es-click="addtask()">add</button>
+        </div>
     </div>
 </div>
+<script src="../dist/soyie-require.js"></script>
+<script>SoyieRequire('./index');</script>
 </body>
 </html>
