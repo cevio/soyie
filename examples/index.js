@@ -101,7 +101,11 @@ Soyie.ready(function(){
                 "name": "NEW NAME",
                 "time": "2015-01-56",
                 "content": "NEW CONTENT",
-                "avatar": array.reply[Math.floor(Math.random() * array.reply.length)].avatar
+                "avatar": array.reply[Math.floor(Math.random() * array.reply.length)].avatar,
+                "checked": 0,
+                "remove" : function(x, j){
+                    arrays[Number(x)].reply.splice(Number(j),1);
+                }
             })
         };
         array.remove = function(i){

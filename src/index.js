@@ -34,6 +34,5 @@ exports.invoke = function(controller, initScope, factory){
     return vm;
 };
 
-exports.ready = function(foo){
-    domReady(foo);
-};
+exports.ready = domReady;
+exports.component = function(name, foo){};
