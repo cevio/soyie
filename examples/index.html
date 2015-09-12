@@ -42,7 +42,7 @@
                     <div class="user clearfix" data-id="{{id}}">
                         <div class="avatar pull-left"><img es-src="{{avatar}}" class="img-responsive img-circle"></div>
                         <div class="info pull-left">
-                            <div class="name">{{name}}</div>
+                            <div class="name">{{name}} {{$index + 1}}</div>
                             <div class="time"><i class="fa fa-clock-o"></i> {{time}}</div>
                             <div class="replies">发表在《{{$parent.title}}》，共有{{reply.length}}条回复
                             <input type="checkbox" es-binding="checked" value="1" /></div>
@@ -61,7 +61,7 @@
                         </div>
                         <p>
                             <button class="btn btn-success" es-click="add()">添加一条新数据</button>
-                            <button class="btn btn-danger" es-click="remove()">删除这条数据</button>
+                            <button class="btn btn-danger" es-click="remove($index);">删除这条数据</button>
                         </p>
                         <p></p>
                     </div>
@@ -88,11 +88,12 @@
                                        es-binding="name" />
                             </div>
                             <div class="form-group">
-                                <label for="exampleInputContent{{id}}">修改内r容</label>
+                                <label for="exampleInputContent{{id}}">修改内容{{$parent.$index}}</label>
                             <textarea class="form-control" id="exampleInputContent{{id}}"
                                       es-binding="content"></textarea>
                             </div>
-                            <button class="btn btn-danger" es-click="remove()">删除这条数据</button>
+                            <button class="btn btn-danger" es-click="remove($parent.$index, $index)">删除这条数据
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -106,9 +107,9 @@
             <h6>任务流程</h6>
             还有{{total()}}个任务未完成
             <ul>
-                <li es-repeat="task in tasks">
-                    <input type="checkbox" value="{{task.value}}" es-binding="task.check" />
-                    <span class="{{task.check + '' === '1' ? 'dline' : ''}}">{{task.name}}</span>
+                <li es-repeat="tasks">
+                    <input type="checkbox" value="{{value}}" es-binding="check" />
+                    <span class="{{check + '' === '1' ? 'dline' : ''}}">{{name}}</span>
                 </li>
             </ul>
             <input type="text" es-binding="newtask" class="form-control" /><br />

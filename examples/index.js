@@ -93,7 +93,7 @@ Soyie.ready(function(){
         }
     ];
 
-    arrays.forEach(function(array, index){
+    arrays.forEach(function(array){
         array.checked = 0;
         array.add = function(){
             array.reply.push({
@@ -104,15 +104,15 @@ Soyie.ready(function(){
                 "avatar": array.reply[Math.floor(Math.random() * array.reply.length)].avatar
             })
         };
-        array.remove = function(){
+        array.remove = function(i){
             if ( window.confirm('确定删除？') ){
-                arrays.splice(index, 1);
+                arrays.splice(Number(i), 1);
             }
         };
-        array.reply.forEach(function(o, z){
+        array.reply.forEach(function(o){
             o.checked = 0;
-            o.remove = function(){
-                arrays[index].reply.splice(z,1);
+            o.remove = function(x, j){
+                arrays[Number(x)].reply.splice(Number(j),1);
             }
         })
     });
@@ -120,31 +120,31 @@ Soyie.ready(function(){
     Soyie.invoke('app',function(scope){
         scope.title = '我的评论列表';
         scope.list = arrays;
-        //scope.tasks = [
-        //    { name: "第1个任务", check: 0, value: 1 },
-        //    { name: "第2个任务", check: 0, value: 1 },
-        //    { name: "第3个任务", check: 0, value: 1 },
-        //    { name: "第4个任务", check: 0, value: 1 },
-        //    { name: "第5个任务", check: 0, value: 1 }
-        //];
-        //scope.newtask = '';
-        //scope.addtask = function(){
-        //    scope.tasks.push({
-        //        name: scope.newtask,
-        //        check: 0,
-        //        value: 1
-        //    });
-        //    scope.newtask = '';
-        //};
-        //scope.total = function(){
-        //    var i = scope.tasks.length;
-        //    scope.tasks.forEach(function(t){
-        //        if ( t.check + '' === '1' ){
-        //            i--;
-        //        }
-        //    });
-        //    return i + '';
-        //}
+        scope.tasks = [
+            { name: "第1个任务", check: 0, value: 1 },
+            { name: "第2个任务", check: 0, value: 1 },
+            { name: "第3个任务", check: 0, value: 1 },
+            { name: "第4个任务", check: 0, value: 1 },
+            { name: "第5个任务", check: 0, value: 1 }
+        ];
+        scope.newtask = '';
+        scope.addtask = function(){
+            scope.tasks.push({
+                name: scope.newtask,
+                check: 0,
+                value: 1
+            });
+            scope.newtask = '';
+        };
+        scope.total = function(){
+            var i = scope.tasks.length;
+            scope.tasks.forEach(function(t){
+                if ( t.check + '' === '1' ){
+                    i--;
+                }
+            });
+            return i + '';
+        }
     });
 
 });

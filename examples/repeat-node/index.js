@@ -51,7 +51,7 @@ soyie.invoke('demo-repeat-example', initData, function($scope, $element){
          * 测试区域开始
          */
         // 对象 添加 pass
-        $scope.img = 'https://www.baidu.com/img/bd_logo1.png';
+        //$scope.img = 'https://www.baidu.com/img/bd_logo1.png';
         // 对象 修改 pass
         //$scope.stitle = '对象修改';
         // 对象 删除 pass
@@ -81,7 +81,7 @@ soyie.invoke('demo-repeat-example', initData, function($scope, $element){
             { "name": "Where are you!", "time": "2015-01-12", "content": "美文美文！好像雨水溅落在玻璃杯上的清澈。", click: click }
         ]};*/ // pass
         // 数组 删除 pass
-        //$scope.data.splice(1, 1) // pass
+        $scope.data.splice(1, 1) // pass
         //$scope.data[0].reply.splice(1,1); // pass
         /**
          * 测试区域结束

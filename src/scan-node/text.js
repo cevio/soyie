@@ -31,6 +31,7 @@ text.prototype.makeParentScope = function(scope){
     var data = {};
     var loops = function(vm, dat){
         if ( vm && vm.parent ){
+            dat.$index = vm.index;
             vm = vm.parent;
             utils.mixin(dat, utils.get(vm.locals, scope));
             dat.$parent = {};

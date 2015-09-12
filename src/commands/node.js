@@ -28,6 +28,7 @@ node.prototype.makeParentScope = function(scope){
     var loops = function(vm, dat){
         if ( vm && vm.parent ){
             vm = vm.parent;
+            dat.$index = vm.index;
             utils.mixin(dat, utils.get(vm.locals, scope));
             dat.$parent = {};
             loops(vm, dat.$parent);

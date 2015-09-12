@@ -52,24 +52,19 @@ createRepeatDataSource.prototype.render = function(scope){
     });
 };
 
-createRepeatDataSource.prototype.update = function(scope, key, alias, options){
-    var that = this;
-    if ( options && options.type ){
-        if ( options.type === 'rebuild' ){
-            this.objects.forEach(function(object, index){
-                if ( object.alone ){
-                    object.deep.parent = that.deep;
-                    object.rebuild();
-                    object.update(scope, { type: 'rebuild' });
-                }else{
-                    object.deep = that.deep;
-                    object.update(scope, key, alias);
-                }
-            });
-        }
+createRepeatDataSource.prototype.update = function(scope, options){
+    if ( options && options.type && options.type === 'rebuild' ){
+        this.objects.forEach(function(object, index){
+            if ( object.alone ){
+                object.update(scope, { type: 'rebuild' });
+            }else{
+                object.index = index;
+                object.update(scope, options);
+            }
+        });
     }else{
         this.objects.forEach(function(object){
-            object.update(scope, key, alias);
+            object.update(scope, options);
         });
     }
 };

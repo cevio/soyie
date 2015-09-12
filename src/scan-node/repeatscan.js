@@ -90,8 +90,13 @@ createRepeatConstructor.prototype.render = function(scope){
 };
 
 createRepeatConstructor.prototype.update = function(scope, options){
-    var that = this;
-    if ( options && options.router && options.index !== undefined && options.type && this.deep.locals === options.router ){
+    if (
+        options
+        && options.router
+        && options.index !== undefined
+        && options.type
+        && this.deep.locals === options.router
+    ){
         if ( options.type === 'add' ){
             if ( options.index > -1 ){
                 var single = this.append(options.index);
@@ -107,7 +112,7 @@ createRepeatConstructor.prototype.update = function(scope, options){
             else{ removeIndex = options.index;}
             this.objects.slice(removeIndex).forEach(function(object, index){
                 object.index = removeIndex + index;
-                object.update(scope);
+                object.update(scope, { type: 'rebuild' });
             });
         }
         else if ( options.type === 'change' ){
@@ -118,7 +123,7 @@ createRepeatConstructor.prototype.update = function(scope, options){
         this.rebuild();
         this.objects.forEach(function(object, index){
             object.index = index;
-            object.update(scope);
+            object.update(scope, options);
         });
     }
     else{

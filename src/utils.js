@@ -48,7 +48,8 @@ exports.mixin = function(source, target, overwrite){
 exports.get = function(deep, scope){
     try{
         var foo = new Function('scope', 'return scope' + deep);
-        return foo(scope) || this.configs.defaultText;
+        var value = foo(scope);
+        return value === undefined || value === null ? this.configs.defaultText : value;
     }catch(e){
         return this.configs.defaultText;
     }
@@ -59,14 +60,15 @@ exports.set = function(value, scope, deep){
         var foo = new Function('value', 'scope', 'scope' + deep + '=value;');
         foo(value, scope);
     }catch(e){
-        console.error(e);
+        console.warn(e);
     }
 };
 
 exports.value = function(expression, scope){
     try{
         var foo = new Function('scope', 'with(scope){return ' + expression + '}');
-        return foo(scope) || this.configs.defaultText;
+        var value = foo(scope);
+        return value === undefined || value === null ? this.configs.defaultText : value;
     }catch(e){
         return this.configs.defaultText;
     }
