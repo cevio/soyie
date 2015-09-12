@@ -26,5 +26,6 @@ AttributeParser.commands = {
     "es-src": require('../commands/es-src'),
     "es-html": require('../commands/es-html'),
     "es-binding": require('../commands/es-binding'),
+    "es-on": require('../commands/es-on'),
     "es-click": require('../commands/es-click')
 };

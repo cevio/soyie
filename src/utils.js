@@ -212,3 +212,29 @@ function unique( arr, sorted ) {
     // Truncate the array:
     arr.length = j+1;
 } // end FUNCTION unique()
+
+
+exports.makeFunction = function(expression){
+    return new Function('scope', ';with(scope){\nreturn ' + expression + '\n};')
+};
+
+/**
+ * 驼峰编码
+ * foo-style-css －> fooStyleCss
+ * @param str
+ * @returns {XML|*|string|void}
+ */
+exports.enHump = function(str){
+    return str.replace(/\-(\w)/g, function(all, letter){
+        return letter.toUpperCase();
+    });
+};
+
+/**
+ * 驼峰解码
+ * fooStyleCss -> foo-style-css
+ * @returns {string}
+ */
+exports.deHump = function(){
+    return str.replace(/([A-Z])/g,"-$1").toLowerCase();
+};
