@@ -6,7 +6,7 @@ Soyie.ready(function(){
             "name": "evio",
             "time": "2015-01-01",
             "content": "文字很美，再接再厉。",
-            "avatar": "http://tp2.sinaimg.cn/5174068425/50/5734587490/1",
+            "avatar": "http://baidu.com",
             "reply": [
                 {
                     "id": 4,
@@ -148,6 +148,18 @@ Soyie.ready(function(){
                 }
             });
             return i + '';
+        };
+        scope.imgerror = function(node){
+            console.warn(
+                'img src error:',
+                '[404]:',
+                node.src,
+                ':replaced with',
+                ':http://tp4.sinaimg.cn/2047613403/50/5736580418/0',
+                ':node is:',
+                node
+            );
+            node.src = 'http://tp4.sinaimg.cn/2047613403/50/5736580418/0';
         }
     });
 

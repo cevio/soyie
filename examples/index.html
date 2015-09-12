@@ -40,7 +40,10 @@
             <article es-repeat="list" class="sec {{!checked ? '' : 'checked'}}">
                 <div class="ass">
                     <div class="user clearfix" data-id="{{id}}">
-                        <div class="avatar pull-left"><img es-src="{{avatar}}" class="img-responsive img-circle"></div>
+                        <div class="avatar pull-left">
+                            <img es-src="{{avatar}}" class="img-responsive img-circle"
+                                 es-on="error: $parent.imgerror(this)">
+                        </div>
                         <div class="info pull-left">
                             <div class="name">{{name}} {{$index + 1}}</div>
                             <div class="time"><i class="fa fa-clock-o"></i> {{time}}</div>
