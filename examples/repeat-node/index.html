@@ -17,22 +17,22 @@
             <p>{{subject + title}}</p>
             dist.a = {{dist.a}}<br />
             <input type="password" es-passview="view" /><button es-passview="view">view</button>
-            <div es-repeat="item in data" class="comment-box" data-id="{{$parent.stitle}}">
+            <div es-repeat="data" class="comment-box" data-id="{{$parent.stitle}}">
                 <span class="index label label-success">{{$index + 1}}-{{$parent.dist.a}}</span>
-                <div class="info">{{item.name}}: <span>{{item.time}}</span></div>
+                <div class="info">{{name}}: <span>{{time}}</span></div>
                 <div class="words"><img es-src="{{$parent.img}}" width="30px">
-                    {{item.content}}<div class="from">发表在《{{$parent.stitle}}》</div></div>
+                    {{content}}<div class="from">发表在《{{$parent.stitle}}》</div></div>
                 <div class="reply">
-                    <div class="reply-box" es-repeat="detail in item.reply">
+                    <div class="reply-box" es-repeat="reply">
                         <span class="index label label-info">{{$index + 1}}<img es-src="{{$parent.$parent.img}}"
                                                                                 width="30px"></span>
-                        <div class="info">{{detail.name}}: <span>{{detail.time}}</span></div>
-                        <div class="words">{{$parent.$parent.dist.a}}:{{detail.content}}
-                            <div class="from">{{detail.name}}回复{{$parent.item.name}} - 发表在《{{$parent.$parent.stitle}}》</div>
-                            <button es-click="detail.click.call(this, $parent.name)" data-id="{{detail.content}}">click
+                        <div class="info">{{name}}: <span>{{time}}</span></div>
+                        <div class="words">{{$parent.$parent.dist.a}}:{{content}}
+                            <div class="from">{{name}}回复{{$parent.name}} - 发表在《{{$parent.$parent.stitle}}》</div>
+                            <button es-click="click.call(this, $parent.name)" data-id="{{content}}">click
                             </button>
-                            <input type="text" es-binding="detail.content" />
-                            <input type="text" es-binding="detail.name" />
+                            <input type="text" es-binding="content" />
+                            <input type="text" es-binding="name" />
                             <input type="text" es-binding="$parent.$parent.stitle" />
                         </div>
                     </div>

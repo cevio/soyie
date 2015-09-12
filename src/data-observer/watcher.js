@@ -39,17 +39,11 @@ watcher.prototype.auto = function(scope, router){
                 splices.forEach(function(splice){
                     var index = splice.index;
                     // 修改数组
-                    if ( splice.removed.length > 0 && splice.addedCount > 0 ){
-                        that.changeArray(router, index);
-                    }
+                    if ( splice.removed.length > 0 && splice.addedCount > 0 ){ that.changeArray(router, index); }
                     // 删除数组
-                    else if ( splice.removed.length > 0 && splice.addedCount === 0 ){
-                        that.removeArray(router, index);
-                    }
+                    else if ( splice.removed.length > 0 && splice.addedCount === 0 ){ that.removeArray(router, index); }
                     // 添加数组
-                    else{
-                        that.addArray(router, index);
-                    }
+                    else{ that.addArray(router, index); }
                 });
             });
             scope.forEach(function(object, index){
@@ -91,7 +85,6 @@ watcher.prototype.changeArray = function(router, index){
     this.update({ router: router, index: index, type: 'change' });
 };
 watcher.prototype.removeArray = function(router, index){
-    console.log({ router: router, index: index, type: 'remove' })
     this.update({ router: router, index: index, type: 'remove' });
 };
 

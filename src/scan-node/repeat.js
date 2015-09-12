@@ -12,24 +12,33 @@ var createRepeatDataSource = module.exports = function(){
     this.loop = true;
 };
 
+Object.defineProperty(createRepeatDataSource.prototype, 'index', {
+    set: function(index){
+        this.deep.parent = this.parent.deep.parent;
+        this.deep.locals = this.parent.deep.locals + "['" + index + "']";
+        this.deep.index = index;
+    }
+});
+
 createRepeatDataSource.prototype.all = function(DOM){
     var that = this;
     if ( !DOM ){ DOM = this.element; }
-    this.objects = this.objects.concat(attrParser(DOM, this.deep));
+    this.objects = this.objects.concat(attrParser(DOM, this));
     utils.slice.call(DOM.childNodes, 0).forEach(function(node){
         if ( utils.exceptTagNames.indexOf(node.tagName) === -1 ){
             switch ( node.nodeType ){
                 case 1:
                     if ( node.hasAttribute('es-repeat') ){
                         var Block = new that.constructer(node);
-                        Block.init(that.deep, that.parent.useAlias);
+                        Block.parent = that;
+                        Block.init();
                         that.objects.push(Block);
                     }else{
                         that.all(node);
                     }
                     break;
                 case 3:
-                    that.objects = that.objects.concat(textParser(node, that.deep));
+                    that.objects = that.objects.concat(textParser(node, that));
                     break;
             }
         }
@@ -37,16 +46,10 @@ createRepeatDataSource.prototype.all = function(DOM){
     return this;
 };
 
-createRepeatDataSource.prototype.render = function(scope, key){
-    var that = this;
+createRepeatDataSource.prototype.render = function(scope){
     this.objects.forEach(function(object){
-        object.render(scope, key, that.parent.alias);
+        object.render(scope);
     });
-};
-
-createRepeatDataSource.prototype.rebuild = function(index){
-    this.deep.locals = this.deep.parent.locals + "['" + index + "']";
-    this.index = index;
 };
 
 createRepeatDataSource.prototype.update = function(scope, key, alias, options){

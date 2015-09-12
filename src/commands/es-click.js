@@ -2,8 +2,8 @@ var node = require('./node');
 var utils = require('../utils');
 var ScopeParent = require('../data-observer/scope-parent');
 
-module.exports = function(DOM, expression, DEEP){
-    var DOMObject = new node(DOM, expression, DEEP);
+module.exports = function(DOM, expression, PARENT){
+    var DOMObject = new node(DOM, expression, PARENT);
     DOMObject.foo = function(){};
     DOMObject.set = function(){
         this.foo = makeFunction(this.expression);
@@ -15,7 +15,7 @@ module.exports = function(DOM, expression, DEEP){
     };
     DOMObject.element.addEventListener('click', function(){
         if ( typeof DOMObject.foo === 'function' ){
-            var scope = DOMObject.gruntScope(ScopeParent.source || {}, DOMObject.index, DOMObject.alias);
+            var scope = DOMObject.gruntScope(ScopeParent.source || {});
             DOMObject.foo.call(this, scope);
         }
     }, false);

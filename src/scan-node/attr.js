@@ -1,7 +1,7 @@
 var utils = require('../utils');
 
-var attr = module.exports = function(DOM, expression, DEEP, AttributeNode){
-    this.deep = DEEP;
+var attr = module.exports = function(DOM, expression, PARENT, AttributeNode){
+    this.parent = PARENT;
     this.expression = expression;
     this.element = DOM;
     this.attrnode = AttributeNode;
@@ -18,53 +18,38 @@ Object.defineProperty(attr.prototype, 'value', {
     }
 });
 
-attr.prototype.gruntScope = function(scope, index, alias){
-    var data = utils.get(this.deep.locals, scope);
-    var _scope = data;
-    if ( alias !== undefined && alias !== null ){
-        _scope = {};
-        _scope[alias] = _scope['$this'] = data;
-        _scope['$index'] = index;
-    }else{
-        if ( index !== undefined && index !== null ){
-            _scope['$index'] = index;
-        }
+attr.prototype.gruntScope = function(scope){
+    var data = utils.get(this.parent.deep.locals, scope);
+    var database = Object.create(data);
+    database.$index = this.parent.deep.index;
+    if ( /\B\$parent\b\./.test(this.expression) ){
+        database.$parent = this.makeParentScope(scope);
     }
-    _scope['$parent'] = this.makeParentScope(scope);
-    return _scope;
+    return database;
 };
 
 attr.prototype.makeParentScope = function(scope){
     var data = {};
     var loops = function(vm, dat){
         if ( vm && vm.parent ){
-            utils.mixin(dat, utils.get(vm.pather, scope));
             vm = vm.parent;
-            if ( vm.parent ){
-                dat.$parent = {};
-                loops(vm, dat.$parent);
-            }
+            utils.mixin(dat, utils.get(vm.locals, scope));
+            dat.$parent = {};
+            loops(vm, dat.$parent);
+        }else{
+            utils.mixin(dat, utils.get(vm.locals, scope));
         }
     };
-    loops(this.deep.parent, data);
+    loops(this.parent.deep, data);
     return data;
 };
 
-attr.prototype.get = function(scope, index, alias){
-    return utils.value(this.expression, this.gruntScope(scope, index, alias));
+attr.prototype.get = function(scope){
+    return utils.value(this.expression, this.gruntScope(scope));
 };
 
-attr.prototype.update = attr.prototype.render = function(scope, index, alias){
-    if ( utils.type(index, 'Object') ){
-        index =this.index;
-        alias = this.alias;
-    }else{
-        if ( index ){ this.index = index; }
-        else{ index = this.index; }
-        if ( alias ){ this.alias = alias; }
-        else{alias = this.alias;}
-    }
-    var value = this.get(scope, index, alias);
+attr.prototype.update = attr.prototype.render = function(scope){
+    var value = this.get(scope);
     if ( this.oldValue !== value ){
         this.value = value;
     }

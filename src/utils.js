@@ -93,22 +93,9 @@ exports.formatExpression = function(expression){
     return pools.join(' + ');
 };
 
-exports.makeDeepOnRealy = function(realy, Alias){
+exports.makeDeepOnExpression = function(realy, router){
     var splitor = realy.split('.');
-    if ( Alias ){
-        return "['" + splitor.slice(1).join("']['") + "']";
-    }else{
-        return "['" + splitor.join("']['") + "']";
-    }
-};
-
-exports.makeRouterOnRealy = function(realy, Alias){
-    var splitor = realy.split('.');
-    if ( Alias ){
-        return splitor.slice(1).join("-");
-    }else{
-        return splitor.join("-");
-    }
+    return (router || '') + "['" + splitor.join("']['") + "']";
 };
 
 exports.flatten = arrayFlatten;

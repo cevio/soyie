@@ -3,8 +3,8 @@ var utils = require('../utils');
 var ScopeParent = require('../data-observer/scope-parent');
 var likeTexts = 'text,password,tel,color,date,datetime,datetime-local,month,week,time,email,number,range,search,url'.split(',');
 
-var bindings = module.exports = function(DOM, expression, DEEP){
-    var DOMObject = new node(DOM, expression, DEEP);
+var bindings = module.exports = function(DOM, expression, PARENT){
+    var DOMObject = new node(DOM, expression, PARENT);
     var bindingtype = (DOM.type || 'NULL').toLowerCase();
     var bindingtagname = DOM.tagName.toUpperCase();
     var type = null;
@@ -37,7 +37,8 @@ bindings.Textarea = bindings.Text = function(object){
     // data 层改变数据方法
     object.element.addEventListener('input', function(){
         object.stop = true;
-        utils.set(this.value, ScopeParent.source || {}, object.getRouter());
+        var router = object.getRouter();
+        utils.set(this.value, ScopeParent.source || {}, router);
     }, false);
 };
 
@@ -66,7 +67,8 @@ bindings.Select = function(object){
         object.stop = true;
         var value = this.value;
         if ( !value ){ value = this.options[this.selectedIndex].value; }
-        utils.set(value, ScopeParent.source || {}, object.getRouter());
+        var router = object.getRouter();
+        utils.set(value, ScopeParent.source || {}, router);
     }, false);
 };
 
@@ -84,7 +86,8 @@ bindings.Checkbox = function(object){
         object.stop = true;
         var value = this.value;
         if ( !this.checked ){ value = undefined; }
-        utils.set(value, ScopeParent.source || {}, object.getRouter());
+        var router = object.getRouter();
+        utils.set(value, ScopeParent.source || {}, router);
     }, false);
 };
 
@@ -102,6 +105,7 @@ bindings.Radio = function(object){
         object.stop = true;
         var value = this.value;
         if ( !this.checked ){ value = undefined; }
-        utils.set(value, ScopeParent.source || {}, object.getRouter());
+        var router = object.getRouter();
+        utils.set(value, ScopeParent.source || {}, router);
     }, false);
 };

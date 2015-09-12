@@ -9,8 +9,6 @@ var scan = module.exports = function(){
     this.objects = [];
     this.deep = new ScopeParent();
     this.deep.locals = '';
-    this.deep.pather = '';
-    this.deep.router = '#';
     this.element = null;
     this.source = null;
 };
@@ -22,7 +20,7 @@ scan.prototype.init = function(data){
 
 scan.prototype.all = function(DOM){
     var that = this;
-    this.objects = this.objects.concat(attrParser(DOM, this.deep));
+    this.objects = this.objects.concat(attrParser(DOM, this));
     if ( !this.element ) this.element = DOM;
     utils.slice.call(DOM.childNodes, 0).forEach(function(node){
         if ( utils.exceptTagNames.indexOf(node.tagName) === -1 ){
@@ -31,14 +29,15 @@ scan.prototype.all = function(DOM){
                     if ( !node.hasAttribute('es-controller') ){
                         if ( node.hasAttribute('es-repeat') ){
                             var repeat = new repeatParser(node);
-                            repeat.init(that.deep, false);
+                            repeat.parent = that;
+                            repeat.init();
                             that.objects.push(repeat);
                         }
                         else{ that.all(node); }
                     }
                     break;
                 case 3:
-                    that.objects = that.objects.concat(textParser(node, that.deep));
+                    that.objects = that.objects.concat(textParser(node, that));
                     break;
             }
         }

@@ -4,8 +4,6 @@ var ScopeParent = require('../data-observer/scope-parent');
 
 var createRepeatConstructor = module.exports = function(DOM){
     this.element = DOM;
-    this.alias = null;
-    this.realy = null;
     this.deep = new ScopeParent();
     this.alone = true;
     this.template = null;
@@ -13,53 +11,22 @@ var createRepeatConstructor = module.exports = function(DOM){
     this.commentEndNode = null;
     this.fragment = document.createDocumentFragment();
     this.objects = [];
-    this.oldValue = null;
 };
 
-createRepeatConstructor.prototype.getCommandInVars = function(DEEP, _ALIAS, rebuild){
-    var expression = this.element.getAttribute('es-repeat').trim();
-    var expressExec = utils.REGEXP_COMMAND_IN.exec(expression);
+createRepeatConstructor.prototype.format = function(){
+    this.expression = this.element.getAttribute('es-repeat').trim();
     this.element.removeAttribute('es-repeat');
-    this.expression = expression;
-    this._ALIAS = _ALIAS;
-
-    this.useAlias = true;
-    this.expressExec = true;
-    this.deep.parent = DEEP;
-    this.deep.pather = DEEP.locals;
-
-    if ( !expressExec ){
-        this.expressExec = false;
-        this.useAlias = false;
-        this.deep.locals = DEEP.locals + utils.makeDeepOnRealy(expression, _ALIAS);
-        this.deep.router = DEEP.router + '-' + utils.makeRouterOnRealy(expression, _ALIAS);
-        return this;
-    }
-
-    this.alias = expressExec[1];
-    this.realy = expressExec[2];
-    this.deep.locals = DEEP.locals + utils.makeDeepOnRealy(this.realy, _ALIAS);
-    this.deep.router = DEEP.router + '-' + utils.makeRouterOnRealy(this.realy, _ALIAS);
-
-    return this;
+    return this.rebuild();
 };
 
 createRepeatConstructor.prototype.rebuild = function(){
-    this.deep.pather = this.deep.parent.locals;
-
-    if ( !this.expressExec ){
-        this.deep.locals = this.deep.parent.locals + utils.makeDeepOnRealy(this.expression, this._ALIAS);
-        return this;
-    }
-
-    this.deep.locals = this.deep.parent.locals + utils.makeDeepOnRealy(this.realy, this._ALIAS);
-
+    this.deep.parent = this.parent.deep;
+    this.deep.locals = this.deep.parent.locals + utils.makeDeepOnExpression(this.expression);
     return this;
 };
 
-createRepeatConstructor.prototype.init = function(DEEP, _ALIAS){
-    this.getCommandInVars(DEEP, _ALIAS);
-    this.freeze();
+createRepeatConstructor.prototype.init = function(){
+    this.format(); this.freeze();
 };
 
 createRepeatConstructor.prototype.freeze = function(){
@@ -74,13 +41,7 @@ createRepeatConstructor.prototype.freeze = function(){
 };
 
 createRepeatConstructor.prototype.append = function(index){
-    var deep = this.deep.locals + "['" + index + "']";
-    var _deep = this.deep.router + '-' + index;
     var single = new repeatSource();
-    single.deep.locals = deep;
-    single.deep.router = _deep;
-    single.deep.parent = this.deep;
-    single.deep.pather = this.deep.pather;
     single.constructer = createRepeatConstructor;
     single.parent = this;
     single.element = this.template.cloneNode(true);
@@ -134,53 +95,30 @@ createRepeatConstructor.prototype.update = function(scope, options){
         if ( options.type === 'add' ){
             if ( options.index > -1 ){
                 var single = this.append(options.index);
-                single.render(scope, options.index);
+                single.render(scope);
             }else{
                 this.render(scope);
             }
         }
         else if ( options.type === 'remove' ){
             this.remove(options.index);
-            var len = this.objects.length - 1;
-            var removeIndex = -1;
-            if ( options.index > len ){
-                removeIndex = len;
-            }else{
-                removeIndex = options.index;
-            }
+            var len = this.objects.length - 1, removeIndex = -1;
+            if ( options.index > len ){ removeIndex = len; }
+            else{ removeIndex = options.index;}
             this.objects.slice(removeIndex).forEach(function(object, index){
                 object.index = removeIndex + index;
-                object.deep.locals = that.deep.locals + "['" + object.index + "']";
-                object.update(scope, object.index, object.parent.alias, {
-                    type: 'rebuild'
-                });
+                object.update(scope);
             });
         }
         else if ( options.type === 'change' ){
-            var changeObject = (function(index){
-                var router = this.deep.locals + "['" + index + "']";
-                var ret = null;
-                for ( var i = 0 ; i < this.objects.length ; i++ ){
-                    var object = this.objects[i];
-                    if ( object.deep.locals === router ){
-                        ret = object;
-                        break;
-                    }
-                }
-                return ret;
-            }).call(this, options.index);
-            if ( changeObject ){
-                changeObject.update(scope, options.index, changeObject.parent.alias);
-            }
+            this.objects[options.index].update(scope);
         }
     }
     else if ( options && options.type === 'rebuild' ){
+        this.rebuild();
         this.objects.forEach(function(object, index){
-            object.deep.locals = object.deep.parent.locals + "['" + index + "']";
-            object.deep.pather = object.deep.parent.pather;
-            object.update(scope, index, object.parent.alias, {
-                type: 'rebuild'
-            });
+            object.index = index;
+            object.update(scope);
         });
     }
     else{

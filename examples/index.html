@@ -67,32 +67,32 @@
                     </div>
                 </div>
                 <div class="reply">
-                    <div class="reply-box sec {{!re.checked ? '' : 'checked'}}" es-repeat="re in reply">
-                        <div class="user clearfix" data-id="{{re.id}}">
+                    <div class="reply-box sec {{!checked ? '' : 'checked'}}" es-repeat="reply">
+                        <div class="user clearfix" data-id="{{id}}">
                             <div class="avatar pull-right">
-                                <img es-src="{{re.avatar}}" class="img-responsive img-circle">
+                                <img es-src="{{avatar}}" class="img-responsive img-circle">
                             </div>
                             <div class="info pull-right">
                                 <div class="name text-right">
-                                    {{re.name}} <i class="fa fa-exchange"></i> {{$parent.name}}
+                                    {{name}} <i class="fa fa-exchange"></i> {{$parent.name}}
                                 </div>
-                                <div class="time text-right"><i class="fa fa-clock-o"></i> {{re.time}}
-                                    <input type="checkbox" es-binding="re.checked" value="1" /> {{$index + 1}}</div>
+                                <div class="time text-right"><i class="fa fa-clock-o"></i> {{time}}
+                                    <input type="checkbox" es-binding="checked" value="1" /> {{$index + 1}}</div>
                             </div>
                         </div>
-                        <div class="content text-right">发表在《{{$parent.$parent.title}}》：{{re.content}}</div>
+                        <div class="content text-right">发表在《{{$parent.$parent.title}}》：{{content}}</div>
                         <div class="action">
                             <div class="form-group">
-                                <label for="exampleInputEmail{{re.id}}">修改作者</label>
-                                <input type="text" class="form-control" id="exampleInputEmail{{re.id}}"
-                                       es-binding="re.name" />
+                                <label for="exampleInputEmail{{id}}">修改作者</label>
+                                <input type="text" class="form-control" id="exampleInputEmail{{id}}"
+                                       es-binding="name" />
                             </div>
                             <div class="form-group">
-                                <label for="exampleInputContent{{re.id}}">修改内r容</label>
-                            <textarea class="form-control" id="exampleInputContent{{re.id}}"
-                                      es-binding="re.content"></textarea>
+                                <label for="exampleInputContent{{id}}">修改内r容</label>
+                            <textarea class="form-control" id="exampleInputContent{{id}}"
+                                      es-binding="content"></textarea>
                             </div>
-                            <button class="btn btn-danger" es-click="re.remove()">删除这条数据</button>
+                            <button class="btn btn-danger" es-click="remove()">删除这条数据</button>
                         </div>
                     </div>
                 </div>

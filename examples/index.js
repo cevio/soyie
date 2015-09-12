@@ -117,34 +117,34 @@ Soyie.ready(function(){
         })
     });
 
-    Soyie.invoke('app', function(scope){
+    Soyie.invoke('app',function(scope){
         scope.title = '我的评论列表';
         scope.list = arrays;
-        scope.tasks = [
-            { name: "第1个任务", check: 0, value: 1 },
-            { name: "第2个任务", check: 0, value: 1 },
-            { name: "第3个任务", check: 0, value: 1 },
-            { name: "第4个任务", check: 0, value: 1 },
-            { name: "第5个任务", check: 0, value: 1 }
-        ];
-        scope.newtask = '';
-        scope.addtask = function(){
-            scope.tasks.push({
-                name: scope.newtask,
-                check: 0,
-                value: 1
-            });
-            scope.newtask = '';
-        };
-        scope.total = function(){
-            var i = scope.tasks.length;
-            scope.tasks.forEach(function(t){
-                if ( t.check + '' === '1' ){
-                    i--;
-                }
-            });
-            return i + '';
-        }
+        //scope.tasks = [
+        //    { name: "第1个任务", check: 0, value: 1 },
+        //    { name: "第2个任务", check: 0, value: 1 },
+        //    { name: "第3个任务", check: 0, value: 1 },
+        //    { name: "第4个任务", check: 0, value: 1 },
+        //    { name: "第5个任务", check: 0, value: 1 }
+        //];
+        //scope.newtask = '';
+        //scope.addtask = function(){
+        //    scope.tasks.push({
+        //        name: scope.newtask,
+        //        check: 0,
+        //        value: 1
+        //    });
+        //    scope.newtask = '';
+        //};
+        //scope.total = function(){
+        //    var i = scope.tasks.length;
+        //    scope.tasks.forEach(function(t){
+        //        if ( t.check + '' === '1' ){
+        //            i--;
+        //        }
+        //    });
+        //    return i + '';
+        //}
     });
 
 });

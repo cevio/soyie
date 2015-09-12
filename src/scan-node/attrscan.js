@@ -1,25 +1,25 @@
 var attrobject = require('./attr');
 var utils = require('../utils');
 
-var AttributeParser = module.exports = function(DOM, DEEP){
+var AttributeParser = module.exports = function(DOM, PARENT){
     var Attributes = [];
     utils.slice.call(DOM.attributes, 0).forEach(function(AttributeNode){
         var AttributeName = AttributeNode.nodeName;
         var AttributeValue = AttributeNode.nodeValue;
         if ( typeof AttributeParser.commands[AttributeName] === 'function' ){
-            Attributes.push(AttributeParser.commands[AttributeName](DOM, AttributeValue, DEEP, AttributeNode));
+            Attributes.push(AttributeParser.commands[AttributeName](DOM, AttributeValue, PARENT, AttributeNode));
         }else{
             if ( AttributeValue.split(utils.REGEXP_TAGSPILTOR).length > 1 ){
-                Attributes.push(AttributeParser.createNormalAttributeFactory(DOM, AttributeValue, DEEP, AttributeNode));
+                Attributes.push(AttributeParser.createNormalAttributeFactory(DOM, AttributeValue, PARENT, AttributeNode));
             }
         }
     });
     return Attributes;
 };
 
-AttributeParser.createNormalAttributeFactory = function(DOM, expression, DEEP, AttributeNode){
+AttributeParser.createNormalAttributeFactory = function(DOM, expression, PARENT, AttributeNode){
     expression = utils.formatExpression(expression);
-    return new attrobject(DOM, expression, DEEP, AttributeNode);
+    return new attrobject(DOM, expression, PARENT, AttributeNode);
 };
 
 AttributeParser.commands = {
