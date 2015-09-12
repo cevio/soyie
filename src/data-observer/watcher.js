@@ -69,6 +69,7 @@ watcher.prototype.addObject = function(property, newvalue, router){
 watcher.prototype.removeObject = function(property, oldvalue, router){
     if ( property === '$parent' ) return;
     this.update();
+    this.clear(oldvalue, router);
 };
 watcher.prototype.changeObject = function(property, newvalue, oldvalue, router){
     if ( property === '$parent' ) return;
