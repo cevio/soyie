@@ -4,6 +4,7 @@ var textParser = require('./textscan');
 var repeatParser = require('./repeatscan');
 var ScopeParent = require('../data-observer/scope-parent');
 var watcher = require('../data-observer/watcher');
+var plugin = require('../plugin');
 
 var scan = module.exports = function(){
     this.objects = [];
