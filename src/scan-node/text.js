@@ -33,11 +33,11 @@ text.prototype.makeParentScope = function(scope){
         if ( vm && vm.parent ){
             dat.$index = vm.index;
             vm = vm.parent;
-            utils.mixin(dat, utils.get(vm.locals, scope));
+            utils.mixin(dat, utils.get(vm.locals, scope), true);
             dat.$parent = {};
             loops(vm, dat.$parent);
         }else{
-            utils.mixin(dat, utils.get(vm.locals, scope));
+            utils.mixin(dat, utils.get(vm.locals, scope), true);
         }
     };
     loops(this.parent.deep, data);

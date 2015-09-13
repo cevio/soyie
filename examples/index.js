@@ -121,6 +121,13 @@ Soyie.ready(function(){
         })
     });
 
+
+    Soyie.component('child', {
+        props: ['myMsg'],
+        template: '<span>{{myMsg}}</span>'
+    });
+
+
     Soyie.invoke('app',function(scope){
         scope.title = '我的评论列表';
         scope.list = arrays;

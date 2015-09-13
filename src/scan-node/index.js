@@ -4,6 +4,7 @@ var textParser = require('./textscan');
 var repeatParser = require('./repeatscan');
 var ScopeParent = require('../data-observer/scope-parent');
 var watcher = require('../data-observer/watcher');
+var plugin = require('../plugin');
 
 var scan = module.exports = function(){
     this.objects = [];
@@ -23,10 +24,15 @@ scan.prototype.all = function(DOM){
     this.objects = this.objects.concat(attrParser(DOM, this));
     if ( !this.element ) this.element = DOM;
     utils.slice.call(DOM.childNodes, 0).forEach(function(node){
-        if ( utils.exceptTagNames.indexOf(node.tagName) === -1 ){
+        var tagName = node.tagName;
+        if ( tagName ) tagName = tagName.toLowerCase();
+        if ( utils.exceptTagNames.indexOf(tagName) === -1 ){
             switch ( node.nodeType ){
                 case 1:
-                    if ( !node.hasAttribute('es-controller') ){
+                    if ( utils.components[tagName] ){
+                        plugin(tagName, node, utils.components[tagName], that);
+                    }
+                    else if ( !node.hasAttribute('es-controller') ){
                         if ( node.hasAttribute('es-repeat') ){
                             var repeat = new repeatParser(node);
                             repeat.parent = that;

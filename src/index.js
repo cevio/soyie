@@ -35,4 +35,12 @@ exports.invoke = function(controller, initScope, factory){
 };
 
 exports.ready = domReady;
-exports.component = function(name, foo){};
+exports.component = function(name, foo){
+    if ( typeof foo === 'function' ){ utils.components[name] = foo; }
+    else{
+        utils.components[name] = function(){
+            return foo;
+        };
+    }
+    return this;
+};

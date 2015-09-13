@@ -29,11 +29,11 @@ node.prototype.makeParentScope = function(scope){
         if ( vm && vm.parent ){
             vm = vm.parent;
             dat.$index = vm.index;
-            utils.mixin(dat, utils.get(vm.locals, scope));
+            utils.mixin(dat, utils.get(vm.locals, scope), true);
             dat.$parent = {};
             loops(vm, dat.$parent);
         }else{
-            utils.mixin(dat, utils.get(vm.locals, scope));
+            utils.mixin(dat, utils.get(vm.locals, scope), true);
         }
     };
     loops(this.parent.deep, data);

@@ -5,7 +5,7 @@ exports.REGEXP_STRING = /(["|'])(.+?)*?\1/g;
 exports.REGEXP_COMMAND_IN = /([^\s]+?)\sin\s(.+)/i;
 exports.REGEXP_PARENT = /(\B\$parent\.)+?[a-zA-z_\.\$0-9]+/g;
 exports.exceptTagNames = ['head', 'script', 'meta', 'link', 'title', 'script', 'hr', 'br'];
-
+exports.components = {};
 exports.configs = {
     defaultText: ''
 };
@@ -235,6 +235,6 @@ exports.enHump = function(str){
  * fooStyleCss -> foo-style-css
  * @returns {string}
  */
-exports.deHump = function(){
+exports.deHump = function(str){
     return str.replace(/([A-Z])/g,"-$1").toLowerCase();
 };
