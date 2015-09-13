@@ -11,17 +11,22 @@ var component = module.exports = function(DOM){
     this.fragment = document.createDocumentFragment();
     this.commentStartNode = null;
     this.commentEndNode = null;
-    this.deep = new ScopeParent();
-    this.deep.locals = '';
     this.props = [];
     this.objects = [];
     this.template = DOM.innerHTML;
     this.humps = {};
+    this.deep = new ScopeParent();
 };
 
 utils.mixin(component.prototype, EventEmitter.prototype);
 
+component.prototype.rebuild = function(){
+    this.deep.parent = this.parent.deep;
+    this.deep.locals = this.deep.parent.locals;
+};
+
 component.prototype.__init__ = function(){
+    this.rebuild();
     this.commentStartNode = document.createComment('Component Start');
     this.commentEndNode = document.createComment('Component End');
     this.fragment.appendChild(this.commentStartNode);
@@ -30,7 +35,6 @@ component.prototype.__init__ = function(){
     this.__compileAttribute__();
     this.__replaceTemplate__();
     this.__all__();
-    console.log(this.objects)
 };
 
 component.prototype.__all__ = function(DOM){
@@ -79,8 +83,8 @@ component.prototype.__compileAttribute__ = function(){
     utils.slice.call(this.element.attributes, 0).forEach(function(attribute){
         if ( that.__props__.indexOf(attribute.nodeName) > -1 ){
             var expression = utils.formatExpression(attribute.nodeValue);
-            var nodeAttr = new attrComponent(expression);
-            that.humps[utils.enHump(attribute.nodeName)] = nodeAttr
+            var nodeAttr = new attrComponent(expression, that.parent);
+            that.humps[utils.enHump(attribute.nodeName)] = nodeAttr;
         }
     });
 };
@@ -113,18 +117,25 @@ component.prototype.__replaceTemplate__ = function(){
     this.element = elements;
 };
 
-component.prototype.getScope = function(){
-    var scope = Object.create();
-    var source = ScopeParent.source;
+component.prototype.getScope = function(_scope){
+    var scope = Object.create({});
+    var source = _scope || ScopeParent.source;
     for ( var i in this.humps ){
-
+        scope[i] = this.humps[i].getScope(source);
     }
+    return scope;
 };
 
-component.prototype.render = function(){
-    console.log('render');
+component.prototype.render = function(scope){
+    var scope = this.getScope(scope);
+    this.objects.forEach(function(object){
+        object.render(scope);
+    });
 };
 
-component.prototype.update = function(){
-    console.log('update');
+component.prototype.update = function(scope, options){
+    var scope = this.getScope(scope);
+    this.objects.forEach(function(object){
+        object.update(scope, options);
+    });
 };

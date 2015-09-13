@@ -2,6 +2,7 @@ var attrParser = require('./attrscan');
 var textParser = require('./textscan');
 var utils = require('../utils');
 var ScopeParent = require('../data-observer/scope-parent');
+var plugin = require('../plugin');
 
 var createRepeatDataSource = module.exports = function(){
     this.deep = new ScopeParent();
@@ -25,10 +26,15 @@ createRepeatDataSource.prototype.all = function(DOM){
     if ( !DOM ){ DOM = this.element; }
     this.objects = this.objects.concat(attrParser(DOM, this));
     utils.slice.call(DOM.childNodes, 0).forEach(function(node){
-        if ( utils.exceptTagNames.indexOf(node.tagName) === -1 ){
+        var tagName = node.tagName;
+        if ( tagName ) tagName = tagName.toLowerCase();
+        if ( utils.exceptTagNames.indexOf(tagName) === -1 ){
             switch ( node.nodeType ){
                 case 1:
-                    if ( node.hasAttribute('es-repeat') ){
+                    if ( utils.components[tagName] ){
+                        plugin(tagName, node, utils.components[tagName], that);
+                    }
+                    else if ( node.hasAttribute('es-repeat') ){
                         var Block = new that.constructer(node);
                         Block.parent = that;
                         Block.init();

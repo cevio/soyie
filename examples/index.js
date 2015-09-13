@@ -1,4 +1,4 @@
-var Soyie = require('../src/index');
+//var Soyie = require('../src/index');
 Soyie.ready(function(){
     var arrays = [
         {
@@ -128,7 +128,7 @@ Soyie.ready(function(){
     });
 
 
-    Soyie.invoke('app',function(scope){
+    Soyie.invoke('app',{title: 'my app'},function(scope){
         scope.title = '我的评论列表';
         scope.list = arrays;
         scope.tasks = [
