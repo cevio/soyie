@@ -117,7 +117,7 @@ component.prototype.__replaceTemplate__ = function(){
     this.element = elements;
 };
 
-component.prototype.getScope = function(_scope){
+component.prototype.__getScope__ = function(_scope){
     var scope = Object.create({});
     var source = _scope || ScopeParent.source;
     for ( var i in this.humps ){
@@ -126,15 +126,15 @@ component.prototype.getScope = function(_scope){
     return scope;
 };
 
-component.prototype.render = function(scope){
-    var scope = this.getScope(scope);
+component.prototype.render = function(_scope){
+    var scope = this.__getScope__(_scope);
     this.objects.forEach(function(object){
         object.render(scope);
     });
 };
 
-component.prototype.update = function(scope, options){
-    var scope = this.getScope(scope);
+component.prototype.update = function(_scope, options){
+    var scope = this.__getScope__(_scope);
     this.objects.forEach(function(object){
         object.update(scope, options);
     });
