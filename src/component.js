@@ -1,10 +1,8 @@
 var attrComponent = require('./component-attribute');
-var attrParser = require('./scan-node/attrscan');
-var textParser = require('./scan-node/textscan');
 var EventEmitter = require('events').EventEmitter;
 var utils = require('./utils');
-var repeatParser = require('./scan-node/repeatscan');
 var ScopeParent = require('./data-observer/scope-parent');
+
 var component = module.exports = function(DOM){
     this.element = DOM;
     this.namespace = 'component';
@@ -45,19 +43,20 @@ component.prototype.__all__ = function(DOM){
         jobject = [DOM];
     }
     jobject.forEach(function(dom){
-        var tagName = dom.tagName;
-        if ( tagName ) tagName = tagName.toLowerCase();
-        that.objects = that.objects.concat(attrParser(dom, that));
+        if ( dom.nodeType === 1 ) that.objects = that.objects.concat(that.coms.attr(dom, that));
         utils.slice.call(dom.childNodes, 0).forEach(function(node){
+            var tagName = node.tagName;
+            if ( tagName ) tagName = tagName.toLowerCase();
             if ( utils.exceptTagNames.indexOf(tagName) === -1 ){
                 switch ( node.nodeType ){
                     case 1:
                         if ( utils.components[tagName] ){
-                            that.pluginConstructor(tagName, node, utils.components[tagName], that);
+                            that.pluginConstructor(tagName, node, utils.components[tagName], that, that.coms);
                         }
                         else if ( !node.hasAttribute('es-controller') ){
                             if ( node.hasAttribute('es-repeat') ){
-                                var repeat = new repeatParser(node);
+                                var repeat = new that.coms.repeat(node);
+                                repeat.coms = that.coms;
                                 repeat.parent = that;
                                 repeat.init();
                                 that.objects.push(repeat);
@@ -66,7 +65,7 @@ component.prototype.__all__ = function(DOM){
                         }
                         break;
                     case 3:
-                        that.objects = that.objects.concat(textParser(node, that));
+                        that.objects = that.objects.concat(that.coms.text(node, that));
                         break;
                 }
             }

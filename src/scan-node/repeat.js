@@ -1,5 +1,3 @@
-var attrParser = require('./attrscan');
-var textParser = require('./textscan');
 var utils = require('../utils');
 var ScopeParent = require('../data-observer/scope-parent');
 var plugin = require('../plugin');
@@ -24,7 +22,7 @@ Object.defineProperty(createRepeatDataSource.prototype, 'index', {
 createRepeatDataSource.prototype.all = function(DOM){
     var that = this;
     if ( !DOM ){ DOM = this.element; }
-    this.objects = this.objects.concat(attrParser(DOM, this));
+    this.objects = this.objects.concat(that.coms.attr(DOM, this));
     utils.slice.call(DOM.childNodes, 0).forEach(function(node){
         var tagName = node.tagName;
         if ( tagName ) tagName = tagName.toLowerCase();
@@ -32,10 +30,11 @@ createRepeatDataSource.prototype.all = function(DOM){
             switch ( node.nodeType ){
                 case 1:
                     if ( utils.components[tagName] ){
-                        plugin(tagName, node, utils.components[tagName], that);
+                        plugin(tagName, node, utils.components[tagName], that, that.coms);
                     }
                     else if ( node.hasAttribute('es-repeat') ){
                         var Block = new that.constructer(node);
+                        Block.coms = that.coms;
                         Block.parent = that;
                         Block.init();
                         that.objects.push(Block);
@@ -44,7 +43,7 @@ createRepeatDataSource.prototype.all = function(DOM){
                     }
                     break;
                 case 3:
-                    that.objects = that.objects.concat(textParser(node, that));
+                    that.objects = that.objects.concat(that.coms.text(node, that));
                     break;
             }
         }

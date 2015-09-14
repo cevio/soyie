@@ -43,6 +43,7 @@ createRepeatConstructor.prototype.freeze = function(){
 createRepeatConstructor.prototype.append = function(index){
     var single = new repeatSource();
     single.constructer = createRepeatConstructor;
+    single.coms = this.coms;
     single.parent = this;
     single.element = this.template.cloneNode(true);
     single.index = index;

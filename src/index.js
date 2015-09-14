@@ -1,6 +1,10 @@
 var vmodel = require('./scan-node/index');
 var utils = require('./utils');
 var domReady = require('domready');
+exports.coms = {};
+exports.coms.repeat = require('./scan-node/repeatscan');
+exports.coms.attr = require('./scan-node/attrscan');
+exports.coms.text = require('./scan-node/textscan');
 
 exports.select = function(expression){
     if ( !utils.type(expression, 'String') ){
@@ -18,7 +22,9 @@ exports.select = function(expression){
 };
 
 exports.controller = function(controller){
-    return (new vmodel()).all(this.select(controller));
+    var vm = new vmodel();
+    vm.coms = this.coms;
+    return vm.all(this.select(controller));
 };
 
 exports.invoke = function(controller, initScope, factory){

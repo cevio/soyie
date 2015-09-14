@@ -7,5 +7,6 @@ var node = module.exports = function(expression, PARENT){
 
 node.prototype.getScope = function(source){
     var scope = utils.get(this.parent.deep.locals, source);
-    return utils.value(this.expression, scope);
+    var _scope = utils.value(this.expression, scope);
+    return _scope;
 };

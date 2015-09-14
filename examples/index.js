@@ -123,8 +123,7 @@ Soyie.ready(function(){
 
 
     Soyie.component('child', {
-        props: ['myMsg'],
-        template: '<span>{{myMsg}}</span>'
+        props: ['myMsg', 'myList']
     });
 
 

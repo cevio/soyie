@@ -120,7 +120,12 @@
             <input type="text" es-binding="newtask" class="form-control" /><br />
             <button class="btn btn-info" es-click="addtask()">add</button>
             <!--component-->
-            <child my-msg="this is: {{title}}"></child>
+            <child my-msg="this is: {{title}}" my-list="{{list}}">
+                <span>{{myMsg}}</span>
+                <ul>
+                    <li es-repeat="myList">{{name}}</li>
+                </ul>
+            </child>
         </div>
     </div>
 </div>
