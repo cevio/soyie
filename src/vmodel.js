@@ -5,7 +5,6 @@
  */
 import * as watcher from './scope/watcher';
 import * as utils from './utils';
-import * as Dep from './scope/dep';
 
 /**
  * VMODEL 原型

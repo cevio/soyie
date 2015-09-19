@@ -1,6 +1,5 @@
 import * as utils from '../utils';
 import * as observeShim from './observe-shim';
-import * as Dep from './dep';
 
 var arrayProto = Array.prototype;
 var arrayMethods = Object.create(arrayProto);
