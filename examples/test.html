@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <app name="app">
+        {{dist}}, {{most}}, {{title}} , {{p}}<br />
+        {{ko.x.k.z}} {{ko.x.k.c}}
+        <child msg="{{title}}">
+            <p>title: {{msg}}</p>
+        </child>
+        <repeat source="{{list}}" parent="{{title + dist + most}}">
+            <div class="repeeat parent">
+                <p>{{$index}} =&gt; a:{{source.a}} + b:{{source.b}} = {{source.a + source.b}}, parent: {{parent}}</p>
+                <repeat source="{{source.c}}" parent="{{parent}}">
+                    <div class="repeat child">
+                    <dd>{{$index}} =&gt; {{source}} , parent: {{parent}}</dd>
+                        <child msg="{{source}}">
+                            <div style="color:red;">{{msg}}</div>
+                        </child>
+                    </div>
+                </repeat>
+            </div>
+        </repeat>
+    </app>
+    <script src="./bundle.js"></script>
+</body>
+</html>

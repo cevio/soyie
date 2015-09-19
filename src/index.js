@@ -1,52 +1,87 @@
-var vmodel = require('./scan-node/index');
-var utils = require('./utils');
-var domReady = require('domready');
-exports.coms = {};
-exports.coms.repeat = require('./scan-node/repeatscan');
-exports.coms.attr = require('./scan-node/attrscan');
-exports.coms.text = require('./scan-node/textscan');
+/**
+ * 加载component组件模型
+ */
+import {COMPONENT} from './component/index';
 
-exports.select = function(expression){
-    if ( !utils.type(expression, 'String') ){
-        return expression;
-    }
+/**
+ * 加载component组件列表
+ */
+import componentMap from './component/map';
 
-    var elements = document.querySelectorAll("[es-controller='" + expression + "']");
-    return elements.length === 0
-        ? null
-        : (
-        elements.length === 1
-            ? elements[0]
-            : utils.slice.call(elements, 0)
-    );
-};
+/**
+ * 加载扫描节点功能
+ */
+import {DOMSCAN} from './use/node-scan';
 
-exports.controller = function(controller){
-    var vm = new vmodel();
-    vm.coms = this.coms;
-    return vm.all(this.select(controller));
-};
+/**
+ * 加载节点树加载完毕功能模型
+ */
+import domReady from 'domready';
 
-exports.invoke = function(controller, initScope, factory){
-    var vm = this.controller(controller);
-    if ( typeof initScope === 'function' ){
-        factory = initScope;
-        initScope = {};
-    }
-    vm.init(initScope);
-    if ( factory ){
-        vm.update(factory);
-    }
-    return vm;
-};
+/**
+ * 加载utils模型
+ */
+import * as utils from './utils';
 
-exports.ready = domReady;
-exports.component = function(name, foo){
-    if ( typeof foo === 'function' ){ utils.components[name] = foo; }
-    else{
-        utils.components[name] = function(){
-            return foo;
-        };
+/**
+ * 加载循环模块模型
+ */
+import {RepeatBlock} from './component/repeat';
+
+/**
+ * 加载vmodel
+ */
+import vmodel from './vmodel';
+
+/**
+ * 注册component组件
+ * @param name 组件名 即tagName名
+ * @param props 组件组成部分 {json}
+ * @returns {component}
+ */
+export function component(name, props){
+    if ( typeof props === 'function' ){
+        componentMap.set(name, props);
+    }else{
+        class MODEL extends COMPONENT {
+            constructor(node){
+                super(node);
+                utils.extend(this, props, true);
+            }
+        }
+        componentMap.set(name, MODEL);
     }
     return this;
-};
+}
+
+/**
+ * 节点加载完毕回调
+ * @param foo
+ */
+export function ready(foo){
+    domReady(foo);
+}
+
+/**
+ * controller模型对象
+ * @param name
+ * @returns {*}
+ */
+export function app(name){
+    var controller =
+        typeof name !== 'string'
+            ? name
+            : document.querySelector("app[name='" + name + "']");
+
+    var template = controller.innerHTML;
+    var copy = utils.createHtmlNode(template);
+    controller.parentNode.replaceChild(copy.node, controller);
+    var vm = new vmodel();
+    DOMSCAN(copy, vm);
+    return vm;
+}
+
+/**
+ * 注册repeat模型component.
+ */
+component('repeat', RepeatBlock);
