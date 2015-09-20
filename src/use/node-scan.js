@@ -22,7 +22,7 @@ function ScanNode(node, vm){
         var classobject = componentMap.get(tagName);
         var object = new classobject(node);
         pushAttributes(object.keys, attributes)
-        object.parent = vm;
+        object.parentroot = vm;
         object.init();
         vm.components.push(object);
     }else{

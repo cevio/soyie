@@ -17,6 +17,8 @@ export class COMPONENT {
         this.keys = {};
         this.parent = null;
         this.scope = null;
+        this.upnotify = false;
+        this.rendered = false;
     }
     init(){
         this.injectProps();
@@ -37,7 +39,9 @@ export class COMPONENT {
                     dehump: hump
                 };
                 this.outerfaces[hump] = this.interfaces[pros];
-                this.keys[pros] = utils.formatExpression(this.virtualDom.getAttribute(hump));
+                if ( this.virtualDom.hasAttribute(hump) ){
+                    this.keys[pros] = utils.formatExpression(this.virtualDom.getAttribute(hump));
+                }
             });
         }else{
             for ( var n in this.props ){
@@ -53,22 +57,20 @@ export class COMPONENT {
                     this.interfaces[n].type = [this.interfaces[n].type];
                 }
                 this.outerfaces[hump] = this.interfaces[n];
-                this.keys[n] = utils.formatExpression(this.virtualDom.getAttribute(hump));
+                if ( this.virtualDom.hasAttribute(hump) ){
+                    this.keys[n] = utils.formatExpression(this.virtualDom.getAttribute(hump));
+                }
             }
         }
     }
     state(key, data){
-        var err;
-        if ( !this.interfaces[key] ){
-            err = new Error('key of [' + key + '] is not singed.');
-        }else{
+        var err = true;
+        if ( this.interfaces[key] ){
             let interfaces = this.interfaces[key];
             if ( !!interfaces.required && (key === undefined || key === null) ){
-                err = new Error('miss props of ' + n);
                 return err;
             }
             if ( interfaces.type.indexOf(utils.type(data)) == -1 && interfaces.type.length > 0 ){
-                err = new Error('props ' + n + ' type error');
                 return err;
             }
             if ( data === undefined || data === null ){
@@ -78,37 +80,70 @@ export class COMPONENT {
                 let type = utils.type(data);
                 if ( type == 'RegExp' ){
                     if ( !interfaces.validator.test(data) ){
-                        err = new Error('props ' + n + ' catch validator error');
                         return err;
                     }
                 }else if ( type == 'Function' ){
                     if ( interfaces.validator(data) == false ){
-                        err = new Error('props ' + n + ' catch validator error');
                         return err;
                     }
                 }else{
                     if ( data != interfaces.validator ){
-                        err = new Error('props ' + n + ' catch validator error');
                         return err;
                     }
                 }
             }
         }
     }
-    render(scope){
+    render(scope) {
         if (scope) this.parent = scope;
-        let result = {};
+        let result = {}, ok = true;
+        for (var i in this.keys) {
+            let res = utils.get (this.keys[i], this.parent);
+            let err = this.state (i, res);
+            if (!err) {
+                result[i] = res;
+            } else {
+                ok = false;
+            }
+        }
+        if (ok) {
+            typeof this.handle === 'function' && this.handle(result);
+            this.rendered = true;
+            this.scope = result;
+            watcher.create(this.scope, this);
+            this.components.forEach (object => object.render (this.scope));
+            this.objects.forEach (object => object.render (this.scope));
+        }
+    }
+
+
+    update(scope){
+        if (scope) this.parent = scope;
+        let result = this.rendered ? this.scope : {}, ok = true;
         for ( var i in this.keys ){
             let res = utils.get(this.keys[i], this.parent);
             let err = this.state(i, res);
-            if ( !err ){ result[i] = res;}
-            else{ throw err; }
+            if ( !err ){
+                if ( result[i] != res ){
+                    result[i] = res;
+                };
+            }else{
+                ok = false;
+            }
         }
-        this.scope = result;
-        this.components.forEach(object => object.render(this.scope));
-        this.objects.forEach(object => object.render(this.scope));
-    }
-    update(scope){
-        this.render(scope);
+        if ( ok ){
+            this.scope = result;
+            if ( !this.rendered ){
+                typeof this.handle === 'function' && this.handle(result);
+                watcher.create(this.scope, this);
+                this.components.forEach(object => object.render(this.scope));
+                this.rendered = true;
+            }
+            watcher.create(this.scope, this);
+            this.objects.forEach(object => object.update(this.scope));
+            if ( this.upnotify && this.parentroot ){
+                this.parentroot.update();
+            }
+        }
     }
 }

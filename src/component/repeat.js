@@ -16,6 +16,7 @@ export class RepeatBlock extends COMPONENT {
         };
     }
     init(){
+        this.upnotify = this.virtualDom.hasAttribute('up-notify');
         this.injectProps();
         this.commentStartNode = document.createComment('Repeat Start');
         this.commentEndNode = document.createComment('Repeat End');
@@ -37,27 +38,27 @@ export class RepeatBlock extends COMPONENT {
         if ( scope ) this.parent = scope;
         let source = utils.get(this.keys['source'], this.parent);
         let parent = this.getParent();
-        let err;
-        if ( !(err = this.state('parent', parent)) ){
+        if ( !this.state('parent', parent) && source ){
             (this.scope = source).forEach((data, index) => this.add(data, parent, index, this.scope));
-        }else{
-            throw err;
+            watcher.create(source, this);
         }
-        watcher.create(source, this);
     }
     update(){
         let source = utils.get(this.keys['source'], this.parent);
         let parent = this.getParent();
-        let err;
-        if ( !(err = this.state('parent', parent)) ){
+        if ( !this.state('parent', parent) && source ){
+            var add = !this.scope;
             (this.scope = source).forEach((data, index) =>{
                 // TODO FIX IT: console.log(JSON.stringify(this.scope));
-                this.components[index] && this.components[index].update({ source: data, parent: parent, $index: index });
+                if ( add ){
+                    this.add(data, parent, index, this.scope);
+                }else{
+                    this.components[index] && this.components[index].update({ source: data, parent: parent, $index: index });
+                }
             });
-        }else{
-            throw err;
+            watcher.create(source, this);
         }
-        watcher.create(source, this);
+
     }
     remove(index){
         if ( index !== undefined ){
@@ -73,16 +74,13 @@ export class RepeatBlock extends COMPONENT {
         }
     }
     add(scope, parent, index, data){
-        let err;
-        if ( !(err = this.state('source', scope)) ){
+        if ( !this.state('source', scope) && scope ){
             let single = this.append();
                 single.parent = this.parent;
                 single.root = this;
                 single.render({ source: scope, parent: parent, $index: index });
 
             this.watch(data, index, parent);
-        }else{
-            throw err;
         }
     }
     watch(data, index, parent){
@@ -133,6 +131,9 @@ export class RepeatSingle {
             object.update();
         });
         this.objects.forEach(object => object.update(this.scope));
+        if ( this.root.upnotify ){
+            this.root.parentroot.update();
+        }
     }
     remove(){
         var next = this.element.start.nextSibling;

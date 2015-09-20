@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <title></title>
 </head>
+<style>
+    .line{ text-decoration: line-through; color: #ccc;}
+</style>
 <body>
     <app name="app">
-        <input so-binding="t" /> <br />
+        <input so-binding="t" /> {{fn2()}}<br />
         <select so-binding="t">
             <option value="0">0</option>
             <option value="1">1</option>
@@ -38,6 +41,9 @@
                 </repeat>
             </div>
         </repeat>
+
+        <hr />
+        <task tasks="{{tasks}}"></task>
     </app>
     <script src="./bundle.js"></script>
 </body>

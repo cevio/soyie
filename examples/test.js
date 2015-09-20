@@ -14,7 +14,7 @@ var scope = {
         alert('fn1');
     },
     fn2: function(){
-        alert('fn2');
+        return this.t + '-' + this.title;
     },
     ko: {
         a:4,b:3,
@@ -38,40 +38,88 @@ var scope = {
 soyie.component('child', {
     props: ['msg']
 });
-window.delog = false;
+
+
+soyie.component('task', {
+    props: {
+        tasks: {
+            type: ['Array'],
+            required: true
+        }
+    },
+    handle: function(scope){
+        scope.remind = function(){
+            var i = scope.tasks.length, j = i;
+            while (i--){
+                if ( scope.tasks[i].state == '1' ){
+                    j--;
+                }
+            }
+            return j;
+        };
+        scope.newtask = '';
+        scope.addtask = function(){
+            scope.tasks.push({
+                name: scope.newtask,
+                state: 0
+            });
+            scope.newtask = '';
+        }
+    },
+    template: '<p>你还有{{remind()}}个任务没完成</p>'
+    +           '<ul>'
+    +               '<repeat source="{{tasks}}" up-notify>'
+    +                   '<li>'
+    +                       '<input type="checkbox" so-binding="source.state" so-unchecked="0" value="1">'
+    +                       '<span class="{{source.state == \'1\' ? \'line\': \'\'}}">{{source.name}}</span>'
+    +                   '</li>'
+    +               '</repeat>'
+    +           '</ul>'
+    +           '<input type="text" so-binding="newtask" placeholder="input your task..." />'
+    +           '<button so-on="click:addtask">add</button>'
+});
+
+
 soyie.ready(() => {
     var vm = soyie.app('app');
     vm.init(scope);
-    //console.log(vm);
-    setTimeout(() => {
-        window.delog = true;
-
-        //scope.p = 'mmmm';
-        //scope.ko.a = 'test';
-        //scope.p = scope.ko.a;
-
-        scope.list[0] = { a:197, b:23425, c: ['ewrew', 'ewr'] };
-
-        scope.list[0].c = ['657','6fgh'];
-        //scope.img = 'https://assets.servedby-buysellads.com/p/manage/asset/id/15119';
-        scope.html = '<h1 style="color:purple">hello world!</h1>';
-
-        //scope.list[0].a = 1000;
-        //scope.list[1].c[0] = '1111111111';
-        //scope.list[0].c[0] = 'list';
-        //setTimeout(()=>delete scope.p, 1000)
-        //scope.title = '123';
-        //scope.list.push({ a: 11, b:12, c: ['k', 'l'] });
+    ////console.log(vm);
+    //setTimeout(() => {
+    //    window.delog = true;
+    //
+    //    //scope.p = 'mmmm';
+    //    //scope.ko.a = 'test';
+    //    //scope.p = scope.ko.a;
+    //
+    //    scope.list[0] = { a:197, b:23425, c: ['ewrew', 'ewr'] };
+    //
+    //    scope.list[0].c = ['657','6fgh'];
+    //    //scope.img = 'https://assets.servedby-buysellads.com/p/manage/asset/id/15119';
+    //    scope.html = '<h1 style="color:purple">hello world!</h1>';
+    //
+    //    //scope.list[0].a = 1000;
+    //    //scope.list[1].c[0] = '1111111111';
+    //    //scope.list[0].c[0] = 'list';
+    //    //setTimeout(()=>delete scope.p, 1000)
+    //    //scope.title = '123';
+    //    //scope.list.push({ a: 11, b:12, c: ['k', 'l'] });
+    //    setTimeout(function(){
+    //        scope.list[5] = { a:197, b:23425, c: ['ewrew', 'ewr'] };
+    //        scope.title = '3242432534';
+    //        scope.list[0].c.$remove(0)
+    //    }, 1000);
+    //    //console.log(scope.list[0].c)
+    //    //scope.list[0].c.$remove(0)
+    //    //scope.list[2].a = 100;
+    //}, 1000);
+    setTimeout(function(){
+        scope.tasks = [
+            { name: "今天要将soyie一期完成", state: 0 }
+        ];
         setTimeout(function(){
-            scope.list[5] = { a:197, b:23425, c: ['ewrew', 'ewr'] };
-            scope.title = '3242432534';
-            scope.list[0].c.$remove(0)
-        }, 1000);
-        //console.log(scope.list[0].c)
-        //scope.list[0].c.$remove(0)
-        //scope.list[2].a = 100;
+            scope.tasks.push({ name: "今天要将soyie而期完成", state: 0 })
+        }, 3000)
     }, 1000);
-
 });
 
 
