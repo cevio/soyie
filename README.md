@@ -76,7 +76,7 @@ Soyie.component('task', {
 对应的HTML代码如下：
 
 ``` html
-<task tasks="{{tasks}}"></task>
+<task tasks="{{tasks}}" />
 ```
 
 我们只要传入tasks对应的数据参数标签（表单式）即可得到与`angular`一样的任务系统。
