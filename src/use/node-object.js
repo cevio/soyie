@@ -6,6 +6,7 @@ export default class {
         this.namespace = 'node';
         this.parent = null;
         this.expression = expression;
+        this.scope = null;
     }
     set(value){
         if ( this.value !== value ){
@@ -16,7 +17,8 @@ export default class {
     get(){
         return this.value;
     }
-    render(scope){
+    render(scope = this.scope){
+        this.scope = scope;
         this.set(utils.get(this.expression, scope));
     }
     update(scope){

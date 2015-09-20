@@ -44,7 +44,7 @@
   },
   "scripts": {
     "build": "webpack -p",
-    "dev": "webpack-dev-server --host 192.168.2.104 --colors --content-base ./examples --config ./webpack.dev.config.js"
+    "dev": "webpack-dev-server --colors --content-base ./examples --config ./webpack.dev.config.js"
   },
   "engine-strict": true,
   "engines": {

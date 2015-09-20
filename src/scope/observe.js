@@ -220,30 +220,3 @@ function copyAugment (target, src, keys) {
         utils.defineValue(target, key, src[key]);
     }
 }
-
-function isExist(value){
-    return value !== undefined && value !== null;
-}
-
-function copyDataObserve(newValue, oldValue, context){
-    let obs, ob = create(newValue);
-
-    if ( isExist(oldValue) ){
-        obs = oldValue.__obs__;
-        obs && obs.copyVms(ob);
-    }else{
-        context && context.copyVms(ob);
-    }
-
-    if ( utils.type(newValue, 'Object') ){
-        for ( var obj in newValue ){
-            if ( isExist(oldValue) ){
-                copyDataObserve(newValue[obj], oldValue[obj], context);
-            }else{
-
-            }
-        }
-    }else if ( utils.type(newValue, 'Array') ) {
-        copyAugment(newValue, arrayMethods, arrayKeys);
-    }
-}

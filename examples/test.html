@@ -6,12 +6,26 @@
 </head>
 <body>
     <app name="app">
+        <input so-binding="t" /> <br />
+        <select so-binding="t">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+        </select><input type="checkbox" so-binding="t" value="3" so-unchecked="1">{{t}}<br />
+        <input type="radio" value="0" so-binding="t" /> 0<br />
+        <input type="radio" value="1" so-binding="t" /> 1<br />
+        <input type="radio" value="2" so-binding="t" /> 2<br />
+        <input type="radio" value="3" so-binding="t" /> 3<br />
+        <br />
+        <img so-src="{{img}}" />
+        <div so-html="{{html}}" so-on="click: fn1('evio')"></div>
         {{dist}}, {{most}}, {{title}} , {{p}}<br />
         {{ko.x.k.z}} {{ko.x.k.c}}
-        <child msg="{{title}}">
+        <child msg="{{t}}">
             <p>title: {{msg}}</p>
         </child>
-        <repeat source="{{list}}" parent="{{title + dist + most}}">
+        <repeat source="{{list}}" parent="{{title + dist + most + t}}">
             <div class="repeeat parent">
                 <p>{{$index}} =&gt; a:{{source.a}} + b:{{source.b}} = {{source.a + source.b}}, parent: {{parent}}</p>
                 <repeat source="{{source.c}}" parent="{{parent}}">

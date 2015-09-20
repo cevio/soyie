@@ -99,12 +99,12 @@ export function deHump(str){
 
 export var hashCode = hashcode;
 
-export function set(value, scope, deep){
+export function set(value, scope, expression){
     try{
-        var foo = new Function('value', 'scope', 'scope' + deep + '=value;');
+        var foo = new Function('value', 'scope', 'scope.' + expression + '=value;');
         foo(value, scope);
     }catch(e){
-        console.warn(e);
+        console.warn('scope.' + expression + '=value;', e);
     }
 }
 

@@ -8,6 +8,14 @@ var scope = {
     dist: 'my dist',
     most: 'your most',
     title: 'this title',
+    img: 'http://vuejs.org/images/logo.png',
+    html: '<h1 style="color:green">hello world!</h1>',
+    fn1: function(){
+        alert('fn1');
+    },
+    fn2: function(){
+        alert('fn2');
+    },
     ko: {
         a:4,b:3,
         x: {
@@ -22,7 +30,9 @@ var scope = {
         { a:5, b:6, c: ['e', 'f'] },
         { a:7, b:8, c: ['g', 'h'] },
         { a:9, b:10, c: ['i', 'j'] }
-    ]
+    ],
+    text: 'evio',
+    t:1
 };
 
 soyie.component('child', {
@@ -43,7 +53,8 @@ soyie.ready(() => {
         scope.list[0] = { a:197, b:23425, c: ['ewrew', 'ewr'] };
 
         scope.list[0].c = ['657','6fgh'];
-
+        //scope.img = 'https://assets.servedby-buysellads.com/p/manage/asset/id/15119';
+        scope.html = '<h1 style="color:purple">hello world!</h1>';
 
         //scope.list[0].a = 1000;
         //scope.list[1].c[0] = '1111111111';
