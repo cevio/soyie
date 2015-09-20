@@ -1,6 +1,8 @@
-### Soyie Doc ###
+### Soyie Component Framework ###
 
-一套高性能的`MVVM`框架。一期功能已完成
+`soyie`是一套针对移动端开发的高性能MVVM前端框架，类似`angular` `vue` `reactjs` `avalon` 。soyie集合来这些框架的优势，具有全组件，高性能的有点。特别是组件的制作（component）非常方便，您可以通过JSON化配置组件，也可以使用`class extends`来继承基本组件类扩展您的组件。
+
+除此之外，她兼容最新的IOS9。非常方便的如同`搭积木`一样拼装您的项目。
 
 ### Installtion ###
 
@@ -14,104 +16,67 @@
 
 ``` javascript
 var Soyie = require('soyie');
-...
+Soyie.ready(function(){
+    var vm = Soyie.app('example');
+    vm.init(scope);
+    scop.baz = 'foo';
+    ......
+});
 ```
 
 ### API ###
 
-框架API简介。
+文档教程正在整理中，敬请期待！
 
-#### Soyie.controller(control) ####
+### components 演示 ###
 
-选择一个controller名或者节点对象
-
-``` javascript
-var VM = Soyie.controller('app');
-```
-
-之后的`VM`代表上面产生的VModel对象。
-
-#### VM.init(data) ####
-
-编译初始化数据，用于一些特殊的APP应用。可以将缓存数据优先预编译。这样，页面上就有数据了。
-
-为了接近原生体验，建议这么做。
+我们在`angular`官网常见一个任务系统，我们将演示如果使用`soyie`来创建这个component系统。
 
 ``` javascript
-VM.init({
-    a:1,
-    b:2,
-    c:['a', 'b']
-});
-```
-
-#### VM.update(foo) ####
-
-为VM更新数据。数据类型有2种：
-
-  * `json` 直接将数据更新上去
-  * `function` 通过Function来对数据源手动操作 (建议使用)
-  
-注意：function 类型的时候， 有2个参数：
-  * `scope` 数据源对象 SCOPE对象
-  * `element` 当前controller层的DOM对象，原生对象
-
-``` javascript
-VM.update(function(scope, element){
-    console.log(element);
-    $.get('/a/b/c', {a:1}, function(html){
-        scope.html = html;
-    });
-})
-```
-#### Soyie.invoke(controller, initData, foo) ###
-
-这个方法是上面方法的全部既可以，等价于：
-
-``` javascript
-Soyie.controller(controller).init(initData).update(foo);
-```
-
-请看调用方法:
-
-``` javascript
-Soyie.invoke('app',function(scope){
-    scope.title = '我的评论列表';
-    scope.list = arrays;
-    scope.tasks = [
-        { name: "第1个任务", check: 0, value: 1 },
-        { name: "第2个任务", check: 0, value: 1 },
-        { name: "第3个任务", check: 0, value: 1 },
-        { name: "第4个任务", check: 0, value: 1 },
-        { name: "第5个任务", check: 0, value: 1 }
-    ];
-    scope.newtask = '';
-    scope.addtask = function(){
-        scope.tasks.push({
-            name: scope.newtask,
-            check: 0,
-            value: 1
-        });
-        scope.newtask = '';
-    };
-    scope.total = function(){
-        var i = scope.tasks.length;
-        scope.tasks.forEach(function(t){
-            if ( t.check + '' === '1' ){
-                i--;
+Soyie.component('task', {
+    props: {
+        tasks: {
+            type: ['Array'],
+            required: true
+        }
+    },
+    handle: function(scope){
+        scope.remind = function(){
+            var i = scope.tasks.length, j = i;
+            while (i--){
+                if ( scope.tasks[i].state == '1' ){
+                    j--;
+                }
             }
-        });
-        return i + '';
-    }
+            return j;
+        };
+        scope.newtask = '';
+        scope.addtask = function(){
+            scope.tasks.push({
+                name: scope.newtask,
+                state: 0
+            });
+            scope.newtask = '';
+        }
+    },
+    template: '<p>你还有{{remind()}}个任务没完成</p>'
+    +           '<ul>'
+    +               '<repeat source="{{tasks}}" up-notify>'
+    +                   '<li>'
+    +                       '<input type="checkbox" so-binding="source.state" so-unchecked="0" value="1">'
+    +                       '<span class="{{source.state == \'1\' ? \'line\': \'\'}}">{{source.name}}</span>'
+    +                   '</li>'
+    +               '</repeat>'
+    +           '</ul>'
+    +           '<input type="text" so-binding="newtask" placeholder="input your task..." />'
+    +           '<button so-on="click:addtask">add</button>'
 });
 ```
 
-#### Soyie.ready(foo) ####
+对应的HTML代码如下：
 
-当DOMREADY时候执行foo方法。
-
-``` javascript
-Soyie.ready(function(){
-    // your code here
-});
+``` html
+<task tasks="{{tasks}}"></task>
 ```
+
+我们只要传入tasks对应的数据参数标签（表单式）即可得到与`angular`一样的任务系统。
