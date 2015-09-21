@@ -14,16 +14,26 @@ export class RepeatBlock extends COMPONENT {
             source: { type: [], required: true },
             parent: { type: [], required: false }
         };
+        /**
+         * Events.
+         */
+        this._onAppend = null;
+        this._onSingleRendered = null;
+        this._onSingleUpdated = null;
+        this._onSingleRemoved = null;
     }
     init(){
+        typeof this._onBeforeInit === 'function' && this._onBeforeInit();
         this.upnotify = this.virtualDom.hasAttribute('up-notify');
         this.injectProps();
+        typeof this._onInjectProps === 'function' && this._onInjectProps();
         this.commentStartNode = document.createComment('Repeat Start');
         this.commentEndNode = document.createComment('Repeat End');
         this.fragment.appendChild(this.commentStartNode);
         this.fragment.appendChild(this.commentEndNode);
         this.virtualDom.parentNode.replaceChild(this.fragment, this.virtualDom);
-        this._init && this._init();
+        typeof this._onScanDoms === 'function' && this._onScanDoms();
+        typeof this._onInit === 'function' && this._onInit();
     }
     append(){
         let single = new RepeatSingle();
@@ -32,9 +42,11 @@ export class RepeatBlock extends COMPONENT {
         this.DOMSCAN(node, single);
         single.element = node;
         this.components.push(single);
+        typeof this._onAppend === 'function' && this._onAppend(single);
         return single;
     }
     render(scope){
+        typeof this._onBeforeRender === 'function' && this._onBeforeRender();
         if ( scope ) this.parent = scope;
         let source = utils.get(this.keys['source'], this.parent);
         let parent = this.getParent();
@@ -42,8 +54,10 @@ export class RepeatBlock extends COMPONENT {
             (this.scope = source).forEach((data, index) => this.add(data, parent, index, this.scope));
             watcher.create(source, this);
         }
+        typeof this._onRndered === 'function' && this._onRndered();
     }
     update(){
+        typeof this._onBeforeUpdate === 'function' && this._onBeforeUpdate();
         let source = utils.get(this.keys['source'], this.parent);
         let parent = this.getParent();
         if ( !this.state('parent', parent) && source ){
@@ -58,7 +72,7 @@ export class RepeatBlock extends COMPONENT {
             });
             watcher.create(source, this);
         }
-
+        typeof this._onUpdated === 'function' && this._onUpdated();
     }
     remove(index){
         if ( index !== undefined ){
@@ -122,6 +136,7 @@ export class RepeatSingle {
         watcher.create(this.scope, this);
         this.objects.forEach(object => object.render(this.scope));
         this.components.forEach(object => object.render(this.scope));
+        typeof this.root._onSingleRendered === 'function' && this.root._onSingleRendered(this);
     }
     update(scope){
         if ( scope ) this.scope = scope;
@@ -134,6 +149,7 @@ export class RepeatSingle {
         if ( this.root.upnotify ){
             this.root.parentroot.update();
         }
+        typeof this.root._onSingleUpdated === 'function' && this.root._onSingleUpdated(this);
     }
     remove(){
         var next = this.element.start.nextSibling;
@@ -151,5 +167,6 @@ export class RepeatSingle {
         if ( this.root.upnotify ){
             this.root.parentroot.update();
         }
+        typeof this.root._onSingleRemoved === 'function' && this.root._onSingleRemoved(this);
     }
 }

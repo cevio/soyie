@@ -19,13 +19,29 @@ export class COMPONENT {
         this.scope = null;
         this.upnotify = false;
         this.rendered = false;
+        this.watcher = watcher;
+        /**
+         * Events.
+         */
+        this._onBeforeInit = null;
+        this._onInjectProps = null;
+        this._onScanDoms = null;
+        this._onInit = null;
+        this._onCheckPropsError = null;
+        this._onBeforeRender = null;
+        this._onRndered = null;
+        this._onBeforeUpdate = null;
+        this._onUpdated = null;
     }
     init(){
+        typeof this._onBeforeInit === 'function' && this._onBeforeInit();
         this.injectProps();
+        typeof this._onInjectProps === 'function' && this._onInjectProps();
         this.element = utils.createHtmlNode(this.template);
         this.virtualDom.parentNode.replaceChild(this.element.node, this.virtualDom);
         DOMSCAN(this.element, this);
-        this._init && this._init();
+        typeof this._onScanDoms === 'function' && this._onScanDoms();
+        typeof this._onInit === 'function' && this._onInit();
     }
     injectProps(){
         if ( utils.type(this.props, 'Array') ){
@@ -68,9 +84,11 @@ export class COMPONENT {
         if ( this.interfaces[key] ){
             let interfaces = this.interfaces[key];
             if ( !!interfaces.required && (key === undefined || key === null) ){
+                typeof this._onCheckPropsError === 'function' && this._onCheckPropsError();
                 return err;
             }
             if ( interfaces.type.indexOf(utils.type(data)) == -1 && interfaces.type.length > 0 ){
+                typeof this._onCheckPropsError === 'function' && this._onCheckPropsError();
                 return err;
             }
             if ( data === undefined || data === null ){
@@ -80,14 +98,17 @@ export class COMPONENT {
                 let type = utils.type(data);
                 if ( type == 'RegExp' ){
                     if ( !interfaces.validator.test(data) ){
+                        typeof this._onCheckPropsError === 'function' && this._onCheckPropsError();
                         return err;
                     }
                 }else if ( type == 'Function' ){
                     if ( interfaces.validator(data) == false ){
+                        typeof this._onCheckPropsError === 'function' && this._onCheckPropsError();
                         return err;
                     }
                 }else{
                     if ( data != interfaces.validator ){
+                        typeof this._onCheckPropsError === 'function' && this._onCheckPropsError();
                         return err;
                     }
                 }
@@ -107,12 +128,14 @@ export class COMPONENT {
             }
         }
         if (ok) {
+            typeof this._onBeforeRender === 'function' && this._onBeforeRender();
             typeof this.handle === 'function' && this.handle(result);
             this.rendered = true;
             this.scope = result;
             watcher.create(this.scope, this);
             this.components.forEach (object => object.render (this.scope));
             this.objects.forEach (object => object.render (this.scope));
+            typeof this._onRndered === 'function' && this._onRndered();
         }
     }
 
@@ -132,6 +155,7 @@ export class COMPONENT {
             }
         }
         if ( ok ){
+            typeof this._onBeforeUpdate === 'function' && this._onBeforeUpdate();
             this.scope = result;
             if ( !this.rendered ){
                 typeof this.handle === 'function' && this.handle(result);
@@ -144,6 +168,7 @@ export class COMPONENT {
             if ( this.upnotify && this.parentroot ){
                 this.parentroot.update();
             }
+            typeof this._onUpdated === 'function' && this._onUpdated();
         }
     }
 }
