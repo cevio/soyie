@@ -89,7 +89,8 @@ soyie.ready(() => {
     //
     //    //scope.p = 'mmmm';
     //    //scope.ko.a = 'test';
-    //    //scope.p = scope.ko.a;
+    //scope.p = scope.ko.a;
+    //
     //
     //    scope.list[0] = { a:197, b:23425, c: ['ewrew', 'ewr'] };
     //
@@ -116,9 +117,9 @@ soyie.ready(() => {
         scope.tasks = [
             { name: "今天要将soyie一期完成", state: 0 }
         ];
-        setTimeout(function(){
-            scope.tasks.push({ name: "今天要将soyie而期完成", state: 0 })
-        }, 3000)
+        //setTimeout(function(){
+        //    scope.tasks.push({ name: "今天要将soyie而期完成", state: 0 })
+        //}, 3000)
     }, 1000);
 });
 

@@ -148,5 +148,8 @@ export class RepeatSingle {
         }
         m.forEach(node => node.parentNode.removeChild(node));
         this.root.components.$remove(this);
+        if ( this.root.upnotify ){
+            this.root.parentroot.update();
+        }
     }
 }
