@@ -14,13 +14,6 @@ export class RepeatBlock extends COMPONENT {
             source: { type: [], required: true },
             parent: { type: [], required: false }
         };
-        /**
-         * Events.
-         */
-        this._onAppend = null;
-        this._onSingleRendered = null;
-        this._onSingleUpdated = null;
-        this._onSingleRemoved = null;
     }
     init(){
         typeof this._onBeforeInit === 'function' && this._onBeforeInit();
