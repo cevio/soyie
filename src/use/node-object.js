@@ -17,11 +17,12 @@ export default class {
     get(){
         return this.value;
     }
-    render(scope = this.scope){
+    render(scope = this.scope, options = {}){
         this.scope = scope;
-        this.set(utils.get(this.expression, scope));
+        this.options = options;
+        this.set(utils.get(this.expression, scope, options));
     }
-    update(scope){
-        this.render(scope);
+    update(scope, options){
+        this.render(scope, options);
     }
 }

@@ -21,29 +21,27 @@
         <input type="radio" value="2" so-binding="t" /> 2<br />
         <input type="radio" value="3" so-binding="t" /> 3<br />
         <br />
-        <img so-src="{{img}}" />
         <div so-html="{{html}}" so-on="click: fn1('evio')"></div>
         {{dist}}, {{most}}, {{title}} , {{p}}<br />
         {{ko.x.k.z}} {{ko.x.k.c}}
-        <child msg="{{t}}">
-            <p>title: {{msg}}</p>
-        </child>
-        <repeat source="{{list}}" parent="{{title + dist + most + t}}">
-            <div class="repeeat parent">
-                <p>{{$index}} =&gt; a:{{source.a}} + b:{{source.b}} = {{source.a + source.b}}, parent: {{parent}}</p>
-                <repeat source="{{source.c}}" parent="{{parent}}">
-                    <div class="repeat child">
-                    <dd>{{$index}} =&gt; {{source}} , parent: {{parent}}</dd>
-                        <child msg="{{source}}">
-                            <div style="color:red;">{{msg}}</div>
-                        </child>
-                    </div>
-                </repeat>
+        <child msg="{{t}}"><p>title: {{msg}}</p></child>
+        <hr />
+        <div class="repeeat parent" so-repeat="{{list}}">
+            <p>{{$index}} =&gt; a:{{a}} + b:{{b}} = {{a + b}}, parent: title=>{{$parent.t}}</p>
+
+            <div class="repeat child" so-repeat="{{c}}">
+                <dd>{{$index}} =&gt; {{$this}} , parent:b=>{{$parent.b}}</dd>
+                <child msg="{{$this}}">
+                    <div style="color:red;">{{msg}}</div>
+                </child>
             </div>
-        </repeat>
+
+        </div>
 
         <hr />
-        <task tasks="{{tasks}}" />
+
+        <task tasks="{{tasks}}"></task>
+        <test d="{{title}}">evio {{d}}</test>
     </app>
     <script src="./bundle.js"></script>
 </body>

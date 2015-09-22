@@ -23,29 +23,29 @@ export class COMPONENT {
         /**
          * Events.
          */
-        this._onBeforeInit = null;
-        this._onInjectProps = null;
-        this._onScanDoms = null;
-        this._onInit = null;
-        this._onCheckPropsError = null;
-        this._onBeforeRender = null;
-        this._onRndered = null;
-        this._onBeforeUpdate = null;
-        this._onUpdated = null;
-        this._onAppend = null;
-        this._onSingleRendered = null;
-        this._onSingleUpdated = null;
-        this._onSingleRemoved = null;
+        this.onBeforeInit = null;
+        this.onInjectProps = null;
+        this.onScanDoms = null;
+        this.onInit = null;
+        this.onCheckPropsError = null;
+        this.onBeforeRender = null;
+        this.onRndered = null;
+        this.onBeforeUpdate = null;
+        this.onUpdated = null;
+        //this._onAppend = null;
+        //this._onSingleRendered = null;
+        //this._onSingleUpdated = null;
+        //this._onSingleRemoved = null;
     }
     init(){
-        typeof this._onBeforeInit === 'function' && this._onBeforeInit();
+        typeof this.onBeforeInit === 'function' && this.onBeforeInit();
         this.injectProps();
-        typeof this._onInjectProps === 'function' && this._onInjectProps();
+        typeof this.onInjectProps === 'function' && this.onInjectProps();
         this.element = utils.createHtmlNode(this.template);
         this.virtualDom.parentNode.replaceChild(this.element.node, this.virtualDom);
         DOMSCAN(this.element, this);
-        typeof this._onScanDoms === 'function' && this._onScanDoms();
-        typeof this._onInit === 'function' && this._onInit();
+        typeof this.onScanDoms === 'function' && this.onScanDoms();
+        typeof this.onInit === 'function' && this.onInit();
     }
     injectProps(){
         if ( utils.type(this.props, 'Array') ){
@@ -88,31 +88,33 @@ export class COMPONENT {
         if ( this.interfaces[key] ){
             let interfaces = this.interfaces[key];
             if ( !!interfaces.required && (key === undefined || key === null) ){
-                typeof this._onCheckPropsError === 'function' && this._onCheckPropsError();
+                typeof this.onCheckPropsError === 'function' &&
+                this.onCheckPropsError(new Error('key [' + key + '] required, but it is undefined.'));
                 return err;
             }
             if ( interfaces.type.indexOf(utils.type(data)) == -1 && interfaces.type.length > 0 ){
-                typeof this._onCheckPropsError === 'function' && this._onCheckPropsError();
+                typeof this.onCheckPropsError === 'function' &&
+                this.onCheckPropsError(new Error('key [' + key + '] need a value of [' + interfaces.type + ']'));
                 return err;
-            }
-            if ( data === undefined || data === null ){
-                data = interfaces.default;
             }
             if ( interfaces.validator ){
                 let type = utils.type(data);
                 if ( type == 'RegExp' ){
                     if ( !interfaces.validator.test(data) ){
-                        typeof this._onCheckPropsError === 'function' && this._onCheckPropsError();
+                        typeof this.onCheckPropsError === 'function' &&
+                        this.onCheckPropsError(new Error('check props of ' + key + ' faild.'));
                         return err;
                     }
                 }else if ( type == 'Function' ){
                     if ( interfaces.validator(data) == false ){
-                        typeof this._onCheckPropsError === 'function' && this._onCheckPropsError();
+                        typeof this.onCheckPropsError === 'function' &&
+                        this.onCheckPropsError(new Error('check props of ' + key + ' faild.'));
                         return err;
                     }
                 }else{
                     if ( data != interfaces.validator ){
-                        typeof this._onCheckPropsError === 'function' && this._onCheckPropsError();
+                        typeof this.onCheckPropsError === 'function' &&
+                        this.onCheckPropsError(new Error('check props of ' + key + ' faild.'));
                         return err;
                     }
                 }
@@ -122,8 +124,11 @@ export class COMPONENT {
     render(scope) {
         if (scope) this.parent = scope;
         let result = {}, ok = true;
-        for (var i in this.keys) {
+        for (var i in this.interfaces) {
             let res = utils.get (this.keys[i], this.parent);
+            if ( res === undefined || res === null || res === '' ){
+                res = this.interfaces[i].default;
+            }
             let err = this.state (i, res);
             if (!err) {
                 result[i] = res;
@@ -132,14 +137,14 @@ export class COMPONENT {
             }
         }
         if (ok) {
-            typeof this._onBeforeRender === 'function' && this._onBeforeRender();
-            typeof this.handle === 'function' && this.handle(result);
+            typeof this.onBeforeRender === 'function' && this.onBeforeRender ();
+            typeof this.handle === 'function' && this.handle (result);
             this.rendered = true;
             this.scope = result;
-            watcher.create(this.scope, this);
+            watcher.create (this.scope, this);
             this.components.forEach (object => object.render (this.scope));
             this.objects.forEach (object => object.render (this.scope));
-            typeof this._onRndered === 'function' && this._onRndered();
+            typeof this.onRndered === 'function' && this.onRndered ();
         }
     }
 
@@ -147,8 +152,11 @@ export class COMPONENT {
     update(scope){
         if (scope) this.parent = scope;
         let result = this.rendered ? this.scope : {}, ok = true;
-        for ( var i in this.keys ){
+        for ( var i in this.interfaces ){
             let res = utils.get(this.keys[i], this.parent);
+            if ( res === undefined || res === null || res === '' ){
+                res = this.interfaces[i].default;
+            }
             let err = this.state(i, res);
             if ( !err ){
                 if ( result[i] != res ){
@@ -159,7 +167,7 @@ export class COMPONENT {
             }
         }
         if ( ok ){
-            typeof this._onBeforeUpdate === 'function' && this._onBeforeUpdate();
+            typeof this.onBeforeUpdate === 'function' && this.onBeforeUpdate();
             this.scope = result;
             if ( !this.rendered ){
                 typeof this.handle === 'function' && this.handle(result);
@@ -172,7 +180,7 @@ export class COMPONENT {
             if ( this.upnotify && this.parentroot ){
                 this.parentroot.update();
             }
-            typeof this._onUpdated === 'function' && this._onUpdated();
+            typeof this.onUpdated === 'function' && this.onUpdated();
         }
     }
 }

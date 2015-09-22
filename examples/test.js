@@ -24,13 +24,6 @@ var scope = {
             }
         }
     },
-    list: [
-        { a:1, b:2, c: ['a', 'b'] },
-        { a:3, b:4, c: ['c', 'd'] },
-        { a:5, b:6, c: ['e', 'f'] },
-        { a:7, b:8, c: ['g', 'h'] },
-        { a:9, b:10, c: ['i', 'j'] }
-    ],
     text: 'evio',
     t:1
 };
@@ -68,94 +61,45 @@ soyie.component('task', {
     },
     template: '<p>你还有{{remind()}}个任务没完成</p>'
     +           '<ul>'
-    +               '<repeat source="{{tasks}}" up-notify>'
-    +                   '<li>'
-    +                       '<input type="checkbox" so-binding="source.state" so-unchecked="0" value="1">'
-    +                       '<span class="{{source.state == \'1\' ? \'line\': \'\'}}">{{source.name}}</span>'
+    +                   '<li so-repeat="{{tasks}}">'
+    +                       '<input type="checkbox" so-binding="state" so-unchecked="0" value="1">'
+    +                       '<span class="{{state == \'1\' ? \'line\': \'\'}}">{{name}}</span>'
     +                   '</li>'
-    +               '</repeat>'
     +           '</ul>'
     +           '<input type="text" so-binding="newtask" placeholder="input your task..." />'
     +           '<button so-on="click:addtask">add</button>'
+});
+
+soyie.component('test', {
+    props: {
+        d: {
+            type: ['String'],
+            required: true,
+            default: 'none is set'
+        }
+    },
+    onCheckPropsError(err){
+        console.log(err)
+    }
 });
 
 
 soyie.ready(() => {
     var vm = soyie.app('app');
     vm.init(scope);
-    ////console.log(vm);
-    //setTimeout(() => {
-    //    window.delog = true;
-    //
-    //    //scope.p = 'mmmm';
-    //    //scope.ko.a = 'test';
-    //scope.p = scope.ko.a;
-    //
-    //
-    //    scope.list[0] = { a:197, b:23425, c: ['ewrew', 'ewr'] };
-    //
-    //    scope.list[0].c = ['657','6fgh'];
-    //    //scope.img = 'https://assets.servedby-buysellads.com/p/manage/asset/id/15119';
-    //    scope.html = '<h1 style="color:purple">hello world!</h1>';
-    //
-    //    //scope.list[0].a = 1000;
-    //    //scope.list[1].c[0] = '1111111111';
-    //    //scope.list[0].c[0] = 'list';
-    //    //setTimeout(()=>delete scope.p, 1000)
-    //    //scope.title = '123';
-    //    //scope.list.push({ a: 11, b:12, c: ['k', 'l'] });
-    //    setTimeout(function(){
-    //        scope.list[5] = { a:197, b:23425, c: ['ewrew', 'ewr'] };
-    //        scope.title = '3242432534';
-    //        scope.list[0].c.$remove(0)
-    //    }, 1000);
-    //    //console.log(scope.list[0].c)
-    //    //scope.list[0].c.$remove(0)
-    //    //scope.list[2].a = 100;
-    //}, 1000);
-    setTimeout(function(){
+    scope.list = [
+        { a:1, b:2, c: ['a', 'b'] },
+        { a:3, b:4, c: ['c', 'd'] },
+        { a:5, b:6, c: ['e', 'f'] },
+        { a:7, b:8, c: ['g', 'h'] },
+        { a:9, b:10, c: ['i', 'j'] }
+    ];
+    setTimeout(() => {
         scope.tasks = [
             { name: "今天要将soyie一期完成", state: 0 }
         ];
-        //setTimeout(function(){
-        //    scope.tasks.push({ name: "今天要将soyie而期完成", state: 0 })
-        //}, 3000)
+        setTimeout(function(){
+            scope.tasks.push({ name: "今天要将soyie二期完成", state: 0 })
+        }, 1000)
     }, 1000);
 });
-
-
-// 一个简单的对象可以作为一个模块来使用
-//var todoModel = {
-//    label: 'Default',
-//    completed: false
-//};
-// 我们观察这个对象
-//Object.observe(todoModel, function(changes) {
-//    changes.forEach(function(change, i) {
-//        console.log(change);
-//        /*
-//         哪个属性被改变了? change.name
-//         改变类型是什么? change.type
-//         新的属性值是什么? change.object[change.name]
-//         */
-//    });
-//});
-// 使用时:
-//todoModel.label = 'Buy some more milk';
-/*
- label属性被改变了
- 改变类型是属性值更新
- 当前属性值为'Buy some more milk'
- */
-//todoModel.completeBy = '01/01/2013';
-/*
- completeBy属性被改变了
- 改变类型是属性被添加
- 当前属性值为'01/01/2013'
- */
-//delete todoModel.completed;
-/*
- completed属性被改变了
- 改变类型是属性被删除
- 当前属性值为undefined
- */

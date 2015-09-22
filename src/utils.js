@@ -108,10 +108,13 @@ export function set(value, scope, expression){
     }
 }
 
-export function get(expression, scope){
+export function get(expression, scope, options){
     try{
-        var foo = new Function('$this', 'with($this){return ' + expression + '}');
-        var value = foo(scope);
+        if ( !options ) options = {};
+        let str = [];
+        for ( var key in options ) str.push("var " + key + " = $options['" + key + "'];");
+        var foo = new Function('$this', '$options', str.join('\n') + '\nwith($this){return ' + expression + '}');
+        var value = foo(scope, options);
         return value === undefined || value === null ? this.configs.defaultText : value;
     }catch(e){
         return this.configs.defaultText;

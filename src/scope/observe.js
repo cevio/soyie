@@ -176,7 +176,11 @@ export class Observer {
             data.__obs__.vms.forEach((vm, i) => {
                 items.forEach(item => {
                     var index = indexs[i];
-                    vm.add(item, vm.getParent(), index, vm.scope);
+                    vm.add(item, index);
+                    var parent = vm.parentroot;
+                    if ( parent ){
+                        parent.update();
+                    }
                 });
             });
         }
@@ -187,7 +191,6 @@ export class Observer {
             if ( obs ){
                 obs.vms.forEach(vm => {
                     vm.remove();
-                    vm.root.update();
                 });
             }else{
                 obs = data.__obs__;

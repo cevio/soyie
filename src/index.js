@@ -24,11 +24,6 @@ import domReady from 'domready';
 import * as utils from './utils';
 
 /**
- * 加载循环模块模型
- */
-import {RepeatBlock} from './component/repeat';
-
-/**
  * 加载vmodel
  */
 import vmodel from './vmodel';
@@ -80,8 +75,3 @@ export function app(name){
     DOMSCAN(copy, vm);
     return vm;
 }
-
-/**
- * 注册repeat模型component.
- */
-component('repeat', RepeatBlock);
