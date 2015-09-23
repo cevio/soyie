@@ -125,10 +125,7 @@ export class COMPONENT {
         if (scope) this.parent = scope;
         let result = {}, ok = true;
         for (var i in this.interfaces) {
-            let res = utils.get(this.keys[i], this.parent);
-            if ( res === undefined || res === null || res === '' ){
-                res = this.interfaces[i].default;
-            }
+            let res = this.guest(i);
             let err = this.state (i, res);
             if (!err) {
                 result[i] = res;
@@ -148,15 +145,19 @@ export class COMPONENT {
         }
     }
 
+    guest(i){
+        let res = utils.get(this.keys[i], this.parent);
+        if ( res === undefined || res === null || res === '' ){
+            res = this.interfaces[i].default;
+        }
+        return res;
+    }
 
     update(scope){
         if (scope) this.parent = scope;
         let result = this.rendered ? this.scope : {}, ok = true;
         for ( var i in this.interfaces ){
-            let res = utils.get(this.keys[i], this.parent);
-            if ( res === undefined || res === null || res === '' ){
-                res = this.interfaces[i].default;
-            }
+            let res = this.guest(i);
             let err = this.state(i, res);
             if ( !err ){
                 if ( result[i] != res ){
