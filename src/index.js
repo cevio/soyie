@@ -41,6 +41,16 @@ export function component(name, props){
         class MODEL extends COMPONENT {
             constructor(node){
                 super(node);
+                var events = props.events;
+                if ( events ){
+                    for ( let i in events ){
+                        var key = i.replace(/^(\w)/, function($1){
+                            return $1.toUpperCase()
+                        });
+                        this['on' + key] = events[i];
+                    }
+                    delete props.events;
+                }
                 utils.extend(this, props, true);
             }
         }
@@ -66,7 +76,7 @@ export function app(name){
     var controller =
         typeof name !== 'string'
             ? name
-            : document.querySelector("app[name='" + name + "']");
+            : document.querySelector("app[so-name='" + name + "']");
 
     var template = controller.innerHTML;
     var copy = utils.createHtmlNode(template);
@@ -74,4 +84,21 @@ export function app(name){
     var vm = new vmodel();
     DOMSCAN(copy, vm);
     return vm;
+}
+
+export function bootstrap(name, data, callback){
+    if ( typeof data === 'function' ){
+        callback = data;
+        data = {};
+    }
+    var vm = this.app(name).init(data);
+    typeof callback === 'function' && callback.call(vm.scope, vm.scope);
+    return vm.scope;
+}
+
+export default {
+    component,
+    ready,
+    app,
+    bootstrap
 }

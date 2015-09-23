@@ -78,6 +78,7 @@ soyie.component('test', {
             default: 'none is set'
         }
     },
+
     onCheckPropsError(err){
         console.log(err)
     }

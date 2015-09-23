@@ -125,7 +125,7 @@ export class COMPONENT {
         if (scope) this.parent = scope;
         let result = {}, ok = true;
         for (var i in this.interfaces) {
-            let res = utils.get (this.keys[i], this.parent);
+            let res = utils.get(this.keys[i], this.parent);
             if ( res === undefined || res === null || res === '' ){
                 res = this.interfaces[i].default;
             }
@@ -137,14 +137,14 @@ export class COMPONENT {
             }
         }
         if (ok) {
-            typeof this.onBeforeRender === 'function' && this.onBeforeRender ();
-            typeof this.handle === 'function' && this.handle (result);
+            typeof this.onBeforeRender === 'function' && this.onBeforeRender();
+            typeof this.handle === 'function' && this.handle(result);
             this.rendered = true;
             this.scope = result;
             watcher.create (this.scope, this);
-            this.components.forEach (object => object.render (this.scope));
-            this.objects.forEach (object => object.render (this.scope));
-            typeof this.onRndered === 'function' && this.onRndered ();
+            this.components.forEach(object => object.render(this.scope));
+            this.objects.forEach(object => object.render(this.scope));
+            typeof this.onRndered === 'function' && this.onRndered();
         }
     }
 
@@ -170,16 +170,15 @@ export class COMPONENT {
             typeof this.onBeforeUpdate === 'function' && this.onBeforeUpdate();
             this.scope = result;
             if ( !this.rendered ){
+                typeof this.onBeforeRender === 'function' && this.onBeforeRender();
                 typeof this.handle === 'function' && this.handle(result);
                 watcher.create(this.scope, this);
                 this.components.forEach(object => object.render(this.scope));
                 this.rendered = true;
+                typeof this.onRndered === 'function' && this.onRndered();
             }
             watcher.create(this.scope, this);
             this.objects.forEach(object => object.update(this.scope));
-            if ( this.upnotify && this.parentroot ){
-                this.parentroot.update();
-            }
             typeof this.onUpdated === 'function' && this.onUpdated();
         }
     }
