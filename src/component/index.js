@@ -29,7 +29,7 @@ export class COMPONENT {
         this.onInit = null;
         this.onCheckPropsError = null;
         this.onBeforeRender = null;
-        this.onRndered = null;
+        this.onRendered = null;
         this.onBeforeUpdate = null;
         this.onUpdated = null;
         //this._onAppend = null;
@@ -144,7 +144,7 @@ export class COMPONENT {
             watcher.create (this.scope, this);
             this.components.forEach(object => object.render(this.scope));
             this.objects.forEach(object => object.render(this.scope));
-            typeof this.onRndered === 'function' && this.onRndered();
+            typeof this.onRendered === 'function' && this.onRendered();
         }
     }
 
@@ -175,7 +175,7 @@ export class COMPONENT {
                 watcher.create(this.scope, this);
                 this.components.forEach(object => object.render(this.scope));
                 this.rendered = true;
-                typeof this.onRndered === 'function' && this.onRndered();
+                typeof this.onRendered === 'function' && this.onRendered();
             }
             watcher.create(this.scope, this);
             this.objects.forEach(object => object.update(this.scope));
