@@ -4,6 +4,7 @@ import soSrc from '../directives/so-src';
 import soHtml from '../directives/so-html';
 import soOn from '../directives/so-on';
 import soBinding from '../directives/so-binding';
+import maps from './directives';
 
 var commands = {
     "so-src": soSrc,
@@ -11,6 +12,8 @@ var commands = {
     "so-on": soOn,
     "so-binding": soBinding
 };
+
+utils.extend(commands, maps || {});
 
 export default (DOM, vm) => {
     var result = [];

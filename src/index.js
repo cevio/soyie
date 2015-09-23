@@ -28,6 +28,8 @@ import * as utils from './utils';
  */
 import vmodel from './vmodel';
 
+import * as watcher from './scope/watcher';
+
 /**
  * 注册component组件
  * @param name 组件名 即tagName名
@@ -100,5 +102,7 @@ export default {
     component,
     ready,
     app,
-    bootstrap
+    bootstrap,
+    COMPONENT,
+    watcher
 }
