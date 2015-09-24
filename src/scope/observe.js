@@ -71,7 +71,10 @@ export function create(value, vm){
     ){
         obs = value.__obs__;
     }
-    else{
+    else if (
+        utils.type(value, 'Array') || utils.type(value, 'Object') &&
+        !Object.isFrozen(value)
+    ){
         obs = new Observer(value);
     }
     if ( obs && vm ){
@@ -112,6 +115,7 @@ utils.defineValue(
  */
 export class Observer {
     constructor(value){
+        //if ( value === undefined || ['Object', 'Array'].indexOf(utils.type(value)) === -1 ) return;
         /**
          * define __obs__ on this
          * __obs_ instance observer

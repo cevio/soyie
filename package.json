@@ -1,7 +1,7 @@
 {
   "name": "soyie",
   "description": "a web mvvm framework",
-  "version": "2.2.17",
+  "version": "2.2.19",
   "keywords": [
     "web",
     "mvvm",
@@ -41,7 +41,7 @@
   },
   "scripts": {
     "build": "webpack -p",
-    "dev": "webpack-dev-server --colors --content-base ./examples --config ./webpack.dev.config.js"
+    "dev": "webpack-dev-server --host 192.168.20.57 --colors --content-base ./examples --config ./webpack.dev.config.js"
   },
   "engine-strict": true,
   "engines": {
