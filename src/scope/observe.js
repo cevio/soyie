@@ -71,7 +71,7 @@ export function create(value, vm){
     ){
         obs = value.__obs__;
     }
-    else if ( !Object.isFrozen(value) ){
+    else{
         obs = new Observer(value);
     }
     if ( obs && vm ){
