@@ -77,6 +77,7 @@ soyie.ready(() => {
             { name: "今天要将soyie三期完成", state: 0 },
             { name: "今天要将soyie四期完成", state: 0 }
         ];
+        this.aaa = [1,2,3,4,5,6];
         setTimeout(() => {
             this.list.shift()
         }, 2000);

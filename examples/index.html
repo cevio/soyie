@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+
+<app so-name="app">
+    <div so-repeat="{{list}}">
+        {{$this}}
+    </div>
+</app>
+
+<script src="../build/soyie.js"></script>
+<script>
+
+    Soyie.ready(function() {
+        Soyie.bootstrap('app', function() {
+            this.list = [1,2,3,4]
+        });
+    });
+
+</script>
+</body>
+</html>
