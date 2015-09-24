@@ -40,6 +40,11 @@ soyie.component('task', {
             required: true
         }
     },
+    events: {
+        init: function(){
+            console.log(1)
+        }
+    },
     handle: function(scope){
         scope.remind = function(){
             var i = scope.tasks.length, j = i;
