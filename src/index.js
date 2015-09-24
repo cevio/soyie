@@ -51,7 +51,6 @@ export function component(name, props){
                         });
                         this['on' + key] = events[i];
                     }
-                    delete props.events;
                 }
                 utils.extend(this, props, true);
             }

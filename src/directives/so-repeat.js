@@ -36,23 +36,46 @@ export class Block {
         }
     }
 
-    update(){
-        let source = utils.get(this.expression, this.parent);
-        if ( source && utils.type(source, 'Array') && source.length > 0 ){
-            if ( this.installed ){
-                (this.scope = source).forEach((data, index) => {
-                    if ( !this.components[index] ){
-                        this.add(data, index);
-                    }else{
-                        this.components[index].update(data, index, this.parent)
-                    }
-                });
+    update(scope = this.parent){
+        this.parent = scope;
+        if ( !this.installed ){ this.render(this.parent); }
+        else{
+            let source = utils.get(this.expression, this.parent);
+            if ( source && utils.type(source, 'Array') && source.length > 0 ){
+                this.scope = source;
+                if ( this.scope.length > this.components.length ){
+                    (() => {
+                        var index = this.scope.length;
+                        while (index--){
+                            if ( !this.components[index] ){
+                                this.add(this.scope[index], index);
+                            }else{
+                                this.components[index].update(this.scope[index], index, this.parent);
+                            }
+                        }
+                    }).call(this);
+                }
+                else if ( this.scope.length < this.components.length ){
+                    (() => {
+                        var index = this.components.length;
+                        while (index--){
+                            if ( this.scope[index] === undefined ){
+                                this.components[index].remove();
+                            }else{
+                                this.components[index].update(this.scope[index], index, this.parent);
+                            }
+                        }
+                    }).call(this);
+                }else{
+                    this.scope.forEach((data, index) => this.components[index].update(data, index, this.parent));
+                }
+
             }else{
-                (this.scope = source).forEach((data, index) => {
-                    this.add(data, index);
-                });
-                watcher.create(this.scope, this);
-                this.installed = true;
+                this.scope = [];
+                var i = this.components.length;
+                while (i--){
+                    this.components[i].remove();
+                }
             }
         }
     }
@@ -76,19 +99,33 @@ export class Block {
     }
 
     watch(data, index, parent){
-        var temp = data[index];
-        Object.defineProperty(data, index, {
-            get: function(){ return temp; },
-            set: (val) => {
-                temp = val;
-                let vm = this.components[index];
-                if ( vm ){
-                    vm.update(temp, index, parent);
-                }else{
-                    this.add(temp, index);
+        let obsindexs = data.hasOwnProperty('__obsindexs__') ? data.__obsindexs__ : null;
+        if ( !obsindexs ){
+            utils.defineValue(data, '__obsindexs__', obsindexs = {});
+        }
+
+        if ( !obsindexs[index] ){
+            obsindexs[index] = { value: data[index], vms: [this] };
+            Object.defineProperty(data, index, {
+                get: function(){ return obsindexs[index].value; },
+                set: (val) => {
+                    obsindexs[index].value = val;
+                    obsindexs[index].vms.forEach(VM => {
+                        let vm = VM.components[index];
+                        if ( vm ){
+                            vm.update(obsindexs[index].value, index, parent);
+                        }else{
+                            this.add(obsindexs[index].value, index);
+                        }
+                    });
                 }
+            });
+        }else{
+            if ( obsindexs[index].vms.indexOf(this) == -1 ){
+                obsindexs[index].vms.push(this);
             }
-        });
+        }
+
         this.watchObject(data[index], this.components[index]);
     }
 
@@ -100,6 +137,10 @@ export class Block {
             }
         }
     }
+
+    remove(index){
+        this.components[index] && this.components[index].remove();
+    }
 }
 
 export class Single {
@@ -107,6 +148,7 @@ export class Single {
         this.namespace = 'repeat-single';
         this.objects = [];
         this.components = [];
+        this.arrays = [];
         this.scope = null;
     }
 
@@ -114,6 +156,7 @@ export class Single {
         this.scope = scope;
         this.options = { $index: index, $parent: parent };
         this.objects.forEach(object => object.render(this.scope, this.options));
+        this.arrays.forEach(array => array.update(this.scope, this.options));
         this.components.forEach(object => object.render(this.scope, this.options));
     }
 
@@ -122,6 +165,7 @@ export class Single {
         if ( index > -1 ) this.options.$index = index;
         if ( parent != null ) this.options.$parent = parent;
         this.objects.forEach(object => object.update(this.scope, this.options));
+        this.arrays.forEach(array => array.update(this.scope, this.options));
         this.components.forEach(object => {
             object.parent = this.scope;
             object.update();

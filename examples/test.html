@@ -9,40 +9,34 @@
 </style>
 <body>
     <app so-name="app">
-        <input so-binding="t" /> {{fn2()}}<br />
-        <select so-binding="t">
-            <option value="0">0</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-        </select><input type="checkbox" so-binding="t" value="3" so-unchecked="1">{{t}}<br />
-        <input type="radio" value="0" so-binding="t" /> 0<br />
-        <input type="radio" value="1" so-binding="t" /> 1<br />
-        <input type="radio" value="2" so-binding="t" /> 2<br />
-        <input type="radio" value="3" so-binding="t" /> 3<br />
-        <br />
-        <div so-html="{{html}}" so-on="click: fn1('evio')"></div>
-        {{dist}}, {{most}}, {{title}} , {{p}}<br />
-        {{ko.x.k.z}} {{ko.x.k.c}}
-        <child msg="{{t}}"><p>title: {{msg}}</p></child>
+        <input so-binding="title" />{{title}}<hr />
+        <ul>
+            <li so-repeat="{{list}}">
+                a({{a}}) + b({{b}}) = a + b({{a + b}}); $index: {{$index}}<br />
+                sum c:
+                <ul>
+                    <li so-repeat="{{c}}">
+                        {{$this}}: {{$index}} = {{$parent.a}}
+                    </li>
+                </ul>
+            </li>
+        </ul>
         <hr />
-        <div class="repeeat parent" so-repeat="{{list}}">
-            <p>{{$index}} =&gt; a:{{a}} + b:{{b}} = {{a + b}}, parent: title=>{{$parent.t}}</p>
-
-            <div class="repeat child" so-repeat="{{c}}">
-                <dd>{{$index}} =&gt; {{$this}} , parent:b=>{{$parent.b}}</dd>
-                <child msg="{{$this}}">
-                    <div style="color:red;">{{msg}}</div>
-                </child>
-            </div>
-
-        </div>
-
-        <hr />
-
+        <ul>
+            <li so-repeat="{{list}}">
+                a({{a}}) + b({{b}}) = a + b({{a + b}}); $index: {{$index}}<br />
+                sum c:
+                <ul>
+                    <li so-repeat="{{c}}">
+                        {{$this}}: {{$index}} = {{$parent.a}}
+                    </li>
+                </ul>
+            </li>
+        </ul>
         <task tasks="{{tasks}}"></task>
         <task tasks="{{tasks}}"></task>
-        <test d="{{title}}">evio {{d}}</test>
+        <task tasks="{{tasks}}"></task>
+
     </app>
     <script src="./bundle.js"></script>
 </body>

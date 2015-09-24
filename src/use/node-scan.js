@@ -19,10 +19,8 @@ function ScanAttr(node, vm){ vm.objects = vm.objects.concat(attrnodescan(node, v
 function ScanNode(node, vm){
     var tagName = node.tagName.toLowerCase();
     if ( componentMap.has(tagName) ){
-        var attributes = utils.slice.call(node.attributes, 0);
         var classobject = componentMap.get(tagName);
         var object = new classobject(node);
-        pushAttributes(object.keys, attributes)
         object.parentroot = vm;
         object.init();
         vm.components.push(object);
@@ -32,7 +30,7 @@ function ScanNode(node, vm){
         repeat.DOMSCAN = DOMSCAN;
         repeat.parentroot = vm;
         repeat.init();
-        vm.components.push(repeat);
+        vm.arrays.push(repeat);
     }
     else{
         ScanAttr(node, vm);

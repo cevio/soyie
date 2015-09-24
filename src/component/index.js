@@ -13,11 +13,11 @@ export class COMPONENT {
         this.template = node.innerHTML;
         this.objects = [];
         this.components = [];
+        this.arrays = [];
         this.DOMSCAN = DOMSCAN;
         this.keys = {};
         this.parent = null;
         this.scope = null;
-        this.upnotify = false;
         this.rendered = false;
         this.watcher = watcher;
         /**
@@ -125,22 +125,24 @@ export class COMPONENT {
         if (scope) this.parent = scope;
         let result = {}, ok = true;
         for (var i in this.interfaces) {
-            let res = this.guest(i);
-            let err = this.state (i, res);
-            if (!err) {
-                result[i] = res;
-            } else {
-                ok = false;
-            }
+            let res = this.guest(i), err = this.state (i, res);
+            if (!err) { result[i] = res; }
+            else { ok = false; }
         }
         if (ok) {
             typeof this.onBeforeRender === 'function' && this.onBeforeRender();
-            typeof this.handle === 'function' && this.handle(result);
-            this.rendered = true;
+            typeof this.handle === 'function' && this.handle.call(result, result);
             this.scope = result;
-            watcher.create (this.scope, this);
-            this.components.forEach(object => object.render(this.scope));
+
+            /**
+             * insert data
+             */
             this.objects.forEach(object => object.render(this.scope));
+            this.arrays.forEach(array => array.render(this.scope));
+            this.components.forEach(object => object.render(this.scope));
+
+            this.watch(this.scope);
+            this.rendered = true;
             typeof this.onRendered === 'function' && this.onRendered();
         }
     }
@@ -153,34 +155,47 @@ export class COMPONENT {
         return res;
     }
 
+    watch(scope){
+        if ( !scope ) return;
+        watcher.create(scope, this);
+        this.watchComponents(this.components, scope);
+        Object.keys(scope).forEach(key => {
+            if ( utils.type(scope[key], 'Object') ){
+                this.watch(scope[key]);
+            }
+        });
+    }
+    watchComponents(components, data){
+        components.forEach(component => {
+            watcher.create(data, component);
+            component.components.forEach(com => {
+                this.watchComponents(com.components, data);
+            });
+        });
+    }
+
     update(scope){
-        if (scope) this.parent = scope;
-        let result = this.rendered ? this.scope : {}, ok = true;
-        for ( var i in this.interfaces ){
-            let res = this.guest(i);
-            let err = this.state(i, res);
-            if ( !err ){
-                if ( result[i] != res ){
-                    result[i] = res;
-                };
-            }else{
-                ok = false;
+        if ( !this.rendered ){
+            this.render(this.parent);
+        }else{
+            if (scope) this.parent = scope;
+            let result = this.rendered ? this.scope : {}, ok = true;
+            for ( var i in this.interfaces ){
+                let res = this.guest(i), err = this.state(i, res);
+                if ( !err ){
+                    if ( result[i] != res ){ result[i] = res; };
+                }else{
+                    ok = false;
+                }
             }
-        }
-        if ( ok ){
-            typeof this.onBeforeUpdate === 'function' && this.onBeforeUpdate();
-            this.scope = result;
-            if ( !this.rendered ){
-                typeof this.onBeforeRender === 'function' && this.onBeforeRender();
-                typeof this.handle === 'function' && this.handle(result);
+            if ( ok ){
+                typeof this.onBeforeUpdate === 'function' && this.onBeforeUpdate();
+                this.scope = result;
                 watcher.create(this.scope, this);
-                this.components.forEach(object => object.render(this.scope));
-                this.rendered = true;
-                typeof this.onRendered === 'function' && this.onRendered();
+                this.objects.forEach(object => object.update(this.scope));
+                this.arrays.forEach(array => array.update(this.scope));
+                typeof this.onUpdated === 'function' && this.onUpdated();
             }
-            watcher.create(this.scope, this);
-            this.objects.forEach(object => object.update(this.scope));
-            typeof this.onUpdated === 'function' && this.onUpdated();
         }
     }
 }

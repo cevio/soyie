@@ -12,10 +12,9 @@ import * as utils from './utils';
  */
 export default class {
     constructor(){
-        // 属性节点和文本节点保存数组
         this.objects = [];
-        // 组件保存数组
         this.components = [];
+        this.arrays = [];
         // 数据源
         this.scope = null;
     }
@@ -25,7 +24,6 @@ export default class {
     init(data){
         this.scope = data || {};
         this.render();
-        // 监听数据与VM
         this.watch(this.scope);
         return this;
     }
@@ -33,10 +31,8 @@ export default class {
         if ( !scope ) return;
         watcher.create(scope, this);
         this.watchComponents(this.components, scope);
-        var keys = Object.keys(scope);
-        keys.forEach(key => {
-            let type = utils.type(scope[key]);
-            if ( type === 'Object' ){
+        Object.keys(scope).forEach(key => {
+            if ( utils.type(scope[key], 'Object') ){
                 this.watch(scope[key]);
             }
         });
@@ -59,6 +55,7 @@ export default class {
             object.render(this.scope);
         });
         // 渲染基本节点列表
+        this.arrays.forEach(array =>  array.render(this.scope));
         this.objects.forEach(object => object.render(this.scope));
         return this;
     }
@@ -70,6 +67,7 @@ export default class {
         this.scope = scope;
         this.watch(this.scope);
         this.objects.forEach(object => object.render(this.scope));
+        this.arrays.forEach(array => array.update(this.scope));
         return this;
     }
 }

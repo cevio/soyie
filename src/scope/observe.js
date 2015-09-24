@@ -71,9 +71,7 @@ export function create(value, vm){
     ){
         obs = value.__obs__;
     }
-    else if (
-        !Object.isFrozen(value)
-    ){
+    else if ( !Object.isFrozen(value) ){
         obs = new Observer(value);
     }
     if ( obs && vm ){
@@ -162,13 +160,7 @@ export class Observer {
      * @param value
      */
     observeObject(value){
-        Object.observe(value, (configs) => {
-            configs.forEach(() => {
-                this.vms.forEach(vm => {
-                    vm.update();
-                });
-            });
-        });
+        Object.observe(value, (configs) => configs.forEach(() => this.vms.forEach(vm => vm.update())));
     }
     observeArray(items, data, indexs){
         var obs = items.__obs__;
@@ -189,8 +181,8 @@ export class Observer {
         items.forEach(item => {
             var obs = item.__obs__;
             if ( obs ){
-                obs.vms.forEach(vm => {
-                    vm.remove();
+                obs.vms.forEach((vm, index) => {
+                    vm.remove && vm.remove(index);
                 });
             }else{
                 obs = data.__obs__;
