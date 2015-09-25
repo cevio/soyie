@@ -1,5 +1,6 @@
 import * as utils from '../utils';
 import * as watcher from '../scope/watcher';
+import attrnode from '../use/attrnode';
 
 export class Block {
     constructor(node){
@@ -91,6 +92,7 @@ export class Block {
         let single = new Single();
         let node = this.template.cloneNode(true);
         this.commentEndNode.parentNode.insertBefore(node, this.commentEndNode);
+        single.objects = single.objects.concat(attrnode(node, single));
         this.DOMSCAN(node, single);
         single.element = node;
         single.root = this;
