@@ -37,8 +37,3 @@ function ScanNode(node, vm){
         DOMSCAN(node, vm);
     }
 }
-function pushAttributes(object, attrs){
-    attrs.forEach(attr => {
-        object[attr.nodeName] = utils.formatExpression(attr.nodeValue);
-    });
-}

@@ -16,7 +16,7 @@
                 a({{a}}) + b({{b}}) = a + b({{a + b}}); $index: {{$index}}<br />
                 sum c:
                 <ul>
-                    <li so-repeat="{{c}}">
+                    <li so-repeat="{{c}}" class="{{$parent.a}}">
                         {{$this}}: {{$index}} = {{$parent.a}}
                     </li>
                 </ul>
