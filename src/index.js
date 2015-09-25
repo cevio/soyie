@@ -1,4 +1,3 @@
-import 'babel-core/polyfill';
 /**
  * 加载component组件模型
  */
