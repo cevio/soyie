@@ -6,10 +6,10 @@
 
 ### Installtion ###
 
-** NPM 安装 **
+**NPM 安装**
 > $ npm install soyie
 
-** 内部安装 **
+**内部安装**
 > $ so install soyie
 
 ### Useage ###
