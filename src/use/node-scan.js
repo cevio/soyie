@@ -18,8 +18,8 @@ function ScanText(node, vm){ vm.objects = vm.objects.concat(textnodescan(node, v
 function ScanAttr(node, vm){ vm.objects = vm.objects.concat(attrnodescan(node, vm)); }
 function ScanNode(node, vm){
     var tagName = node.tagName.toLowerCase();
-    if ( componentMap.has(tagName) ){
-        var classobject = componentMap.get(tagName);
+    if ( componentMap[tagName] ){
+        var classobject = componentMap[tagName];
         var object = new classobject(node);
         object.parentroot = vm;
         object.init();
