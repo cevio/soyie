@@ -24,6 +24,33 @@ Soyie.ready(function(){
 });
 ```
 
+或者你也可以这样使用：
+
+``` javascript
+var Soyie = require('soyie');
+Soyie.ready(function(){
+    Soyie.bootstrap('example', scope, function(){
+        this.baz = 'foo';
+        ...
+    });
+});
+```
+
+`soyie.bootstrap`方法有以下几种使用情况：
+
+``` javascript
+// 只有初始数据，静态赋值
+Soyie.bootstrap('example', scope);
+```
+
+``` javascript
+// 没有初始值，直接使用动态赋值
+Soyie.bootstrap('example', function(){
+    this.baz = 'foo';
+    ...
+});
+```
+
 ### API ###
 
 文档教程正在整理中，敬请期待！
@@ -61,12 +88,10 @@ Soyie.component('task', {
     },
     template: '<p>你还有{{remind()}}个任务没完成</p>'
     +           '<ul>'
-    +               '<repeat source="{{tasks}}" up-notify>'
-    +                   '<li>'
-    +                       '<input type="checkbox" so-binding="source.state" so-unchecked="0" value="1">'
-    +                       '<span class="{{source.state == \'1\' ? \'line\': \'\'}}">{{source.name}}</span>'
+    +                   '<li so-repeat="{{tasks}}">'
+    +                       '<input type="checkbox" so-binding="state" so-unchecked="0" value="1">'
+    +                       '<span class="{{state == \'1\' ? \'line\': \'\'}}">{{name}}</span>'
     +                   '</li>'
-    +               '</repeat>'
     +           '</ul>'
     +           '<input type="text" so-binding="newtask" placeholder="input your task..." />'
     +           '<button so-on="click:addtask">add</button>'
@@ -76,7 +101,7 @@ Soyie.component('task', {
 对应的HTML代码如下：
 
 ``` html
-<task tasks="{{tasks}}" />
+<task tasks="{{tasks}}"></task>
 ```
 
 我们只要传入tasks对应的数据参数标签（表单式）即可得到与`angular`一样的任务系统。
