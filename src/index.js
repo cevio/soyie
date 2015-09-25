@@ -55,7 +55,7 @@ export function component(name, props){
                 utils.extend(this, props, true);
             }
         }
-        componentMap.set(name, MODEL);
+        componentMap[name] = MODEL;
     }
     return this;
 }
