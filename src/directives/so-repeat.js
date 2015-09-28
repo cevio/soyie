@@ -44,6 +44,9 @@ export class Block {
             let source = utils.get(this.expression, this.parent);
             if ( source && utils.type(source, 'Array') && source.length > 0 ){
                 this.scope = source;
+                if ( !this.scope.__obs__ ){
+                    watcher.create(this.scope, this);
+                }
                 if ( this.scope.length > this.components.length ){
                     (() => {
                         var index = this.scope.length;
@@ -53,6 +56,7 @@ export class Block {
                             }else{
                                 this.components[index].update(this.scope[index], index, this.parent);
                             }
+                            this.watch(this.scope, index, this.parent);
                         }
                     }).call(this);
                 }
@@ -65,10 +69,14 @@ export class Block {
                             }else{
                                 this.components[index].update(this.scope[index], index, this.parent);
                             }
+                            this.watch(this.scope, index, this.parent);
                         }
                     }).call(this);
                 }else{
-                    this.scope.forEach((data, index) => this.components[index].update(data, index, this.parent));
+                    this.scope.forEach((data, index) => {
+                        this.components[index].update(data, index, this.parent);
+                        this.watch(this.scope, index, this.parent);
+                    });
                 }
 
             }else{

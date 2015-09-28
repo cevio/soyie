@@ -91,6 +91,9 @@ soyie.ready(() => {
                 { a:76, b:8, c: ['gdsaf', 'hadsf'],d:c2 },
                 { a:96, b:610, c: ['isadf', 'jdsaf'], d:c2 }
             ];
+            setTimeout(() =>{
+                this.list[0].c = ['dafasfadfa','sadfsdfa'];
+            }, 2000);
         }, 2000);
     });
     //var vm = soyie.app('app');
