@@ -14,7 +14,7 @@
         <ul>
             <li so-repeat="{{list}}">
                 a({{a}}) + b({{b}}) = a + b({{a + b}}); $index: {{$index}}<br />
-                <div so-on="click:d">click</div>
+                <div so-on="click:$parent.change">click</div>
                 sum c:
                 <ul>
                     <li so-repeat="{{c}}" class="{{$parent.a}}">
