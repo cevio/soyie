@@ -9,6 +9,7 @@ export default (attr, DOM, vm) => {
     object.set = (method, foo) => object.value[method] = foo;
 
     object.render = function(scope){
+        this.scope = scope || this.scope;
         var contexts = this.expression.split('|');
         contexts.forEach(context => {
             var gate = context.indexOf(':');
@@ -18,7 +19,7 @@ export default (attr, DOM, vm) => {
             if ( typeof this.value[method] !== 'function' ){
                 this.node.addEventListener(method, (...args) => {
                     var fn = this.value[method];
-                    var result = fn.call(this.node, scope);
+                    var result = fn.call(this.node, this.scope);
                     if ( typeof result === 'function' ){
                         result.apply(this.node, args);
                     }

@@ -56,15 +56,20 @@ soyie.component('task', {
     +           '<input type="text" so-binding="newtask" placeholder="input your task..." />'
     +           '<button so-on="click:addtask">add</button>'
 });
-
+function c1(){
+    alert(1);
+}
+function c2(){
+    alert(2)
+}
 soyie.ready(() => {
     soyie.bootstrap('app', function(){
         this.list = [
-            { a:1, b:2, c: ['a', 'b'] },
-            { a:3, b:4, c: ['c', 'd'] },
-            { a:5, b:6, c: ['e', 'f'] },
-            { a:7, b:8, c: ['g', 'h'] },
-            { a:9, b:10, c: ['i', 'j'] }
+            { a:1, b:2, c: ['a', 'b'], d:c1  },
+            { a:3, b:4, c: ['c', 'd'], d:c1 },
+            { a:5, b:6, c: ['e', 'f'], d:c1 },
+            { a:7, b:8, c: ['g', 'h'], d:c1 },
+            { a:9, b:10, c: ['i', 'j'], d:c1 }
         ];
         this.title = "evio";
         this.change = function(){
@@ -79,7 +84,13 @@ soyie.ready(() => {
         ];
         this.aaa = [1,2,3,4,5,6];
         setTimeout(() => {
-            this.list.shift()
+            this.list = [
+                { a:16, b:26, c: ['ccc', 'ccdfaf'],d:c2 },
+                { a:4, b:46, c: ['dsaf', 'adfadsf'],d:c2 },
+                { a:56, b:66, c: ['esadf', 'fdas'],d:c2 },
+                { a:76, b:8, c: ['gdsaf', 'hadsf'],d:c2 },
+                { a:96, b:610, c: ['isadf', 'jdsaf'], d:c2 }
+            ];
         }, 2000);
     });
     //var vm = soyie.app('app');
