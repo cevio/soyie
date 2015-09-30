@@ -29,6 +29,8 @@ import * as utils from './utils';
 import vmodel from './vmodel';
 
 import * as watcher from './scope/watcher';
+import * as directMaps from './use/directives';
+import * as structor from './use/node-object';
 
 /**
  * 注册component组件
@@ -97,11 +99,20 @@ export function bootstrap(name, data, callback){
     return vm.scope;
 }
 
+export function directive(name, foo){
+    if ( !directMaps[name] ){
+        directMaps[name] = foo;
+    }
+}
+
 export default {
     component,
     ready,
     app,
     bootstrap,
     COMPONENT,
-    watcher
+    watcher,
+    directive,
+    utils,
+    structor
 }
