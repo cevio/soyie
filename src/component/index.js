@@ -32,6 +32,9 @@ export class COMPONENT {
         this.onRendered = null;
         this.onBeforeUpdate = null;
         this.onUpdated = null;
+        this.onWrapTemplate = function(temp){
+            return temp;
+        };
         //this._onAppend = null;
         //this._onSingleRendered = null;
         //this._onSingleUpdated = null;
@@ -41,7 +44,7 @@ export class COMPONENT {
         typeof this.onBeforeInit === 'function' && this.onBeforeInit();
         this.injectProps();
         typeof this.onInjectProps === 'function' && this.onInjectProps();
-        this.element = utils.createHtmlNode(this.template);
+        this.element = utils.createHtmlNode(this.onWrapTemplate(this.template));
         this.virtualDom.parentNode.replaceChild(this.element.node, this.virtualDom);
         DOMSCAN(this.element, this);
         typeof this.onScanDoms === 'function' && this.onScanDoms();
