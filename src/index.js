@@ -105,14 +105,7 @@ export function directive(name, foo){
     }
 }
 
-export default {
-    component,
-    ready,
-    app,
-    bootstrap,
-    COMPONENT,
-    watcher,
-    directive,
-    utils,
-    structor
-}
+export let componentStructor = COMPONENT;
+export let watch = watcher;
+export let util = utils;
+export let nodeStructor = structor;
