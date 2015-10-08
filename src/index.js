@@ -40,7 +40,7 @@ import * as structor from './use/node-object';
  */
 export function component(name, props){
     if ( typeof props === 'function' ){
-        componentMap.set(name, props);
+        componentMap[name] = props;
     }else{
         class MODEL extends COMPONENT {
             constructor(node){
