@@ -29,8 +29,8 @@ import * as utils from './utils';
 import vmodel from './vmodel';
 
 import * as watcher from './scope/watcher';
-import * as directMaps from './use/directives';
-import * as structor from './use/node-object';
+import directMaps from './use/directives';
+import structor from './use/node-object';
 
 /**
  * 注册component组件

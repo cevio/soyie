@@ -1,21 +1,6 @@
 import node from './node-object';
 import * as utils from '../utils';
-import soSrc from '../directives/so-src';
-import soHtml from '../directives/so-html';
-import soOn from '../directives/so-on';
-import soBinding from '../directives/so-binding';
-import soDisabled from '../directives/so-disabled';
-import maps from './directives';
-
-var commands = {
-    "so-src": soSrc,
-    "so-html": soHtml,
-    "so-on": soOn,
-    "so-binding": soBinding,
-    "so-disabled": soDisabled
-};
-
-utils.extend(commands, maps || {});
+import commands from './directives';
 
 export default (DOM, vm) => {
     var result = [];
