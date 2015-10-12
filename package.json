@@ -18,11 +18,6 @@
     "type": "git",
     "url": "https://github.com/cevio/soyie"
   },
-  "files": [
-    "src",
-    "build",
-    "examples"
-  ],
   "timestamp": 1438693004413,
   "dependencies": {
     "babel-core": "^5.8.25",
