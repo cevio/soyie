@@ -1,7 +1,7 @@
 {
   "name": "soyie",
   "description": "a web mvvm framework",
-  "version": "2.2.38",
+  "version": "2.2.39",
   "keywords": [
     "web",
     "mvvm",
@@ -20,14 +20,12 @@
   },
   "timestamp": 1438693004413,
   "dependencies": {
-    "babel-core": "^5.8.25",
     "domready": "^1.0.8",
-    "es6-map": "^0.1.1",
     "events": "^1.0.2",
-    "hashcode": "^1.0.3"
   },
   "devDependencies": {
     "autoprefixer-loader": "^3.1.0",
+    "babel-core": "^5.8.25",
     "babel-core": "^5.8.24",
     "babel-loader": "^5.3.2",
     "css-loader": "^0.18.0",
