@@ -31,7 +31,7 @@ export default (attr, DOM, vm) => {
         }
     });
 
-    object.render = function(scope = this.scope, options = {}){
+    object.notify = function(scope = this.scope, options = {}){
         object.scope = scope;
         object.options = options;
         let str = [];

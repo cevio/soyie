@@ -1,6 +1,6 @@
 import * as utils from '../utils';
 import {DOMSCAN} from '../use/node-scan';
-import * as watcher from '../scope/watcher';
+import watcher from '../scope/watcher';
 
 export class COMPONENT {
     constructor(node){
@@ -18,8 +18,8 @@ export class COMPONENT {
         this.keys = {};
         this.parent = null;
         this.scope = null;
-        this.rendered = false;
         this.watcher = watcher;
+        this.installed = false;
         /**
          * Events.
          */
@@ -124,29 +124,63 @@ export class COMPONENT {
             }
         }
     }
-    render(scope) {
-        if (scope) this.parent = scope;
-        let result = {}, ok = true;
-        for (var i in this.interfaces) {
-            let res = this.guest(i), err = this.state (i, res);
-            if (!err) { result[i] = res; }
-            else { ok = false; }
+
+    notify(scope){
+        if ( this.parent && this.parent.__ob__ && this.parent != scope ){
+            this.parent.__ob__.vms.$remove(this);
         }
+        if (scope) this.parent = scope;
+        watcher.create(this.parent, this);
+
+        var ok = true, result;
+        if ( this.installed ){
+            result = this.scope;
+            for ( var i in this.interfaces ){
+                let res = this.guest(i), err = this.state(i, res);
+                if ( !err ){
+                    if ( result[i] != res ){ result[i] = res; };
+                }else{
+                    ok = false;
+                }
+            }
+        }else{
+            result = {};
+            for (var i in this.interfaces){
+                let res = this.guest(i), err = this.state(i, res);
+                if (!err) { result[i] = res; }
+                else { ok = false; }
+            }
+        }
+
         if (ok) {
-            typeof this.onBeforeRender === 'function' && this.onBeforeRender();
-            typeof this.handle === 'function' && this.handle.call(result, result);
             this.scope = result;
-
-            /**
-             * insert data
-             */
-            this.objects.forEach(object => object.render(this.scope));
-            this.arrays.forEach(array => array.render(this.scope));
-            this.components.forEach(object => object.render(this.scope));
-
             this.watch(this.scope);
-            this.rendered = true;
-            typeof this.onRendered === 'function' && this.onRendered();
+            if ( this.installed ){
+                typeof this.onBeforeUpdate === 'function' && this.onBeforeUpdate();
+                this.objects.forEach(object => object.notify(this.scope));
+                //this.arrays.forEach(array => {
+                //    if ( !array.installed ){
+                //        array.notify(this.scope);
+                //    }
+                //});
+                typeof this.onUpdated === 'function' && this.onUpdated();
+            }else{
+                typeof this.onBeforeRender === 'function' && this.onBeforeRender();
+                typeof this.handle === 'function' && this.handle.call(result, result);
+                this.objects.forEach(object => object.notify(this.scope));
+                this.arrays.forEach(array => {
+                    if ( !array.installed ){
+                        array.notify(this.scope);
+                    }
+                });
+                this.components.forEach(object => {
+                    if ( !object.installed ){
+                        object.notify(this.scope);
+                    }
+                });
+                this.installed = true;
+                typeof this.onRendered === 'function' && this.onRendered();
+            }
         }
     }
 
@@ -161,12 +195,18 @@ export class COMPONENT {
     watch(scope){
         if ( !scope ) return;
         watcher.create(scope, this);
-        this.watchComponents(this.components, scope);
-        Object.keys(scope).forEach(key => {
-            if ( utils.type(scope[key], 'Object') ){
+        if ( utils.type(scope, 'Object') ){
+            for ( var key in scope ){
                 this.watch(scope[key]);
             }
-        });
+        }
+        else if ( utils.type(scope, 'Array') ){
+            var i = scope.length;
+            while (i--){
+                watcher.take(scope, i, this);
+                this.watch(scope[i]);
+            }
+        }
     }
     watchComponents(components, data){
         components.forEach(component => {
@@ -178,11 +218,11 @@ export class COMPONENT {
     }
 
     update(scope){
-        if ( !this.rendered ){
+        if ( !this.installed ){
             this.render(this.parent);
         }else{
             if (scope) this.parent = scope;
-            let result = this.rendered ? this.scope : {}, ok = true;
+            let result = this.installed ? this.scope : {}, ok = true;
             for ( var i in this.interfaces ){
                 let res = this.guest(i), err = this.state(i, res);
                 if ( !err ){

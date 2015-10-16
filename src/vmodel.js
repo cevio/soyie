@@ -23,51 +23,41 @@ export default class {
      */
     init(data){
         this.scope = data || {};
-        this.render();
+        this.notify();
         this.watch(this.scope);
         return this;
     }
+
     watch(scope){
         if ( !scope ) return;
         watcher.create(scope, this);
-        this.watchComponents(this.components, scope);
         Object.keys(scope).forEach(key => {
             if ( utils.type(scope[key], 'Object') ){
                 this.watch(scope[key]);
             }
         });
     }
-    watchComponents(components, data){
-        components.forEach(component => {
-            watcher.create(data, component);
-            component.components.forEach(com => {
-                this.watchComponents(com.components, data);
+
+    notify(){
+        setTimeout(() => {
+            // 只更新objects下的数据
+            this.objects.forEach(object => object.notify(this.scope));
+
+            // 判断循环是否被渲染过
+            // 如果没有被渲染 那么重新渲染
+            this.arrays.forEach(array => {
+                if ( !array.installed ){
+                    array.notify(this.scope);
+                }
             });
-        });
-    }
-    /**
-     *  模型数据渲染
-     */
-    render(){
-        // 渲染组件列表
-        this.components.forEach(object => {
-            watcher.create(this.scope, object);
-            object.render(this.scope);
-        });
-        // 渲染基本节点列表
-        this.arrays.forEach(array =>  array.render(this.scope));
-        this.objects.forEach(object => object.render(this.scope));
-        return this;
-    }
-    /**
-     *  模型数据更新
-     *  changes: 改变数据集合
-     */
-    update(scope = this.scope){
-        this.scope = scope;
-        this.watch(this.scope);
-        this.objects.forEach(object => object.render(this.scope));
-        this.arrays.forEach(array => array.update(this.scope));
-        return this;
+
+            // 判断组件是否被渲染过
+            // 如果没有被渲染 那么重新渲染
+            this.components.forEach(component => {
+                if ( !component.installed ){
+                    component.notify(this.scope);
+                }
+            });
+        }, 0);
     }
 }

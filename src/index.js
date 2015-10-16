@@ -79,7 +79,7 @@ export function app(name){
     var controller =
         typeof name !== 'string'
             ? name
-            : document.querySelector("app[so-name='" + name + "']");
+            : document.querySelector("webapp[so-name='" + name + "']");
 
     var template = controller.innerHTML;
     var copy = utils.createHtmlNode(template);

@@ -17,12 +17,9 @@ export default class {
     get(){
         return this.value;
     }
-    render(scope = this.scope, options = {}){
+    notify(scope = this.scope, options = {}){
         this.scope = scope;
         this.options = options;
-        this.set(utils.get(this.expression, scope, options));
-    }
-    update(scope, options){
-        this.render(scope, options);
+        this.set(utils.get(this.expression, this.scope, options));
     }
 }
