@@ -161,7 +161,7 @@ export class COMPONENT {
                 this.objects.forEach(object => object.notify(this.scope));
                 this.arrays.forEach(array => {
                     if ( !array.installed ){
-                        array.notify(this.scope);
+                        array.notify();
                     }
                 });
                 //console.log(this, this.scope)

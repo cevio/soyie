@@ -25,7 +25,8 @@ export class Block {
     }
 
     notify(scope){
-        let source = utils.get(this.expression, scope);
+        scope && (this.parent = scope);
+        let source = utils.get(this.expression, this.parent);
         if ( source && utils.type(source, 'Array') ){
             if ( !source.hasOwnProperty('__parent__') ) {
                 utils.defineValue(source, '__parent__', scope);
