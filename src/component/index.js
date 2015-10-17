@@ -208,37 +208,4 @@ export class COMPONENT {
             }
         }
     }
-    watchComponents(components, data){
-        components.forEach(component => {
-            watcher.create(data, component);
-            component.components.forEach(com => {
-                this.watchComponents(com.components, data);
-            });
-        });
-    }
-
-    update(scope){
-        if ( !this.installed ){
-            this.render(this.parent);
-        }else{
-            if (scope) this.parent = scope;
-            let result = this.installed ? this.scope : {}, ok = true;
-            for ( var i in this.interfaces ){
-                let res = this.guest(i), err = this.state(i, res);
-                if ( !err ){
-                    if ( result[i] != res ){ result[i] = res; };
-                }else{
-                    ok = false;
-                }
-            }
-            if ( ok ){
-                typeof this.onBeforeUpdate === 'function' && this.onBeforeUpdate();
-                this.scope = result;
-                watcher.create(this.scope, this);
-                this.objects.forEach(object => object.update(this.scope));
-                this.arrays.forEach(array => array.update(this.scope));
-                typeof this.onUpdated === 'function' && this.onUpdated();
-            }
-        }
-    }
 }
