@@ -28,7 +28,7 @@ Observer.prototype.ObjectObserve = function(data){
             ob = oldValue ? oldValue.__ob__ : null;
             if ( utils.type(oldValue, 'Array') ){
                 if ( ob ){
-                    ob.vms.forEach(vm => vm.notify(config.object));
+                    ob.vms.forEach(vm => vm.notify());
                 }
             }else{
                 this.vms.forEach(vm => {

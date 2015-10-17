@@ -29,15 +29,15 @@ export class Block {
         let source = utils.get(this.expression, this.parent);
         if ( source && utils.type(source, 'Array') ){
             if ( !source.hasOwnProperty('__parent__') ) {
-                utils.defineValue(source, '__parent__', scope);
+                utils.defineValue(source, '__parent__', this.parent);
             }else{
-                source.__parent__ = scope;
+                source.__parent__ = this.parent;
             }
             watcher.create(source, this);
             this.removeAll();
             if ( source.length ){
                 source.forEach((data, index) => {
-                    this.add(source, index, scope);
+                    this.add(source, index);
                 });
             }
             this.installed = true;
@@ -51,9 +51,9 @@ export class Block {
         }
     }
 
-    add(source, index, parent){
+    add(source, index){
         let single = this.append();
-        single.notify(source, index, parent);
+        single.notify(source, index);
         watcher.take(source, index, single);
     }
 
@@ -79,7 +79,8 @@ export class Single {
         this.scope = null;
     }
 
-    notify(source, index, parent){
+    notify(source, index){
+        var parent = source.__parent__;
         if ( parent ){
             if (parent !== this.parent && this.parent && this.parent.__ob__) {
                 this.parent.__ob__.vms.$remove(this);
@@ -87,7 +88,11 @@ export class Single {
             this.parent = parent;
             watcher.create(this.parent, this);
         }
-        const options = { $index: index, $parent: this.parent };
+        if ( index === undefined ){
+            index = this.index;
+        }
+        this.index = index;
+        const options = { $index: this.index, $parent: this.parent };
         this.objects.forEach(object => object.notify(source[index], options));
         this.arrays.forEach(array => {
             if ( !array.installed ){

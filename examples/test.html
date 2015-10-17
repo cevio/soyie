@@ -11,7 +11,9 @@
     <webapp so-name="app">
         <t dist="{{dist}}">
             <s supper="{{dist.supper}}">
-                <a href="" so-repeat="{{supper.list}}" style="margin-right: 10px;">{{a}} - {{$index}}</a>
+                <a href="" so-repeat="{{supper.list}}" style="margin-right: 10px;">
+                    {{a}} - {{$index}} - {{$parent.supper.a()}}
+                </a>
             </s>
         </t>
     </webapp>
