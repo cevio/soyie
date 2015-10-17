@@ -9,18 +9,11 @@
 </style>
 <body>
     <webapp so-name="app">
-        {{d.p.x}}
-        <ul>
-            <li so-repeat="{{c}}">
-                {{a}} - {{b}} = {{$parent.a}}
-                <ul>
-                    <li so-repeat="{{c}}">{{$this}}</li>
-                </ul>
-            </li>
-        </ul>
-        <task tasks="{{tasks}}"></task>
-        <task tasks="{{tasks}}"></task>
-        <task tasks="{{tasks}}"></task>
+        <t dist="{{dist}}">
+            <s supper="{{dist.supper}}">
+                <a href="" so-repeat="{{supper.list}}" style="margin-right: 10px;">{{a}}</a>
+            </s>
+        </t>
     </webapp>
     <script src="./bundle.js"></script>
 </body>

@@ -130,7 +130,8 @@ export class COMPONENT {
             this.parent.__ob__.vms.$remove(this);
         }
         if (scope) this.parent = scope;
-        watcher.create(this.parent, this);
+        //watcher.create(this.parent, this);
+        this.watch(this.parent);
 
         var ok = true, result;
         if ( this.installed ){
@@ -158,10 +159,14 @@ export class COMPONENT {
             if ( this.installed ){
                 typeof this.onBeforeUpdate === 'function' && this.onBeforeUpdate();
                 this.objects.forEach(object => object.notify(this.scope));
-                //this.arrays.forEach(array => {
-                //    if ( !array.installed ){
-                //        array.notify(this.scope);
-                //    }
+                this.arrays.forEach(array => {
+                    if ( !array.installed ){
+                        array.notify(this.scope);
+                    }
+                });
+                //console.log(this, this.scope)
+                //this.components.forEach(object => {
+                //    object.notify(this.scope);
                 //});
                 typeof this.onUpdated === 'function' && this.onUpdated();
             }else{
