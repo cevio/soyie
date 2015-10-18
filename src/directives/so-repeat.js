@@ -36,9 +36,7 @@ export class Block {
             watcher.create(source, this);
             this.removeAll();
             if ( source.length ){
-                source.forEach((data, index) => {
-                    this.add(source, index);
-                });
+                source.forEach((data, index) => this.add(source, index));
             }
             this.installed = true;
         }
@@ -80,31 +78,31 @@ export class Single {
     }
 
     notify(source, index){
-        var parent = source.__parent__;
-        if ( parent ){
-            if (parent !== this.parent && this.parent && this.parent.__ob__) {
-                this.parent.__ob__.vms.$remove(this);
+        if ( source ){
+            var parent = source.__parent__;
+            if ( parent ){
+                if (parent !== this.parent && this.parent && this.parent.__ob__) {
+                    this.parent.__ob__.vms.$remove(this);
+                }
+                this.parent = parent;
+                this.watch(this.parent);
             }
-            this.parent = parent;
-            watcher.create(this.parent, this);
+            if ( index === undefined ){
+                index = this.index;
+            }
+            this.index = index;
+            this.scope = source[index];
         }
-        if ( index === undefined ){
-            index = this.index;
-        }
-        this.index = index;
+
         const options = { $index: this.index, $parent: this.parent };
-        this.objects.forEach(object => object.notify(source[index], options));
+        this.objects.forEach(object => object.notify(this.scope, options));
         this.arrays.forEach(array => {
-            if ( !array.installed ){
-                array.notify(source[index]);
-            }
+            if ( !array.installed ){ array.notify(this.scope); }
         });
         this.components.forEach(component => {
-            if ( !component.installed ){
-                component.notify(source[index]);
-            }
+            if ( !component.installed ){ component.notify(this.scope); }
         });
-        this.watch(source[index]);
+        this.watch(this.scope);
     }
 
     watch(scope){

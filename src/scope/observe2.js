@@ -1,3 +1,4 @@
+import * as observeShim from './observe-shim';
 var utils = require('../utils');
 var arrayProto = Array.prototype;
 var arrayMethods = Object.create(arrayProto);
@@ -31,13 +32,7 @@ Observer.prototype.ObjectObserve = function(data){
                     ob.vms.forEach(vm => vm.notify());
                 }
             }else{
-                this.vms.forEach(vm => {
-                    if ( vm.namespace === 'component' ){
-                        vm.notify();
-                    }else{
-                        vm.notify(data);
-                    }
-                });
+                this.vms.forEach(vm => vm.notify());
             }
         });
     });
@@ -127,7 +122,7 @@ methods.forEach(function(method){
 
     utils.defineValue(arrayMethods, method, function(...args){
         var result = original.apply(this, args);
-        this.__ob__.vms.forEach(vm => vm.notify(this.__parent__));
+        this.__ob__.vms.forEach(vm => vm.notify());
         return result;
     });
 });
@@ -184,7 +179,11 @@ function _defineSetter_(i, that, data){
         var vms = that.tokens[i].vms;
         that.tokens[i].value = val;
         vms.forEach(vm => {
-            vm.notify(data, i);
+            if ( vm.namespace == 'repeat-single' ) {
+                vm.notify(data, i);
+            }else{
+                vm.notify();
+            }
             Observer.take(data, i, vm);
         });
     }

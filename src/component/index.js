@@ -126,16 +126,18 @@ export class COMPONENT {
     }
 
     notify(scope){
-        if ( this.parent && this.parent.__ob__ && this.parent != scope ){
-            this.parent.__ob__.vms.$remove(this);
+        if ( scope ){
+            if ( this.parent && this.parent.__ob__ && this.parent != scope ){
+                this.parent.__ob__.vms.$remove(this);
+            }
+            this.parent = scope;
         }
-        if (scope) this.parent = scope;
-        //watcher.create(this.parent, this);
+
         this.watch(this.parent);
 
         var ok = true, result;
         if ( this.installed ){
-            result = this.scope;
+            result = this.scope || {};
             for ( var i in this.interfaces ){
                 let res = this.guest(i), err = this.state(i, res);
                 if ( !err ){
@@ -161,7 +163,7 @@ export class COMPONENT {
                 this.objects.forEach(object => object.notify(this.scope));
                 this.arrays.forEach(array => {
                     if ( !array.installed ){
-                        array.notify();
+                        array.notify(this.scope);
                     }
                 });
                 //console.log(this, this.scope)

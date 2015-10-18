@@ -18,8 +18,8 @@ export default class {
         return this.value;
     }
     notify(scope = this.scope, options = {}){
-        this.scope = scope;
-        this.options = options;
-        this.set(utils.get(this.expression, this.scope, options));
+        scope && (this.scope = scope);
+        options && (this.options = options);
+        this.set(utils.get(this.expression, this.scope, this.options));
     }
 }

@@ -39,25 +39,23 @@ export default class {
     }
 
     notify(){
-        setTimeout(() => {
-            // 只更新objects下的数据
-            this.objects.forEach(object => object.notify(this.scope));
+        // 只更新objects下的数据
+        this.objects.forEach(object => object.notify(this.scope));
 
-            // 判断循环是否被渲染过
-            // 如果没有被渲染 那么重新渲染
-            this.arrays.forEach(array => {
-                if ( !array.installed ){
-                    array.notify(this.scope);
-                }
-            });
+        // 判断循环是否被渲染过
+        // 如果没有被渲染 那么重新渲染
+        this.arrays.forEach(array => {
+            if ( !array.installed ){
+                array.notify(this.scope);
+            }
+        });
 
-            // 判断组件是否被渲染过
-            // 如果没有被渲染 那么重新渲染
-            this.components.forEach(component => {
-                if ( !component.installed ){
-                    component.notify(this.scope);
-                }
-            });
-        }, 0);
+        // 判断组件是否被渲染过
+        // 如果没有被渲染 那么重新渲染
+        this.components.forEach(component => {
+            if ( !component.installed ){
+                component.notify(this.scope);
+            }
+        });
     }
 }

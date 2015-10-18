@@ -6,6 +6,9 @@
 </head>
 <style>
     .line{ text-decoration: line-through; color: #ccc;}
+    .hide{
+        display: none;
+    }
 </style>
 <body>
     <webapp so-name="app">
@@ -14,6 +17,7 @@
                 <a href="" so-repeat="{{supper.list}}" style="margin-right: 10px;">
                     {{a}} - {{$index}} - {{$parent.supper.a()}}
                 </a>
+                <more status="{{supper.status}}"></more>
             </s>
         </t>
     </webapp>
