@@ -155,7 +155,7 @@ export class COMPONENT {
             }
         }
 
-        if (ok) {
+        if (ok && result !== undefined) {
             this.scope = result;
             this.watch(this.scope);
             if ( this.installed ){
